@@ -6,8 +6,8 @@
 #include "GL/glut.h"
 // Added in Exercise 8 - End *****************************************************************
 
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
+#include <cv.h>
+#include <highgui.h>
 
 #include "PoseEstimation.h"
 
@@ -656,6 +656,6 @@ int main(int argc, char* argv[])
 
     // start the action
     glutMainLoop();
-  
+
     return 0;
 }

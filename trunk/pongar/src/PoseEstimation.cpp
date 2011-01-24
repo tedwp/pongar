@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES 
 #include <math.h>
-#include <opencv/cv.h>
-#include <opencv/cxcore.h>
+#include <cv.h>
+#include <cxcore.h>
 #include <vector>
 #include <algorithm>
 #include <iostream>
