@@ -88,7 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\exercise-8.cpp" />
+    <ClCompile Include="..\src\pongar.cpp" />
     <ClCompile Include="..\src\PoseEstimation.cpp" />
   </ItemGroup>
   <ItemGroup>
