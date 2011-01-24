@@ -41,10 +41,11 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\</OutDir>
     <TargetName>$(ProjectName)D</TargetName>
-    <IncludePath>$(IncludePath);C:\OpenCV2.1\include\opencv</IncludePath>
+    <IncludePath>$(IncludePath);..\..\opencv\include\opencv</IncludePath>
     <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
-    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;C:\OpenCV2.1\lib</LibraryPath>
-    <SourcePath>C:\OpenCV2.1\src\cv; C:\OpenCV2.1\src\cvaux; C:\OpenCV2.1\src\cxcore; C:\OpenCV2.1\src\highgui; C:\OpenCV2.1\src\ml;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;..\..\opencv\lib</LibraryPath>
+    <SourcePath>$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <ExecutablePath>..\..\opencv\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
