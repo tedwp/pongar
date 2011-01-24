@@ -1,10 +1,8 @@
-//Alexcommittest - ignorieren und löschen
+
 #include <iostream>
 #include <iomanip>
 
-// Added in Exercise 8 - Start *****************************************************************
 #include "GL/glut.h"
-// Added in Exercise 8 - End *****************************************************************
 
 #include <cv.h>
 #include <highgui.h>
@@ -13,24 +11,24 @@
 
 using namespace std;
 
+//thresholding
 int thresh = 100;
+int bw_thresh = 100;
+
+//camera
 CvCapture* cap;
+const int width = 640; 
+const int height = 480;
+//macbook pro camera: camangle = 60
+const int camangle = 60;
 
-int bw_thresh = 40;
+float resultMatrix_005A[16];
+float resultMatrix_0272[16];
 
-// Added in Exercise 8 - Start *****************************************************************
 CvMemStorage* memStorage;
-
-float resultMatrix[16];
-
-//camera settings
-const int width = 320; 
-const int height = 240;
-const int camangle = 35;
-
 unsigned char bkgnd[width*height*3];
-// Added in Exercise 8 - End *****************************************************************
 
+//trackbar
 void trackbarHandler(int pos) {
 	thresh = pos;
 }
@@ -41,14 +39,9 @@ void bw_trackbarHandler(int pos) {
 
 void initVideoStream() {
 	cap = cvCaptureFromCAM (0);
-
 	if (!cap) {
-		cout << "No webcam found, using video file\n";
-		cap = cvCaptureFromFile("C:\\Andi\\Uni\\SVNs\\far_intern\\teaching\\2010WS\\AR\\Exercises\\Solutions\\MarkerMovie.mpg");
-		if (!cap) {
-			cout << "No video file found. Exiting.\n";
-			exit(0);
-		}
+		cout << "No webcam found\n";
+		exit(0);
 	}
 }
 
@@ -73,19 +66,19 @@ int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 
 void init()
 {
-	cvNamedWindow ("Exercise 8 - Original Image", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Exercise 8 - Converted Image", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Exercise 8 - Stripe", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );
 	initVideoStream();
 
 	int value = thresh;
 	int max = 255;
-	cvCreateTrackbar( "Threshold", "Exercise 8 - Converted Image", &value, max, trackbarHandler);
-
+	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
+	
 	int bw_value = bw_thresh;
-	cvCreateTrackbar( "BW Threshold", "Exercise 8 - Converted Image", &bw_value, max, bw_trackbarHandler);
+	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
 
 	memStorage = cvCreateMemStorage();
 }
@@ -106,10 +99,7 @@ void idle()
 	}
 
 	CvSize picSize = cvGetSize(iplGrabbed);
-
-// Added in Exercise 8 - Start *****************************************************************
 	memcpy( bkgnd, iplGrabbed->imageData, sizeof(bkgnd) );
-// Added in Exercise 8 - End *****************************************************************
 
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
@@ -279,7 +269,7 @@ void idle()
 					{
 						IplImage* iplTmp = cvCreateImage( cvSize(100,300), IPL_DEPTH_8U, 1 );
 						cvResize( iplStripe, iplTmp, CV_INTER_NN );
-						cvShowImage ( "Exercise 8 - Stripe", iplTmp );//iplStripe );
+						cvShowImage ( "Stripe", iplTmp );//iplStripe );
 						cvReleaseImage( &iplTmp );
 						isFirstStripe = false;
 					}
@@ -331,7 +321,7 @@ void idle()
 
 				if ( c == 0 ) //lines parallel?
 				{
-					std::cout << "lines parallel" << std::endl;
+					//std::cout << "lines parallel" << std::endl;
 					continue;
 				}
 
@@ -347,10 +337,6 @@ void idle()
 
 				cvCircle (iplGrabbed, p, 5, CV_RGB(i*60,i*60,0), -1);
 			} //finished the calculation of the exact corners
-
-// Added in Exercise 8 - Start *****************************************************************
-			// resultMatrix made global variable
-// Added in Exercise 8 - End *****************************************************************
 
 			CvPoint2D32f targetCorners[4];
 			targetCorners[0].x = -0.5; targetCorners[0].y = -0.5;
@@ -373,7 +359,7 @@ void idle()
 			
 			cvThreshold(iplMarker, iplMarker, bw_thresh, 255, CV_THRESH_BINARY);
 
-//now we have a B/W image of a supposed Marker
+			//now we have a B/W image of a supposed Marker
 
 			// check if border is black
 			int code = 0;
@@ -447,7 +433,7 @@ void idle()
 				for(int i = 0; i < 4; i++)	corners[i] = corrected_corners[i];
 			}
 
-			printf ("Found: %04x\n", code);
+			//printf ("Found: %04x\n", code);
 
 			if ( isFirstMarker )
 			{
@@ -462,22 +448,8 @@ void idle()
 				corners[i].y = -corners[i].y + height/2;
 			}
 			
-			estimateSquarePose( resultMatrix, corners, 0.045 );
-			for (int i = 0; i<4; ++i) {
-				for (int j = 0; j<4; ++j) {
-					cout << setw(6);
-					cout << setprecision(4);
-					cout << resultMatrix[4*i+j] << " ";
-				}
-				cout << "\n";
-			}
-			cout << "\n";
-			float x,y,z;
-			x = resultMatrix[3];
-			y = resultMatrix[7];
-			z = resultMatrix[11];
-			cout << "length: " << sqrt(x*x+y*y+z*z) << "\n";
-			cout << "\n";
+			if(code == 0x005a) estimateSquarePose( resultMatrix_005A, corners, 0.045 );
+			else if(code == 0x0272) estimateSquarePose( resultMatrix_0272, corners, 0.045 );
 
 			cvReleaseMat (&projMat);
 
@@ -485,8 +457,8 @@ void idle()
 		} // end of if(result->total == 4)
 	} // end of loop over contours
 
-	cvShowImage("Exercise 8 - Original Image", iplGrabbed);
-	cvShowImage("Exercise 8 - Converted Image", iplThreshold);
+	cvShowImage("Original Image", iplGrabbed);
+	cvShowImage("Converted", iplThreshold);
 
 	int key = cvWaitKey (10);
 	if (key == 27) exit(0);
@@ -499,9 +471,7 @@ void idle()
 	cvReleaseImage (&iplThreshold);
 
 	cvClearMemStorage ( memStorage );
-// Added in Exercise 8 - Start *****************************************************************
 	glutPostRedisplay();
-// Added in Exercise 8 - End *****************************************************************
 }
 
 void cleanup() 
@@ -509,11 +479,10 @@ void cleanup()
 	cvReleaseMemStorage (&memStorage);
 
 	cvReleaseCapture (&cap);
-	cvDestroyWindow ("Exercise 8 - Original Image");
-	cvDestroyWindow ("Exercise 8 - Converted Image");
-	cvDestroyWindow ("Exercise 8 - Stripe");
+	cvDestroyWindow ("Original Image");
+	cvDestroyWindow ("Converted");
+	cvDestroyWindow ("Stripe");
 	cvDestroyWindow ("Marker");
-	cout << "Finished\n";
 }
 
 void display() 
@@ -547,37 +516,17 @@ void display()
 	{
 		for (int y=0; y<4; ++y)
 		{
-			resultTransposedMatrix[x*4+y] = resultMatrix[y*4+x];
+			resultTransposedMatrix[x*4+y] = resultMatrix_005A[y*4+x];
 		}
 	}
 
 	//glLoadTransposeMatrixf( resultMatrix );
 	glLoadMatrixf( resultTransposedMatrix );
-    glRotatef( -90, 1, 0, 0 );
-	glScalef(0.03, 0.03, 0.03);
+	glScalef(0.20, 0.20, 0.20);
 
-	// draw 3 white spheres
-	glColor4f( 1.0, 1.0, 1.0, 1.0 );
-	glutSolidSphere( 0.8, 10, 10 );
-	glTranslatef( 0.0, 0.8, 0.0 );
-	glutSolidSphere( 0.6, 10, 10 );
-	glTranslatef( 0.0, 0.6, 0.0 );
-	glutSolidSphere( 0.4, 10, 10 );
-
-	// draw the eyes
-	glPushMatrix();
-	glColor4f( 0.0, 0.0, 0.0, 1.0 );
-	glTranslatef( 0.2, 0.2, 0.2 );
-	glutSolidSphere( 0.066, 10, 10 );
-	glTranslatef( 0, 0, -0.4 );
-	glutSolidSphere( 0.066, 10, 10 );
-	glPopMatrix();
-
-	// draw a nose
-	glColor4f( 1.0, 0.5, 0.0, 1.0 );
-	glTranslatef( 0.3, 0.0, 0.0 );
-	glRotatef( 90, 0, 1, 0 );
-	glutSolidCone( 0.1, 0.3, 10, 1 );
+	// draw white rectangle
+	glColor4f( 1.0, 1.0, 1.0, 0.7 );
+	glRectf(-0.5, -0.8, 0.5, 0.8);
 
     // redraw
     glutSwapBuffers();
@@ -585,8 +534,8 @@ void display()
 
 void resize( int w, int h) 
 {
-//    width = w;
-  //  height = h;
+	//width = w;
+	//height = h;
 
     // set a whole-window viewport
     glViewport( 0, 0, width, height );
@@ -608,13 +557,11 @@ void resize( int w, int h)
 
 int main(int argc, char* argv[]) 
 {
-	cout << "Startup\n";
-
     // initialize the window system
     glutInit( &argc, argv );
     glutInitWindowSize( width, height );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutCreateWindow("AR Exercise 8 - Combine");
+    glutCreateWindow("PongAR");
 
     // initialize the GL library
 
@@ -640,8 +587,8 @@ int main(int argc, char* argv[])
     glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
     glLightfv( GL_LIGHT0, GL_AMBIENT,  light_amb );
     glLightfv( GL_LIGHT0, GL_DIFFUSE,  light_dif );
-    glEnable( GL_LIGHTING );
-    glEnable( GL_LIGHT0 );
+    //glEnable( GL_LIGHTING );
+    //glEnable( GL_LIGHT0 );
 
     // make functions known to GLUT
     glutDisplayFunc( display );
