@@ -1,5 +1,5 @@
 #pragma once
-#include <opencv/cv.h>
+#include <cv.h>
 
 /** 
  * computes the orientation and translation of a square

@@ -41,7 +41,10 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\</OutDir>
     <TargetName>$(ProjectName)D</TargetName>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath);C:\OpenCV2.1\include\opencv</IncludePath>
+    <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib</ReferencePath>
+    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;C:\OpenCV2.1\lib</LibraryPath>
+    <SourcePath>C:\OpenCV2.1\src\cv; C:\OpenCV2.1\src\cvaux; C:\OpenCV2.1\src\cxcore; C:\OpenCV2.1\src\highgui; C:\OpenCV2.1\src\ml;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,13 +58,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\freeglut\include;..\..\opencv\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\freeglut\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\freeglut\lib;..\..\opencv\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_core220d.lib;opencv_highgui220d.lib;opencv_video220d.lib;opencv_ml220d.lib;opencv_legacy220d.lib;opencv_imgproc220d.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\freeglut\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cv210.lib;cxcore210.lib;highgui210.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
