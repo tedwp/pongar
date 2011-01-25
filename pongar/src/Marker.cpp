@@ -17,32 +17,44 @@ Marker::~Marker(void)
 
 void Marker::render(void)
 {
-	float resultTransposedMatrix[16];
-	for (int x=0; x<4; ++x)
+	if(hasPositionChanged())
 	{
-		for (int y=0; y<4; ++y)
+		float resultTransposedMatrix[16];
+		for (int x=0; x<4; ++x)
 		{
-			resultTransposedMatrix[x*4+y] = m_position[y*4+x];
+			for (int y=0; y<4; ++y)
+			{
+				resultTransposedMatrix[x*4+y] = m_position[y*4+x];
+			}
 		}
-	}
-	//Ende - ÜdMi
+		//Ende - ÜdMi
 	
 	
-	//glLoadTransposeMatrixf( resultMatrix );
-	glLoadMatrixf( resultTransposedMatrix );
-	glScalef(0.20, 0.20, 0.20);
+		//glLoadTransposeMatrixf( resultMatrix );
+		glLoadMatrixf( resultTransposedMatrix );
+		glScalef(0.20, 0.20, 0.20);
 	
-	// draw white rectangle
+		// draw white rectangle
 	
-	glColor4f( 1.0, 1.0, 1.0, 0.7 );
-	glRectf(-0.5, -0.8, 0.5, 0.8);
+		glColor4f( 1.0, 1.0, 1.0, 0.7 );
+		glRectf(-0.5, -0.8, 0.5, 0.8);
+		}
 }
 
-
-void Marker::setPosition(float position[ 16 ])
+void Marker::updatePosition(float position [16])
 {
-	for( int i = 0; i < 16; i++ )
-		m_position[ i ] = position[ i ];
+	m_positionChanged = false;
+	
+	for(unsigned i = 0; i < 16; i++)
+	{
+		m_positionChanged = true;
+	}
+	
+	if(m_positionChanged)
+	{
+		for( int i = 0; i < 16; i++ )
+			m_position[ i ] = position[ i ];
+	}
 }
 
 float* Marker::getPosition(void)
@@ -54,4 +66,9 @@ int Marker::getId(void)
 {
 	return m_id;
 
+}
+
+bool Marker::hasPositionChanged(void)
+{
+	return m_positionChanged;
 }
