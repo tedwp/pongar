@@ -56,7 +56,7 @@ Marker* Game::getMarkerById(int id)
 			return getInstance().m_markers[i];
 		}
 	}
-	return null;
+	return NULL;
 }
 
 void Game::idle( void )
