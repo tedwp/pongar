@@ -1,5 +1,4 @@
-#include "temp.h"
-
+#include "Capture.h"
 #include "Graphics.h"
 #include "GL/glut.h"
 
@@ -80,7 +79,7 @@ void Graphics::doRender()
 	{
 		for (int y=0; y<4; ++y)
 		{
-			resultTransposedMatrix[x*4+y] = resultMatrix_005A[y*4+x];
+			resultTransposedMatrix[x*4+y] = Capture::getInstance().m_resultMatrix_005A[y*4+x];
 		}
 	}
 
@@ -119,7 +118,7 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, width, 0.0, height );
 
     glRasterPos2i( 0, height-1 );
-    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, bkgnd );
+    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, Capture::getInstance().m_bkgnd );
 
     glPopMatrix();
 
@@ -165,8 +164,10 @@ void Graphics::doResize( int w, int h)
 }
 void Graphics::cleanup(void)
 {
-	cvReleaseMemStorage (&memStorage);
-	cvReleaseCapture (&cap);
+	//TODO move to capture
+	//TODO zum laufen bringen und auskommentierung entfernen
+	//cvReleaseMemStorage (&memStorage);
+	//cvReleaseCapture (&(Capture::getInstance().m_cap));
 	cvDestroyWindow ("Original Image");
 	cvDestroyWindow ("Converted");
 	cvDestroyWindow ("Stripe");

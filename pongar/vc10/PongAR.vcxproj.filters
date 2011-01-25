@@ -50,7 +50,7 @@
     <ClInclude Include="..\src\Game.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\temp.h">
+    <ClInclude Include="..\src\conf.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
