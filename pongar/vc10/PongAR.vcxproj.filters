@@ -30,6 +30,9 @@
     <ClCompile Include="..\src\Capture.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Game.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\PoseEstimation.h">
@@ -42,6 +45,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Graphics.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Game.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
