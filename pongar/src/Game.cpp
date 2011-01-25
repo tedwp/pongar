@@ -18,7 +18,7 @@ Game& Game::getInstance(void)
 
 void Game::init( void )
 {
-	Capture::getInstance()->init();
+	Capture::getInstance().init();
 	Graphics::getInstance().init();
 	
 }
