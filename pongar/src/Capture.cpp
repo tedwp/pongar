@@ -34,10 +34,12 @@ Capture& Capture::getInstance(void)
 }
 void Capture::init()
 {
-	cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Marker", 0 );
+	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
+	/*cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );
-	initVideoStream();
+	*/initVideoStream();
 
 	int value = Capture::getInstance().threshold;
 	int max = 255;
@@ -236,7 +238,7 @@ void Capture::updateMarkerPositions(void)
 					{
 						IplImage* iplTmp = cvCreateImage( cvSize(100,300), IPL_DEPTH_8U, 1 );
 						cvResize( iplStripe, iplTmp, CV_INTER_NN );
-						cvShowImage ( "Stripe", iplTmp );//iplStripe );
+						//cvShowImage ( "Stripe", iplTmp );//iplStripe );
 						cvReleaseImage( &iplTmp );
 						isFirstStripe = false;
 					}
@@ -404,7 +406,7 @@ void Capture::updateMarkerPositions(void)
 
 			if ( isFirstMarker )
 			{
-				cvShowImage ( "Marker", iplMarker );
+				//cvShowImage ( "Marker", iplMarker );
 				isFirstMarker = false;
 			}
 
@@ -436,6 +438,9 @@ void Capture::updateMarkerPositions(void)
 		} // end of if(result->total == 4)
 	} // end of loop over contours
 
+	/*cvShowImage("Original Image", iplGrabbed);
+	cvShowImage("Converted", iplThreshold);
+*/
 	isFirstStripe = true;
 
 	isFirstMarker = true;
