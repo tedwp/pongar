@@ -1,5 +1,20 @@
+#include <iostream>
+
+
+
+#include "temp.h"
+
 #include "Capture.h"
 #include "Marker.h"
+
+#include <cv.h>
+#include <highgui.h>
+
+#include "PoseEstimation.h"
+
+
+
+using namespace std;
 
 Capture::Capture(ArrayList<Marker> markers)
 {
@@ -9,22 +24,56 @@ Capture::~Capture(void)
 {
 }
 
-void init(void)
+
+void Capture::init(void)
+{
+	cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Marker", 0 );
+	cvResizeWindow("Marker", 120, 120 );
+	initVideoStream();
+
+	int value = thresh;
+	int max = 255;
+	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
+	
+	int bw_value = bw_thresh;
+	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
+
+	memStorage = cvCreateMemStorage();
+}
+
+void Capture::updateMarkerPositions(void)
 {
 }
 
-void updateMarkerPositions(void)
+Marker Capture::getMarkerForId(int id)
 {
 }
 
-Marker getMarkerForId(int id)
+void Capture::initVideoStream(void)
+{
+	cap = cvCaptureFromCAM (0);
+	if (!cap) {
+		cout << "No webcam found\n";
+		exit(0);
+	}
+}
+
+int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 {
 }
 
-void initVideoStream(void)
+
+
+//trackbar
+void Capture::trackbarHandler(int pos)
 {
+	thresh = pos;
 }
 
-int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
+void Capture::bw_trackbarHandler(int pos)
 {
+	bw_thresh = pos;
 }

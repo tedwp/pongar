@@ -1,53 +1,50 @@
 //schtest
+#include "temp.h"
+
+#include "Game.h"
 
 #include <iostream>
 #include <iomanip>
 
 #include "GL/glut.h"
-
-#include <cv.h>
-#include <highgui.h>
+//
+//#include <cv.h>
+//#include <highgui.h>
 
 #include "PoseEstimation.h"
 
 using namespace std;
+//
+////thresholding
+//int thresh = 100;
+//int bw_thresh = 100;
+//
+////camera
+//CvCapture* cap;
+//const int width = 640; 
+//const int height = 480;
+////macbook pro camera: camangle = 60
+//const int camangle = 60;
+//
+//float resultMatrix_005A[16];
+//float resultMatrix_0272[16];
+//
+//CvMemStorage* memStorage;
+//unsigned char bkgnd[width*height*3];
+//
+////trackbar
+//void trackbarHandler(int pos) {
+//	thresh = pos;
+//}
+//
+//void bw_trackbarHandler(int pos) {
+//	bw_thresh = pos;
+//}
 
-//thresholding
-int thresh = 100;
-int bw_thresh = 100;
-
-//camera
-CvCapture* cap;
-const int width = 640; 
-const int height = 480;
-//macbook pro camera: camangle = 60
-const int camangle = 60;
-
-float resultMatrix_005A[16];
-float resultMatrix_0272[16];
-
-CvMemStorage* memStorage;
-unsigned char bkgnd[width*height*3];
-
-//trackbar
-void trackbarHandler(int pos) {
-	thresh = pos;
-}
-
-void bw_trackbarHandler(int pos) {
-	bw_thresh = pos;
-}
-
-void initVideoStream() {
-	cap = cvCaptureFromCAM (0);
-	if (!cap) {
-		cout << "No webcam found\n";
-		exit(0);
-	}
-}
 
 int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 {
+
 	int x = int( floorf ( p.x ) );
 	int y = int( floorf ( p.y ) );
 
@@ -67,7 +64,7 @@ int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 
 void init()
 {
-	cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
+	/*cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Marker", 0 );
@@ -81,7 +78,7 @@ void init()
 	int bw_value = bw_thresh;
 	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
 
-	memStorage = cvCreateMemStorage();
+	memStorage = cvCreateMemStorage();*/
 }
 
 void idle()
@@ -558,43 +555,45 @@ void resize( int w, int h)
 
 int main(int argc, char* argv[]) 
 {
-    // initialize the window system
-    glutInit( &argc, argv );
-    glutInitWindowSize( width, height );
-    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutCreateWindow("PongAR");
+	Game game(); //TODO right?
 
-    // initialize the GL library
+    //// initialize the window system
+    //glutInit( &argc, argv );
+    //glutInitWindowSize( width, height );
+    //glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+    //glutCreateWindow("PongAR");
 
-    // pixel storage/packing stuff
-    glPixelStorei( GL_PACK_ALIGNMENT,   1 );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-    glPixelZoom( 1.0, -1.0 );
+    //// initialize the GL library
 
-    // enable and set colors
-    glEnable( GL_COLOR_MATERIAL );
-    glClearColor( 0, 0, 0, 1.0 );
+    //// pixel storage/packing stuff
+    //glPixelStorei( GL_PACK_ALIGNMENT,   1 );
+    //glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    //glPixelZoom( 1.0, -1.0 );
 
-    // enable and set depth parameters
-    glEnable( GL_DEPTH_TEST );
-    glClearDepth( 1.0 );
+    //// enable and set colors
+    //glEnable( GL_COLOR_MATERIAL );
+    //glClearColor( 0, 0, 0, 1.0 );
 
-    // light parameters
-    GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
-    GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
+    //// enable and set depth parameters
+    //glEnable( GL_DEPTH_TEST );
+    //glClearDepth( 1.0 );
 
-    // enable lighting
-    glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
-    glLightfv( GL_LIGHT0, GL_AMBIENT,  light_amb );
-    glLightfv( GL_LIGHT0, GL_DIFFUSE,  light_dif );
-    //glEnable( GL_LIGHTING );
-    //glEnable( GL_LIGHT0 );
+    //// light parameters
+    //GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
+    //GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
+    //GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
 
-    // make functions known to GLUT
-    glutDisplayFunc( display );
-    glutReshapeFunc( resize  );
-    glutIdleFunc( idle );
+    //// enable lighting
+    //glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
+    //glLightfv( GL_LIGHT0, GL_AMBIENT,  light_amb );
+    //glLightfv( GL_LIGHT0, GL_DIFFUSE,  light_dif );
+    ////glEnable( GL_LIGHTING );
+    ////glEnable( GL_LIGHT0 );
+
+    //// make functions known to GLUT
+    //glutDisplayFunc( display );
+    //glutReshapeFunc( resize  );
+    //glutIdleFunc( idle );
 
     // setup OpenCV
     init();

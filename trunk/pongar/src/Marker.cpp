@@ -11,6 +11,6 @@ Marker::~Marker(void)
 {
 }
 
-void setPosition(cvMat newPosition)
+void Marker::setPosition(cvMat newPosition)
 {
 }

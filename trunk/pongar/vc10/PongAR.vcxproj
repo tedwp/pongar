@@ -101,6 +101,7 @@
     <ClInclude Include="..\src\Marker.h" />
     <ClInclude Include="..\src\PoseEstimation.h" />
     <ClInclude Include="..\src\Capture.h" />
+    <ClInclude Include="..\src\temp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
