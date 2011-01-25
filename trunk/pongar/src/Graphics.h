@@ -5,7 +5,7 @@ class Graphics
 {
 public:
 	static Graphics& getInstance(void);
-	void init(void);
+	void init(int argc, char* argv[]);
 	void start(void);
 
 private:

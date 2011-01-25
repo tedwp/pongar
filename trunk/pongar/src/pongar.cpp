@@ -163,8 +163,8 @@ void idle()
 
 				//normalize vectors
 				double diffLength = sqrt ( dx*dx+dy*dy );
-				stripeVecX.x = dx / diffLength;
-				stripeVecX.y = dy / diffLength;
+				stripeVecX.x = (float) (dx / diffLength);
+				stripeVecX.y = (float) (dy / diffLength);
 
 				stripeVecY.x =  stripeVecX.y;
 				stripeVecY.y = -stripeVecX.x;
@@ -190,8 +190,8 @@ void idle()
 						{
 							CvPoint2D32f subPixel;
 
-							subPixel.x = (double)p.x + ((double)m * stripeVecX.x) + ((double)n * stripeVecY.x);
-							subPixel.y = (double)p.y + ((double)m * stripeVecX.y) + ((double)n * stripeVecY.y);
+							subPixel.x =(float) ( (double)p.x + ((double)m * stripeVecX.x) + ((double)n * stripeVecY.x));
+							subPixel.y =(float) ( (double)p.y + ((double)m * stripeVecX.y) + ((double)n * stripeVecY.y));
 
 							CvPoint p2;
 							p2.x = (int)subPixel.x;
@@ -253,8 +253,8 @@ void idle()
 					int maxIndexShift = maxIndex - (stripeLength>>1);
 
 					//shift the original edgepoint accordingly
-					edgeCenter.x = (double)p.x + (((double)maxIndexShift+pos) * stripeVecY.x);
-					edgeCenter.y = (double)p.y + (((double)maxIndexShift+pos) * stripeVecY.y);
+					edgeCenter.x = (float) ( (double)p.x + (((double)maxIndexShift+pos) * stripeVecY.x));
+					edgeCenter.y = (float) ((double)p.y + (((double)maxIndexShift+pos) * stripeVecY.y));
 
 					CvPoint p_tmp;
 					p_tmp.x = (int)edgeCenter.x;
@@ -328,8 +328,8 @@ void idle()
 				b /= c;
 
 				//exact corner
-				corners[i].x = a; 
-				corners[i].y = b;
+				corners[i].x = (float) a; 
+				corners[i].y = (float) b;
 				CvPoint p;
 				p.x = (int)corners[i].x;
 				p.y = (int)corners[i].y;
@@ -447,8 +447,8 @@ void idle()
 				corners[i].y = -corners[i].y + height/2;
 			}
 			
-			if(code == 0x005a) estimateSquarePose( Capture::getInstance().m_resultMatrix_005A, corners, 0.045 );
-			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045 );
+			if(code == 0x005a) estimateSquarePose( Capture::getInstance().m_resultMatrix_005A, corners, 0.045f );
+			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
 
 			cvReleaseMat (&projMat);
 
@@ -556,7 +556,7 @@ void idle()
 
 int main(int argc, char* argv[]) 
 {
-	Game::getInstance().init();
+	Game::getInstance().init(argc, argv);
 
     //// initialize the window system
     //glutInit( &argc, argv );
