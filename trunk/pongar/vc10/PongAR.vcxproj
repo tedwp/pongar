@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\Marker.cpp" />
     <ClCompile Include="..\src\pongar.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="..\src\Capture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\Graphics.h" />
     <ClInclude Include="..\src\Marker.h" />
     <ClInclude Include="..\src\PoseEstimation.h" />
