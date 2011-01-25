@@ -5,6 +5,7 @@ public:
 	Marker(void);
 	~Marker(void);
 	void setPosition(cvMat newPosition);
-	int id;
-};
+private:
+		int id;
 
+};

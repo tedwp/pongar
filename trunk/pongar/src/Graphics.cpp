@@ -19,6 +19,6 @@ void prepareForDisplay(void)
 void redrawDisplay(void)
 {
 }
-void resize(void)
+void resize( int w, int h) 
 {
 }
