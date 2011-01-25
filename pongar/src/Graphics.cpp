@@ -85,8 +85,8 @@ void Graphics::doRender()
 	float resultTransposedMatrix[16];
 	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
 	{
-		std::cout << " Rendering ";
-		std::cout << i;
+		std::cout << "\nRendering #";
+		std::cout << Game::getMarkers()[i]->getId();
 		Game::getMarkers()[i]->render();
 	}
 	/*
