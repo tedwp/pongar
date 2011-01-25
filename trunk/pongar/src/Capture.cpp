@@ -430,7 +430,7 @@ void Capture::updateMarkerPositions(void)
 			{
 				float shizzle[16];
 				estimateSquarePose( shizzle, corners, 0.045f );
-				m->setPosition(shizzle);
+				m->updatePosition(shizzle);
 			}
 
 			cvReleaseMat (&projMat);
