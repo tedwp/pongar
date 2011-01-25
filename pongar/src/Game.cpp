@@ -29,6 +29,7 @@ void Game::init( int argc, char* argv[] )
 {
 	Marker* ersterMarker = new Marker(2884);
 	Marker* zweiterMarker = new Marker(626);
+	Marker* zweiterMarker = new Marker(90);
 	
 	m_markers.push_back(ersterMarker);
 	m_markers.push_back(zweiterMarker);
