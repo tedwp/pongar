@@ -425,6 +425,7 @@ void Capture::updateMarkerPositions(void)
 
 			//Marker* m = Game::getMarkerById(0x005a);
 			std::cout << code;
+			std::cout << "    ";
 			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{
