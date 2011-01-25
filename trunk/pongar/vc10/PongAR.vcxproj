@@ -88,17 +88,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\GL.cpp" />
+    <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\Marker.cpp" />
     <ClCompile Include="..\src\pongar.cpp" />
     <ClCompile Include="..\src\PoseEstimation.cpp" />
-    <ClCompile Include="..\src\CV.cpp" />
+    <ClCompile Include="..\src\Capture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\GL.h" />
+    <ClInclude Include="..\src\Graphics.h" />
     <ClInclude Include="..\src\Marker.h" />
     <ClInclude Include="..\src\PoseEstimation.h" />
-    <ClInclude Include="..\src\CV.h" />
+    <ClInclude Include="..\src\Capture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
