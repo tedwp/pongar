@@ -47,6 +47,7 @@ void Marker::updatePosition(float position [16])
 	
 	for(unsigned i = 0; i < 16; i++)
 	{
+		if(position[i] != m_position[i])
 		m_positionChanged = true;
 	}
 	
