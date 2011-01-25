@@ -18,11 +18,18 @@ public:
 	static std::vector<Marker*> getMarkers(void);
 	static Marker* getMarkerById(int id);
 
+	static const int PURPOSE_PADDLE1 = 1;
+	static const int PURPOSE_PADDLE2 = 2;
+	static const int PURPOSE_PLAYINGFIELD = 3;
+
 private:
+	static Game& m_instance;
+	std::vector<Marker*> m_markers;
+
 	Game(void);
 	Game(const Game&);
 	~Game(void);
-	static Game& m_instance;
-	std::vector<Marker*> m_markers;
+	void Game::registerMarker(int id, int purpose);
+	
 };
 
