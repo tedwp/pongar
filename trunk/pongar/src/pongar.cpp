@@ -556,7 +556,7 @@ void idle()
 
 int main(int argc, char* argv[]) 
 {
-	Game::getInstance()->init();
+	Game::getInstance().init();
 
     //// initialize the window system
     //glutInit( &argc, argv );
@@ -608,7 +608,8 @@ int main(int argc, char* argv[])
     //while (1) idle();
 
     // start the action
-	Game::getInstance()->start();
+
+	Game::getInstance().start();
 
     return 0;
 }
