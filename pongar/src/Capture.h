@@ -1,4 +1,5 @@
 #pragma once
+#include "Marker.h"
 class Capture
 {
 public:
@@ -12,6 +13,10 @@ private:
 	Marker getMarkerForId(int id);
 	void initVideoStream(void);
 	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p );
+	
+	//trackbar
+	void trackbarHandler(int pos);
+	void bw_trackbarHandler(int pos);
 };
 
 
