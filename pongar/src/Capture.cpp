@@ -416,14 +416,20 @@ void Capture::updateMarkerPositions(void)
 				corners[i].x -= width/2;
 				corners[i].y = -corners[i].y + height/2;
 			}
-			float shizzle[16];
+			
+			/*
 			//if(code == 0x005a) estimateSquarePose( Capture::getInstance().m_resultMatrix_005A, corners, 0.045f );
-			if(code == 0x005a) estimateSquarePose( shizzle, corners, 0.045f );
-			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
+			*/
+			//if(code == 0x005a) estimateSquarePose( shizzle, corners, 0.045f );
+			//else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
 
-			Marker* m = Game::getMarkerById(0x005a);
+			//Marker* m = Game::getMarkerById(0x005a);
+			std::cout << code;
+			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{
+				float shizzle[16];
+				estimateSquarePose( shizzle, corners, 0.045f );
 				m->setPosition(shizzle);
 			}
 
