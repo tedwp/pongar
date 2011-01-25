@@ -22,7 +22,7 @@ void Game::init( void )
 	Graphics::getInstance().init();
 	
 }
-void start(void)
+void Game::start(void)
 {
 	Graphics::getInstance().start();
 }
