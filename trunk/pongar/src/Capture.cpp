@@ -19,16 +19,11 @@ using namespace std;
 
 Capture::~Capture(void)
 {
-	if( m_instance != NULL )
-		delete( m_instance );
 }
 
-Capture* Capture::getInstance(void)
+Capture& Capture::getInstance(void)
 {
-	if(m_instance == NULL)
-	{
-		m_instance = new Capture();
-	}
+	static Capture m_instance;
 	return m_instance;
 
 }

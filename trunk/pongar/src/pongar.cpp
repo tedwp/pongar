@@ -202,7 +202,7 @@ void idle()
 							else
 								cvCircle (iplGrabbed, p2, 1, CV_RGB(0,255,255), -1);
 
-							int pixel = Capture::getInstance()->subpixSampleSafe (iplConverted, subPixel);
+							int pixel = Capture::getInstance().subpixSampleSafe (iplConverted, subPixel);
 
 							int w = m + 1; //add 1 to shift to 0..2
 							int h = n + ( stripeLength >> 1 ); //add stripelenght>>1 to shift to 0..stripeLength
