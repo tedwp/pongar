@@ -48,7 +48,7 @@ vector<Marker*> Game::getMarkers(void)
 	return getInstance().m_markers;
 }
 
-Marker Game::getMarkerById(int id)
+Marker Game::getMarkerById(int id) throw (MarkerNotFoundException)
 {
 	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
 	{
