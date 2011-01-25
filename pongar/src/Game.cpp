@@ -1,12 +1,21 @@
-#pragma once
-class Game
+#include "Game.h"
+
+Game::Game(void) 
 {
-public:
-	Game(void);
-	~Game(void);
+}
 
-	void init( void );
-	void idle( void );
-	void cleanup( void );
-};
+Game::~Game( void )
+{
+}
 
+void Game::init( void )
+{
+}
+
+void Game::idle( void )
+{
+}
+
+void Game::cleanup( void )
+{
+}
