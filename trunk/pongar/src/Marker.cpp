@@ -38,7 +38,7 @@ void Marker::render(void)
 	
 		glColor4f( 1.0, 1.0, 1.0, 0.7 );
 		glRectf(-0.5, -0.8, 0.5, 0.8);
-		}
+	}
 }
 
 void Marker::updatePosition(float position [16])

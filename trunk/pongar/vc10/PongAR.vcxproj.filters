@@ -33,6 +33,12 @@
     <ClCompile Include="..\src\Game.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\UI.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Paddle.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\PoseEstimation.h">
@@ -51,6 +57,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\src\conf.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UI.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Paddle.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
