@@ -5,14 +5,15 @@
 class Game
 {
 public:
-	Game(void);
+	static Game* getInstance(void);
 	~Game(void);
 
 	void init( void );
 	void idle( void );
 	void cleanup( void );
+	void start(void);
 private:
-	Graphics m_graphics;
-	Capture m_capture
+	Game(void);
+	static Game* m_instance;
 };
 
