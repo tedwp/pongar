@@ -4,14 +4,15 @@
 class Graphics
 {
 public:
-	static Graphics* getInstance(void);
-	~Graphics(void);
+	static Graphics& getInstance(void);
 	void init(void);
 	void start(void);
 
 private:
 	Graphics(void);
-	static Graphics* m_instance;
+	Graphics(const Graphics&);
+	~Graphics(void);
+	static Graphics& m_instance;
 
 
 	static void render();

@@ -7,16 +7,11 @@ Game::Game(void)
 
 Game::~Game(void)
 {
-	if( m_instance != NULL )
-		delete( m_instance );
 }
 
-Game* Game::getInstance(void)
+Game& Game::getInstance(void)
 {
-	if(m_instance == NULL)
-	{
-		m_instance = new Game();
-	}
+	static Game m_instance;
 	return m_instance;
 
 }
@@ -24,12 +19,12 @@ Game* Game::getInstance(void)
 void Game::init( void )
 {
 	Capture::getInstance()->init();
-	Graphics::getInstance()->init();
+	Graphics::getInstance().init();
 	
 }
 void start(void)
 {
-	Graphics::getInstance()->start();
+	Graphics::getInstance().start();
 }
 
 void Game::idle( void )

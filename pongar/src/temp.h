@@ -21,8 +21,8 @@
 //unsigned char bkgnd[width*height*3];
 
 //thresholding
-int thresh = 100;
-int bw_thresh = 100;
+int thresh;// = 100;
+int bw_thresh;// = 100;
 
 //camera
 CvCapture* cap;

@@ -10,19 +10,11 @@ Graphics::Graphics(void)
 
 Graphics::~Graphics(void)
 {
-	if( m_instance != NULL )
-		getInstance()->cleanup();
-		delete( m_instance );
-
-
 }
 
-Graphics* Graphics::getInstance(void)
+Graphics& Graphics::getInstance(void)
 {
-	if(m_instance == NULL)
-	{
-		m_instance = new Graphics();
-	}
+	static Graphics m_instance;
 	return m_instance;
 
 }
@@ -72,7 +64,7 @@ void Graphics::start(void)
 }
 void Graphics::render()
 {
-	Graphics::getInstance()->doRender();
+	Graphics::getInstance().doRender();
     
 }
 void Graphics::doRender()
@@ -146,7 +138,7 @@ void Graphics::redrawDisplay(void)
 
 void Graphics::resize( int w, int h) 
 {
-	Graphics::getInstance()->doResize(w, h);
+	Graphics::getInstance().doResize(w, h);
 }
 void Graphics::doResize( int w, int h) 
 {
