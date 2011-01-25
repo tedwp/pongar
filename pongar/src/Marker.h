@@ -1,4 +1,5 @@
 #pragma once
+#include <cv.h>
 
 class Marker
 {
@@ -6,7 +7,7 @@ class Marker
 public:
 	Marker(int id);
 	~Marker(void);
-	void setPosition(cvMat newPosition);
+	void setPosition(CvMat newPosition);
 private:
 		int m_id;
 

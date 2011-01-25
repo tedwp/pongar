@@ -1,13 +1,28 @@
 #pragma once
+#include "temp.h"
 
 class Graphics
 {
 public:
-	Graphics(void);
+	static Graphics* getInstance(void);
 	~Graphics(void);
 	void init(void);
+	void start(void);
+
+private:
+	Graphics(void);
+	static Graphics* m_instance;
+
+
+	static void render();
+	void doRender(void);
+
+	static void resize( int w, int h) ;
+	void doResize( int w, int h) ;
+
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
-	void resize( int w, int h) 
+	void Graphics::cleanup(void);
+	
 };
 

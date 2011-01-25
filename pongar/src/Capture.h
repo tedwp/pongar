@@ -1,22 +1,28 @@
 #pragma once
+#include <vector>
 #include "Marker.h"
+
 class Capture
 {
 public:
-	Capture(ArrayList<Marker> markers);
+	static Capture* getInstance(void);
 	~Capture(void);
 	void init(void);
 	void updateMarkerPositions(void);
+	void setMarkers(std::vector<Marker*> markers);
+	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p ); //TODO make private!
 
 private:
-	ArrayList<Marker>& m_markers;
+	static Capture* m_instance;
+	Capture(void);
+
+	std::vector<Marker*>& m_markers;
 	Marker getMarkerForId(int id);
 	void initVideoStream(void);
-	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p );
 	
 	//trackbar
-	void trackbarHandler(int pos);
-	void bw_trackbarHandler(int pos);
+	static void trackbarHandler(int pos);
+	static void bw_trackbarHandler(int pos);
 };
 
 

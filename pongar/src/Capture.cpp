@@ -1,7 +1,6 @@
 #include <iostream>
 
 
-
 #include "temp.h"
 
 #include "Capture.h"
@@ -16,15 +15,27 @@
 
 using namespace std;
 
-Capture::Capture(ArrayList<Marker> markers)
-{
-}
+
 
 Capture::~Capture(void)
 {
+	if( m_instance != NULL )
+		delete( m_instance );
 }
 
+Capture* Capture::getInstance(void)
+{
+	if(m_instance == NULL)
+	{
+		m_instance = new Capture();
+	}
+	return m_instance;
 
+}
+void Capture::setMarkers(std::vector<Marker*> markers)
+{
+	m_markers = markers;
+}
 void Capture::init(void)
 {
 	cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
@@ -50,6 +61,7 @@ void Capture::updateMarkerPositions(void)
 
 Marker Capture::getMarkerForId(int id)
 {
+	return NULL;
 }
 
 void Capture::initVideoStream(void)
@@ -63,6 +75,22 @@ void Capture::initVideoStream(void)
 
 int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 {
+
+	int x = int( floorf ( p.x ) );
+	int y = int( floorf ( p.y ) );
+
+	if ( x < 0 || x >= pSrc->width  - 1 ||
+		 y < 0 || y >= pSrc->height - 1 )
+		return 127;
+
+	int dx = int ( 256 * ( p.x - floorf ( p.x ) ) );
+	int dy = int ( 256 * ( p.y - floorf ( p.y ) ) );
+
+	unsigned char* i = ( unsigned char* ) ( ( pSrc->imageData + y * pSrc->widthStep ) + x );
+	int a = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
+	i += pSrc->widthStep;
+	int b = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
+	return a + ( ( dy * ( b - a) ) >> 8 );
 }
 
 
