@@ -424,17 +424,13 @@ void Capture::updateMarkerPositions(void)
 			//else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
 
 			//Marker* m = Game::getMarkerById(0x005a);
-			std::cout << code;
-			std::cout << "    ";
 			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{
-				std::cout << " Found ";
 				float shizzle[16];
 				estimateSquarePose( shizzle, corners, 0.045f );
 				m->setPosition(shizzle);
 			}
-			std::cout << " X ";
 
 			cvReleaseMat (&projMat);
 
