@@ -1,11 +1,13 @@
 #pragma once
+
 class Marker
 {
+
 public:
-	Marker(void);
+	Marker(int id);
 	~Marker(void);
 	void setPosition(cvMat newPosition);
 private:
-		int id;
+		int m_id;
 
 };
