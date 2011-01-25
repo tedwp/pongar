@@ -429,10 +429,12 @@ void Capture::updateMarkerPositions(void)
 			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{
+				std::cout << " Found ";
 				float shizzle[16];
 				estimateSquarePose( shizzle, corners, 0.045f );
 				m->setPosition(shizzle);
 			}
+			std::cout << " X ";
 
 			cvReleaseMat (&projMat);
 

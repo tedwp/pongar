@@ -27,8 +27,8 @@ Game& Game::getInstance(void)
 
 void Game::init( int argc, char* argv[] )
 {
-	Marker* ersterMarker = new Marker(0xb44);
-	Marker* zweiterMarker = new Marker(0x272);
+	Marker* ersterMarker = new Marker(2884);
+	Marker* zweiterMarker = new Marker(626);
 	
 	m_markers.push_back(ersterMarker);
 	m_markers.push_back(zweiterMarker);
