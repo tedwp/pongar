@@ -89,12 +89,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GL.cpp" />
+    <ClCompile Include="..\src\Marker.cpp" />
     <ClCompile Include="..\src\pongar.cpp" />
     <ClCompile Include="..\src\PoseEstimation.cpp" />
     <ClCompile Include="..\src\CV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\GL.h" />
+    <ClInclude Include="..\src\Marker.h" />
     <ClInclude Include="..\src\PoseEstimation.h" />
     <ClInclude Include="..\src\CV.h" />
   </ItemGroup>
