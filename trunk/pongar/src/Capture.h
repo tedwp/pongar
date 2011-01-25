@@ -13,9 +13,9 @@ class Capture
 public:
 	static Capture& getInstance(void);
 	
-	void init(void);
+	void init();
+
 	void updateMarkerPositions(void);
-	void setMarkers(std::vector<Marker*>& markers);
 	 //TODO make the following private!
 	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p );
 	int threshold;
@@ -35,7 +35,6 @@ private:
 	Capture(const Capture&);
 	~Capture(void);
 
-	std::vector<Marker*>* m_markers;
 	Marker getMarkerForId(int id);
 	void initVideoStream(void);
 	
