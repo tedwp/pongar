@@ -16,10 +16,10 @@ Game& Game::getInstance(void)
 
 }
 
-void Game::init( void )
+void Game::init( int argc, char* argv[] )
 {
 	Capture::getInstance().init();
-	Graphics::getInstance().init();
+	Graphics::getInstance().init(argc, argv);
 	
 }
 void Game::start(void)

@@ -7,7 +7,7 @@ class Game
 public:
 	static Game& getInstance(void);
 
-	void init( void );
+	void init( int argc, char* argv[] );
 	void idle( void );
 	void cleanup( void );
 	void start(void);

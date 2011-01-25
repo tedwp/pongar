@@ -17,10 +17,10 @@ Graphics& Graphics::getInstance(void)
 	return m_instance;
 
 }
-void Graphics::init(void)
+void Graphics::init(int argc, char* argv[])
 {
 	// initialize the window system
-    glutInit( 0, NULL );
+    glutInit( &argc, argv);
     glutInitWindowSize( width, height );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
     glutCreateWindow("PongAR");
