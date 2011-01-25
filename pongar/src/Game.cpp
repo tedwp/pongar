@@ -27,14 +27,19 @@ Game& Game::getInstance(void)
 
 void Game::init( int argc, char* argv[] )
 {
-	
-	m_markers.push_back(new Marker(2884));
-	m_markers.push_back(new Marker(626));
-	m_markers.push_back(new Marker(90));
-	
+	getInstance().registerMarker(2884, PURPOSE_PADDLE1);
+	getInstance().registerMarker(626, PURPOSE_PADDLE2);
+	getInstance().registerMarker(90, PURPOSE_PLAYINGFIELD);
+		
 	Capture::getInstance().init();
 	Graphics::getInstance().init(argc, argv);
 	
+}
+void Game::registerMarker(int id, int purpose)
+{
+	Marker* m = new Marker(id);
+	m->setPurpose(purpose);
+	m_markers.push_back(m);
 }
 void Game::start(void)
 {

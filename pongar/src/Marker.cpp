@@ -68,6 +68,14 @@ int Marker::getId(void)
 	return m_id;
 
 }
+int Marker::getPurpose(void)
+{
+	return m_purpose;
+}
+void Marker::setPurpose(int p)
+{
+	m_purpose = p;
+}
 
 bool Marker::hasPositionChanged(void)
 {
