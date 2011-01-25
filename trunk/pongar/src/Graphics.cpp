@@ -79,12 +79,14 @@ void Graphics::doRender()
 	
 	//Anfang - Über die Marker iterieren
 
-		
+	/*	
 	float resultTransposedMatrix[16];
 	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
 	{
 		Game::getMarkers()[i]->render();
 	}
+	*/
+
 	/*
 	for (int x=0; x<4; ++x)
 	{
