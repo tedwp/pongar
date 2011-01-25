@@ -3,6 +3,8 @@
 
 #include "conf.h"
 
+#include "PoseEstimation.h"
+
 #include <cv.h>
 #include "Marker.h"
 #include <highgui.h>
