@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Graphics.h"
+#include "MarkerNotFoundException.h"
 #include <vector>
 
 using namespace std;
@@ -56,7 +57,7 @@ Marker Game::getMarkerById(int id)
 			return *(getInstance().m_markers[i]);
 		}
 	}
-	return NULL;
+	throw new MarkerNotFoundException();
 }
 
 void Game::idle( void )

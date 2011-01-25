@@ -1,6 +1,6 @@
 #include <iostream>
 
-
+#include "MarkerNotFoundException.h"
 #include "conf.h"
 #include "Game.h"
 #include "Capture.h"
@@ -421,7 +421,13 @@ void Capture::updateMarkerPositions(void)
 			if(code == 0x005a) estimateSquarePose( shizzle, corners, 0.045f );
 			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
 
-			Game::getMarkerById(0x005a).setPosition(shizzle);
+			try
+			{
+				Game::getMarkerById(0x005a).setPosition(shizzle);
+			}
+			catch(MarkerNotFoundException e)
+			{
+			}
 
 			cvReleaseMat (&projMat);
 
