@@ -21,6 +21,8 @@ private:
 	static void resize( int w, int h) ;
 	void doResize( int w, int h) ;
 
+	static void idle(void);
+
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
 	void Graphics::cleanup(void);

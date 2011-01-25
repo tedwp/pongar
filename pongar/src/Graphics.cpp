@@ -1,4 +1,5 @@
 #include "Capture.h"
+#include "Game.h"
 #include "Graphics.h"
 #include "GL/glut.h"
 
@@ -55,8 +56,14 @@ void Graphics::init(int argc, char* argv[])
     // make functions known to GLUT
     glutDisplayFunc( render );
     glutReshapeFunc( resize  );
-    glutIdleFunc( idle );
+    glutIdleFunc( getInstance().idle);
 }
+void Graphics::idle(void)
+{
+	Game::getInstance().idle();
+	glutPostRedisplay();
+}
+
 void Graphics::start(void)
 {
 	glutMainLoop();
