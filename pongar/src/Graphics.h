@@ -1,9 +1,9 @@
 #pragma once
-class GL
+class Graphics
 {
 public:
-	GL(void);
-	~GL(void);
+	Graphics(void);
+	~Graphics(void);
 	void init(void);
 	void prepareForDisplay(void);
 	void redrawDisplay(void);

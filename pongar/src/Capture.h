@@ -1,9 +1,9 @@
 #pragma once
-class CV
+class Capture
 {
 public:
-	CV(ArrayList<Marker> markers);
-	~CV(void);
+	Capture(ArrayList<Marker> markers);
+	~Capture(void);
 	void init(void);
 	void updateMarkerPositions(void);
 
