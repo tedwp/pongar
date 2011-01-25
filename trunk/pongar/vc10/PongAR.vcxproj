@@ -91,6 +91,7 @@
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\Marker.cpp" />
+    <ClCompile Include="..\src\MarkerNotFoundException.cpp" />
     <ClCompile Include="..\src\pongar.cpp" />
     <ClCompile Include="..\src\PoseEstimation.cpp" />
     <ClCompile Include="..\src\Capture.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\Graphics.h" />
     <ClInclude Include="..\src\Marker.h" />
+    <ClInclude Include="..\src\MarkerNotFoundException.h" />
     <ClInclude Include="..\src\PoseEstimation.h" />
     <ClInclude Include="..\src\Capture.h" />
     <ClInclude Include="..\src\conf.h" />
