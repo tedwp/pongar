@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Graphics.h"
-#include "MarkerNotFoundException.h"
 #include <vector>
 
 using namespace std;
@@ -48,16 +47,16 @@ vector<Marker*> Game::getMarkers(void)
 	return getInstance().m_markers;
 }
 
-Marker Game::getMarkerById(int id) throw (MarkerNotFoundException)
+Marker* Game::getMarkerById(int id)
 {
 	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
 	{
 		if(	(getInstance().m_markers[i])->getId() == id)
 		{
-			return *(getInstance().m_markers[i]);
+			return getInstance().m_markers[i];
 		}
 	}
-	throw new MarkerNotFoundException();
+	return null;
 }
 
 void Game::idle( void )

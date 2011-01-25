@@ -421,12 +421,10 @@ void Capture::updateMarkerPositions(void)
 			if(code == 0x005a) estimateSquarePose( shizzle, corners, 0.045f );
 			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
 
-			try
+			Marker* m = Game::getMarkerById(0x005a);
+			if(m != NULL)
 			{
-				Game::getMarkerById(0x005a).setPosition(shizzle);
-			}
-			catch(MarkerNotFoundException e)
-			{
+				m->setPosition(shizzle);
 			}
 
 			cvReleaseMat (&projMat);
