@@ -17,7 +17,7 @@ Marker::~Marker(void)
 
 void Marker::render(void)
 {
-	float resultTransposedMatrix[16];
+	/*float resultTransposedMatrix[16];
 	for (int x=0; x<4; ++x)
 	{
 		for (int y=0; y<4; ++y)
@@ -35,7 +35,7 @@ void Marker::render(void)
 	// draw white rectangle
 	
 	glColor4f( 1.0, 1.0, 1.0, 0.7 );
-	glRectf(-0.5, -0.8, 0.5, 0.8);
+	glRectf(-0.5, -0.8, 0.5, 0.8);*/
 }
 
 
