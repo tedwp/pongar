@@ -33,9 +33,6 @@
     <ClCompile Include="..\src\Game.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\MarkerNotFoundException.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\PoseEstimation.h">
@@ -54,9 +51,6 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\src\conf.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\MarkerNotFoundException.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

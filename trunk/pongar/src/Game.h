@@ -16,7 +16,7 @@ public:
 	void start(void);
 
 	static std::vector<Marker*> getMarkers(void);
-	static Marker getMarkerById(int id);
+	static Marker* getMarkerById(int id);
 
 private:
 	Game(void);
