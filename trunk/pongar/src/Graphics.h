@@ -1,5 +1,5 @@
 #pragma once
-#include "temp.h"
+#include "conf.h"
 
 class Graphics
 {

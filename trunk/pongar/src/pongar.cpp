@@ -1,5 +1,5 @@
 //schtest
-#include "temp.h"
+#include "conf.h"
 
 #include "Game.h"
 
@@ -87,38 +87,38 @@ void idle()
 
 	bool isFirstMarker = true;
 
-	IplImage* iplGrabbed = cvQueryFrame(cap);
+	IplImage* iplGrabbed = cvQueryFrame(Capture::getInstance().m_cap);
 
 	if(!iplGrabbed){
 		printf("Could not query frame. Trying to reinitialize.\n");
-		cvReleaseCapture (&cap);
+		cvReleaseCapture (&Capture::getInstance().m_cap);
 		exit(0);
 		//initVideoStream();
 		return;
 	}
 
 	CvSize picSize = cvGetSize(iplGrabbed);
-	memcpy( bkgnd, iplGrabbed->imageData, sizeof(bkgnd) );
+	memcpy( Capture::getInstance().m_bkgnd, iplGrabbed->imageData, sizeof(Capture::getInstance().m_bkgnd) );
 
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 
 	cvConvertImage(iplGrabbed, iplConverted, 0);
-	cvThreshold(iplConverted, iplThreshold, thresh, 255, CV_THRESH_BINARY);
+	cvThreshold(iplConverted, iplThreshold, Capture::getInstance().threshold, 255, CV_THRESH_BINARY);
 	//cvAdaptiveThreshold(iplConverted, iplThreshold, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 33, 5);
 
 	// Find Contours
 	CvSeq* contours;
 
 	cvFindContours(
-		iplThreshold, memStorage, &contours, sizeof(CvContour),
+		iplThreshold, Capture::getInstance().m_memStorage, &contours, sizeof(CvContour),
 		CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE
 	);
 
 	for (; contours; contours = contours->h_next)
 	{
 		CvSeq* result = cvApproxPoly(
-			contours, sizeof(CvContour), memStorage, CV_POLY_APPROX_DP,
+			contours, sizeof(CvContour), Capture::getInstance().m_memStorage, CV_POLY_APPROX_DP,
 			cvContourPerimeter(contours)*0.02, 0
 		);
 
@@ -356,7 +356,7 @@ void idle()
 			//change the perspective in the marker image using the previously calculated matrix
 			cvWarpPerspective(iplConverted, iplMarker, projMat, CV_WARP_FILL_OUTLIERS,  cvScalarAll(0));
 			
-			cvThreshold(iplMarker, iplMarker, bw_thresh, 255, CV_THRESH_BINARY);
+			cvThreshold(iplMarker, iplMarker, Capture::getInstance().bw_threshold, 255, CV_THRESH_BINARY);
 
 			//now we have a B/W image of a supposed Marker
 
@@ -447,8 +447,8 @@ void idle()
 				corners[i].y = -corners[i].y + height/2;
 			}
 			
-			if(code == 0x005a) estimateSquarePose( resultMatrix_005A, corners, 0.045 );
-			else if(code == 0x0272) estimateSquarePose( resultMatrix_0272, corners, 0.045 );
+			if(code == 0x005a) estimateSquarePose( Capture::getInstance().m_resultMatrix_005A, corners, 0.045 );
+			else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045 );
 
 			cvReleaseMat (&projMat);
 
@@ -469,7 +469,7 @@ void idle()
 	cvReleaseImage (&iplConverted);
 	cvReleaseImage (&iplThreshold);
 
-	cvClearMemStorage ( memStorage );
+	cvClearMemStorage ( Capture::getInstance().m_memStorage );
 	glutPostRedisplay();
 }
 

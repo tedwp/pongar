@@ -1,7 +1,7 @@
 #include <iostream>
 
 
-#include "temp.h"
+#include "conf.h"
 
 #include "Capture.h"
 #include "Marker.h"
@@ -16,6 +16,12 @@
 using namespace std;
 
 
+Capture::Capture(void)
+{
+	threshold = 100;
+	bw_threshold = 100;
+	m_markers = NULL;
+}
 
 Capture::~Capture(void)
 {
@@ -27,9 +33,9 @@ Capture& Capture::getInstance(void)
 	return m_instance;
 
 }
-void Capture::setMarkers(std::vector<Marker*> markers)
+void Capture::setMarkers(std::vector<Marker*>& markers)
 {
-	m_markers = markers;
+	m_markers = &markers;
 }
 void Capture::init(void)
 {
@@ -40,14 +46,14 @@ void Capture::init(void)
 	cvResizeWindow("Marker", 120, 120 );
 	initVideoStream();
 
-	int value = thresh;
+	int value = Capture::getInstance().threshold;
 	int max = 255;
 	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
 	
-	int bw_value = bw_thresh;
+	int bw_value = Capture::getInstance().bw_threshold;
 	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
 
-	memStorage = cvCreateMemStorage();
+	m_memStorage = cvCreateMemStorage();
 }
 
 void Capture::updateMarkerPositions(void)
@@ -61,8 +67,8 @@ Marker Capture::getMarkerForId(int id)
 
 void Capture::initVideoStream(void)
 {
-	cap = cvCaptureFromCAM (0);
-	if (!cap) {
+	m_cap = cvCaptureFromCAM (0);
+	if (!m_cap) {
 		cout << "No webcam found\n";
 		exit(0);
 	}
@@ -93,10 +99,10 @@ int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 //trackbar
 void Capture::trackbarHandler(int pos)
 {
-	thresh = pos;
+	getInstance().threshold = pos;
 }
 
 void Capture::bw_trackbarHandler(int pos)
 {
-	bw_thresh = pos;
+	getInstance().bw_threshold = pos;
 }
