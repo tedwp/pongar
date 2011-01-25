@@ -19,9 +19,9 @@ Marker::~Marker(void)
 void Marker::render(void)
 {
 	float resultTransposedMatrix[16];
-	for (int x=0; x<4; ++x)
+	for (int x=0; x < 4; ++x)
 	{
-		for (int y=0; y<4; ++y)
+		for (int y=0; y < 4; ++y)
 		{
 			resultTransposedMatrix[x*4+y] = m_position[y*4+x];
 		}
@@ -29,7 +29,6 @@ void Marker::render(void)
 	//Ende - ÜdMi
 	
 	
-	//glLoadTransposeMatrixf( resultMatrix );
 	glLoadMatrixf( resultTransposedMatrix );
 	glScalef(0.20, 0.20, 0.20);
 	

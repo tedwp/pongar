@@ -34,8 +34,6 @@ Capture& Capture::getInstance(void)
 }
 void Capture::init()
 {
-	cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );
@@ -437,12 +435,6 @@ void Capture::updateMarkerPositions(void)
 			delete[] rect;
 		} // end of if(result->total == 4)
 	} // end of loop over contours
-
-	cvShowImage("Original Image", iplGrabbed);
-	cvShowImage("Converted", iplThreshold);
-
-	int key = cvWaitKey (10);
-	if (key == 27) exit(0);
 
 	isFirstStripe = true;
 
