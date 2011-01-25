@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include "GL/glut.h"
 
+#include <iostream>
+
 Graphics::Graphics(void)
 {
 }
@@ -83,6 +85,8 @@ void Graphics::doRender()
 	float resultTransposedMatrix[16];
 	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
 	{
+		std::cout << " Rendering ";
+		std::cout << i;
 		Game::getMarkers()[i]->render();
 	}
 	/*

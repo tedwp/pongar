@@ -2,6 +2,7 @@
 
 #include "GL\glut.h"
 
+
 Marker::Marker(int id)
 {
 	m_id = id;
@@ -41,6 +42,7 @@ void Marker::render(void)
 
 void Marker::setPosition(float* position)
 {
+	
 	m_position = position;
 }
 
