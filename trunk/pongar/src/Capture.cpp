@@ -36,6 +36,7 @@ void Capture::init()
 {
 	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	cvResizeWindow("Converted", 200, 50);
 	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
 	/*cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );
