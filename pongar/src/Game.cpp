@@ -105,4 +105,5 @@ void Game::idle( void )
 
 void Game::cleanup( void )
 {
+	Capture::getInstance().cleanup();
 }

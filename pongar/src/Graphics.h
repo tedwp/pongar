@@ -8,6 +8,8 @@ public:
 	void init(int argc, char* argv[]);
 	void start(void);
 
+	unsigned char m_bkgnd[width*height*3];
+
 private:
 	Graphics(void);
 	Graphics(const Graphics&);
@@ -25,7 +27,6 @@ private:
 
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
-	void Graphics::cleanup(void);
 	
 };
 
