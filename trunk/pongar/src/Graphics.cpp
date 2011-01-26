@@ -97,23 +97,11 @@ void Graphics::doRender()
 			resultTransposedMatrix[x*4+y] = Capture::getInstance().m_resultMatrix_005A[y*4+x];
 		}
 	}
-
-
 	
 	//Ende - ÜdMi
-	
-	
-	//glLoadTransposeMatrixf( resultMatrix );
-	glLoadMatrixf( resultTransposedMatrix );
-	glScalef(0.20, 0.20, 0.20);
-	
-	// draw white rectangle
-	
-	glColor4f( 1.0, 1.0, 1.0, 0.7 );
-	glRectf(-0.5, -0.8, 0.5, 0.8);
 	*/
+
 	redrawDisplay();
-    
 
 }
 void Graphics::prepareForDisplay(void)
@@ -133,7 +121,7 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, width, 0.0, height );
 
     glRasterPos2i( 0, height-1 );
-    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, Capture::getInstance().m_bkgnd );
+    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 
     glPopMatrix();
 
@@ -156,8 +144,6 @@ void Graphics::resize( int w, int h)
 }
 void Graphics::doResize( int w, int h) 
 {
-	//width = w;
-	//height = h;
 
     // set a whole-window viewport
     glViewport( 0, 0, width, height );
@@ -176,15 +162,4 @@ void Graphics::doResize( int w, int h)
     // invalidate display
     glutPostRedisplay();
 
-}
-void Graphics::cleanup(void)
-{
-	//TODO move to capture
-	//TODO zum laufen bringen und auskommentierung entfernen
-	//cvReleaseMemStorage (&memStorage);
-	//cvReleaseCapture (&(Capture::getInstance().m_cap));
-	cvDestroyWindow ("Original Image");
-	cvDestroyWindow ("Converted");
-	cvDestroyWindow ("Stripe");
-	cvDestroyWindow ("Marker");
 }

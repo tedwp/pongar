@@ -1,20 +1,17 @@
 #include <iostream>
 
+#include <cv.h>
+#include <highgui.h>
+
 #include "MarkerNotFoundException.h"
 #include "conf.h"
 #include "Game.h"
 #include "Capture.h"
 #include "Marker.h"
 
-#include <cv.h>
-#include <highgui.h>
-
 #include "PoseEstimation.h"
 
-
-
 using namespace std;
-
 
 Capture::Capture(void)
 {
@@ -32,6 +29,7 @@ Capture& Capture::getInstance(void)
 	return m_instance;
 
 }
+
 void Capture::init()
 {
 	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
@@ -39,10 +37,11 @@ void Capture::init()
 	cvResizeWindow("Converted", 300, 10);
 	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
 	/*cvNamedWindow ("Marker", 0 );
-	cvResizeWindow("Marker", 120, 120 );
-	*/initVideoStream();
+	cvResizeWindow("Marker", 120, 120 );*/
+	
+	initVideoStream();
 
-	int value = Capture::getInstance().threshold;
+	int value = threshold;
 	int max = 255;
 	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
 	
@@ -50,6 +49,16 @@ void Capture::init()
 	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
 
 	m_memStorage = cvCreateMemStorage();
+}
+
+
+void Capture::initVideoStream(void)
+{
+	m_cap = cvCaptureFromCAM (camindex);
+	if (!m_cap) {
+		cout << "No webcam found\n";
+		exit(0);
+	}
 }
 
 void Capture::updateMarkerPositions(void)
@@ -63,13 +72,12 @@ void Capture::updateMarkerPositions(void)
 	if(!iplGrabbed){
 		printf("Could not query frame. Trying to reinitialize.\n");
 		cvReleaseCapture (&Capture::getInstance().m_cap);
-		exit(0);
-		//initVideoStream();
+		initVideoStream();
 		return;
 	}
 
 	CvSize picSize = cvGetSize(iplGrabbed);
-	memcpy( Capture::getInstance().m_bkgnd, iplGrabbed->imageData, sizeof(Capture::getInstance().m_bkgnd) );
+	memcpy( Graphics::getInstance().m_bkgnd, iplGrabbed->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
 
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
@@ -80,7 +88,6 @@ void Capture::updateMarkerPositions(void)
 
 	// Find Contours
 	CvSeq* contours;
-
 	cvFindContours(
 		iplThreshold, Capture::getInstance().m_memStorage, &contours, sizeof(CvContour),
 		CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE
@@ -418,13 +425,6 @@ void Capture::updateMarkerPositions(void)
 				corners[i].y = -corners[i].y + height/2;
 			}
 			
-			/*
-			//if(code == 0x005a) estimateSquarePose( Capture::getInstance().m_resultMatrix_005A, corners, 0.045f );
-			*/
-			//if(code == 0x005a) estimateSquarePose( shizzle, corners, 0.045f );
-			//else if(code == 0x0272) estimateSquarePose( Capture::getInstance().m_resultMatrix_0272, corners, 0.045f );
-
-			//Marker* m = Game::getMarkerById(0x005a);
 			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{
@@ -441,9 +441,9 @@ void Capture::updateMarkerPositions(void)
 
 	/*cvShowImage("Original Image", iplGrabbed);
 	cvShowImage("Converted", iplThreshold);
-*/
-	isFirstStripe = true;
+	*/
 
+	isFirstStripe = true;
 	isFirstMarker = true;
 
 	cvReleaseImage (&iplConverted);
@@ -453,18 +453,8 @@ void Capture::updateMarkerPositions(void)
 }
 
 
-void Capture::initVideoStream(void)
-{
-	m_cap = cvCaptureFromCAM (0);
-	if (!m_cap) {
-		cout << "No webcam found\n";
-		exit(0);
-	}
-}
-
 int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 {
-
 	int x = int( floorf ( p.x ) );
 	int y = int( floorf ( p.y ) );
 
@@ -482,7 +472,15 @@ int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
 	return a + ( ( dy * ( b - a) ) >> 8 );
 }
 
-
+void Capture::cleanup()
+{
+	cvReleaseMemStorage (&m_memStorage);
+	cvReleaseCapture (&(Capture::getInstance().m_cap));
+	//cvDestroyWindow ("Original Image");
+	cvDestroyWindow ("Converted");
+	//cvDestroyWindow ("Stripe");
+	//cvDestroyWindow ("Marker");
+}
 
 //trackbar
 void Capture::trackbarHandler(int pos)

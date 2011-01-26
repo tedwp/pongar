@@ -1,4 +1,5 @@
 #include "Marker.h"
+#include "Game.h"
 
 #include "GL\glut.h"
 
@@ -34,10 +35,26 @@ void Marker::render(void)
 		glLoadMatrixf( resultTransposedMatrix );
 		glScalef(0.20, 0.20, 0.20);
 	
-		// draw white rectangle
-	
-		glColor4f( 1.0, 1.0, 1.0, 0.7 );
-		glRectf(-0.5, -0.8, 0.5, 0.8);
+		switch (m_purpose){
+		case Game::PURPOSE_PADDLE1:
+			// draw green rectangle
+			glColor4f( 0.0, 1.0, 0.0, 1.0 );
+			glRectf(-0.2, -0.1, 0.2, 0.1);
+
+			break;
+		case Game::PURPOSE_PADDLE2:
+			// draw red rectangle
+			glColor4f( 1.0, 0.0, 0.0, 1.0 );
+			glRectf(-0.2, -0.1, 0.2, 0.1);
+
+			break;
+		case Game::PURPOSE_PLAYINGFIELD:
+			// draw white rectangle
+			glColor4f( 1.0, 1.0, 1.0, 1.0 );
+			glRectf(-0.5, -0.8, 0.5, 0.8);
+
+			break;
+		}
 	}
 }
 

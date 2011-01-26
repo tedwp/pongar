@@ -14,33 +14,38 @@ public:
 	static Capture& getInstance(void);
 	
 	void init();
+	void cleanup();
 
 	void updateMarkerPositions(void);
-	 //TODO make the following private!
-	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p );
-	int threshold;
-	int bw_threshold;
-	CvCapture* m_cap;
-	CvMemStorage* m_memStorage;
-	
-	float m_resultMatrix_005A[16];
-	float m_resultMatrix_0272[16];
-	unsigned char m_bkgnd[width*height*3];
 
 private:
 	static Capture& m_instance;
-
 
 	Capture(void);
 	Capture(const Capture&);
 	~Capture(void);
 
+	int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p );
+
 	Marker getMarkerForId(int id);
 	void initVideoStream(void);
-	
-	//trackbar
+
+	//thresholding
+	int threshold;
+	int bw_threshold;
+
+	//trackbar for thresholding
 	static void trackbarHandler(int pos);
 	static void bw_trackbarHandler(int pos);
+
+	//capture variables
+	CvCapture* m_cap;
+	CvMemStorage* m_memStorage;
+	
+	//transformation matrices
+	float m_resultMatrix_005A[16];
+	float m_resultMatrix_0272[16];
+
 };
 
 
