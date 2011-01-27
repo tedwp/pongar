@@ -35,25 +35,26 @@ void Marker::render(void)
 		glLoadMatrixf( resultTransposedMatrix );
 		glScalef(0.20, 0.20, 0.20);
 	
-		switch (m_purpose){
-		case Game::PURPOSE_PADDLE1:
-			// draw green rectangle
-			glColor4f( 0.0, 1.0, 0.0, 1.0 );
-			glRectf(-0.2, -0.1, 0.2, 0.1);
-
-			break;
-		case Game::PURPOSE_PADDLE2:
-			// draw red rectangle
-			glColor4f( 1.0, 0.0, 0.0, 1.0 );
-			glRectf(-0.2, -0.1, 0.2, 0.1);
-
-			break;
-		case Game::PURPOSE_PLAYINGFIELD:
+		if (m_purpose == Game::PURPOSE_PLAYINGFIELD){
+			Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
+			Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
+	
 			// draw white rectangle
 			glColor4f( 1.0, 1.0, 1.0, 1.0 );
 			glRectf(-0.5, -0.8, 0.5, 0.8);
 
-			break;
+			if(m_paddle1 != NULL && m_paddle2 != NULL)
+			{
+				glTranslatef( 0.0, 0.0, -0.01 );
+	
+				// draw green rectangle
+				glColor4f( 0.0, 1.0, 0.0, 1.0 );
+				glRectf(-0.2 - m_paddle1->getOffset(), -0.75, 0.2 - m_paddle1->getOffset(), -0.55);
+
+				// draw red rectangle
+				glColor4f( 1.0, 0.0, 0.0, 1.0 );
+				glRectf(-0.2 - m_paddle2->getOffset(), 0.55, 0.2 - m_paddle2->getOffset(), 0.75);
+			}
 		}
 	}
 }
@@ -97,4 +98,11 @@ void Marker::setPurpose(int p)
 bool Marker::hasPositionChanged(void)
 {
 	return m_positionChanged;
+}
+
+void Marker::setOffset(float offset){
+	m_offset = offset;
+}
+float Marker::getOffset(){
+	return m_offset;
 }

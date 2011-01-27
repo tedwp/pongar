@@ -17,6 +17,7 @@ public:
 
 	static std::vector<Marker*> getMarkers(void);
 	static Marker* getMarkerById(int id);
+	static Marker* getMarkerByPurpose(int purpose);
 
 	static const int PURPOSE_PADDLE1 = 1;
 	static const int PURPOSE_PADDLE2 = 2;
