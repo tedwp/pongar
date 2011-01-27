@@ -81,7 +81,6 @@ void Graphics::doRender()
 	
 	//Anfang - Über die Marker iterieren
 
-		
 	float resultTransposedMatrix[16];
 	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
 	{
@@ -89,6 +88,42 @@ void Graphics::doRender()
 		std::cout << Game::getMarkers()[i]->getId();
 		Game::getMarkers()[i]->render();
 	}
+	
+	Marker* m_playingfield = Game::getMarkerById(Game::PURPOSE_PLAYINGFIELD);
+	Marker* m_paddle1 = Game::getMarkerById(Game::PURPOSE_PADDLE1);
+	Marker* m_paddle2 = Game::getMarkerById(Game::PURPOSE_PADDLE2);
+	if(m_playingfield != NULL && m_paddle1 != NULL && m_paddle2 != NULL)
+	{
+		float* playingFieldTf = m_playingfield->getPosition();
+		float* paddle1Tf = m_paddle1->getPosition();
+		float* paddle2Tf = m_paddle2->getPosition();
+	
+		//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
+		CvMat* playingFieldMat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(playingFieldTf, playingFieldMat);
+		CvMat* paddle1Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle1Tf, paddle1Mat);
+		CvMat* paddle2Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle2Tf, paddle2Mat);
+	
+		CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
+		cvInvert(playingFieldMat, playingFieldMatInv);
+
+		cvMul(paddle1Mat, playingFieldMatInv, paddle1Mat);
+		cvMul(paddle2Mat, playingFieldMatInv, paddle2Mat);
+
+		float paddle1offset = cvGet2D(paddle1Mat, 1, 3).val[0];
+		float paddle2offset = cvGet2D(paddle2Mat, 1, 3).val[0];
+		std::cout << "\npaddle1 ";
+		std::cout << paddle1offset;
+		cvReleaseMat( &playingFieldMat );
+	}
+
+
+	//set y offset of paddles (w.r.t. limits)
+
+	//use offset for rendering
+
 	/*
 	for (int x=0; x<4; ++x)
 	{
@@ -162,4 +197,12 @@ void Graphics::doResize( int w, int h)
     // invalidate display
     glutPostRedisplay();
 
+}
+
+
+void Graphics::arrayToCvMat(float* transform, CvMat* mat){
+	cvZero( mat );
+	for (unsigned i = 0; i < 16; i++){
+		cvmSet( mat, i/4, i%4, transform[i] );
+	}
 }
