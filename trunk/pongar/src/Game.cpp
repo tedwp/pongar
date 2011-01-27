@@ -63,6 +63,18 @@ Marker* Game::getMarkerById(int id)
 	return NULL;
 }
 
+Marker* Game::getMarkerByPurpose(int purpose)
+{
+	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
+	{
+		if(	(getInstance().m_markers[i])->getPurpose() == purpose)
+		{
+			return getInstance().m_markers[i];
+		}
+	}
+	return NULL;
+}
+
 void Game::idle( void )
 {
 	Capture::getInstance().updateMarkerPositions();

@@ -84,14 +84,14 @@ void Graphics::doRender()
 	float resultTransposedMatrix[16];
 	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
 	{
-		std::cout << "\nRendering #";
-		std::cout << Game::getMarkers()[i]->getId();
+		/*std::cout << "\nRendering #";
+		std::cout << Game::getMarkers()[i]->getId();*/
 		Game::getMarkers()[i]->render();
 	}
 	
-	Marker* m_playingfield = Game::getMarkerById(Game::PURPOSE_PLAYINGFIELD);
-	Marker* m_paddle1 = Game::getMarkerById(Game::PURPOSE_PADDLE1);
-	Marker* m_paddle2 = Game::getMarkerById(Game::PURPOSE_PADDLE2);
+	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
+	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
+	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
 	if(m_playingfield != NULL && m_paddle1 != NULL && m_paddle2 != NULL)
 	{
 		float* playingFieldTf = m_playingfield->getPosition();
@@ -114,27 +114,19 @@ void Graphics::doRender()
 
 		float paddle1offset = cvGet2D(paddle1Mat, 1, 3).val[0];
 		float paddle2offset = cvGet2D(paddle2Mat, 1, 3).val[0];
-		std::cout << "\npaddle1 ";
-		std::cout << paddle1offset;
+
+		//set y offset of paddles
+		float sensitivityFactor = 180;
+		//TODO adjust sensitivityFactor depending on z coordinate?!?
+		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
+		m_paddle2->setOffset(paddle2offset*sensitivityFactor);
+
+		//release matrices
 		cvReleaseMat( &playingFieldMat );
+		cvReleaseMat( &playingFieldMatInv );
+		cvReleaseMat( &paddle1Mat );
+		cvReleaseMat( &paddle2Mat );
 	}
-
-
-	//set y offset of paddles (w.r.t. limits)
-
-	//use offset for rendering
-
-	/*
-	for (int x=0; x<4; ++x)
-	{
-		for (int y=0; y<4; ++y)
-		{
-			resultTransposedMatrix[x*4+y] = Capture::getInstance().m_resultMatrix_005A[y*4+x];
-		}
-	}
-	
-	//Ende - ÜdMi
-	*/
 
 	redrawDisplay();
 
