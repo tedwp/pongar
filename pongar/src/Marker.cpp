@@ -42,18 +42,18 @@ void Marker::render(void)
 			// draw white rectangle
 			glColor4f( 1.0, 1.0, 1.0, 1.0 );
 			glRectf(-0.5, -0.8, 0.5, 0.8);
-
+			
 			if(m_paddle1 != NULL && m_paddle2 != NULL)
 			{
 				glTranslatef( 0.0, 0.0, -0.01 );
 	
 				// draw green rectangle
 				glColor4f( 0.0, 1.0, 0.0, 1.0 );
-				glRectf(-0.2 - m_paddle1->getOffset(), -0.75, 0.2 - m_paddle1->getOffset(), -0.55);
+				glRectf(-0.1 - m_paddle1->getOffset(), -0.75, 0.1 - m_paddle1->getOffset(), -0.65);
 
 				// draw red rectangle
 				glColor4f( 1.0, 0.0, 0.0, 1.0 );
-				glRectf(-0.2 - m_paddle2->getOffset(), 0.55, 0.2 - m_paddle2->getOffset(), 0.75);
+				glRectf(-0.1 - m_paddle2->getOffset(), 0.65, 0.1 - m_paddle2->getOffset(), 0.75);
 			}
 		}
 	}
