@@ -17,8 +17,6 @@ public:
 	void setOffset(float offset);
 	float getOffset();
 
-	void render(void);
-
 	bool hasPositionChanged(void);
 
 private:
@@ -27,5 +25,4 @@ private:
 		bool m_positionChanged;
 		int m_purpose;
 		float m_offset;
-    void drawCircle(float r);
 };
