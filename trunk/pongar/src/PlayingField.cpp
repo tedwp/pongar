@@ -89,7 +89,7 @@ void PlayingField::render()
         }
 				glRectf(paddle2YEnd, 0.75, paddle2YStart, 0.78);
 
-        computeBallPosition();
+        computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
         glTranslatef( ballPosition.first, ballPosition.second, 0.0 );
         glColor3f(0.0, 0.0, 0.0);
         drawCircle(0.05);
@@ -99,7 +99,7 @@ void PlayingField::render()
 	}
 }
 
-void PlayingField::computeBallPosition()
+void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End)
 {
   float degInRad=ballAngle*3.14159/180;
   ballVector.first = ballSpeed * sin(degInRad);
@@ -110,12 +110,19 @@ void PlayingField::computeBallPosition()
 
   bool xCollision = false;
   bool yCollision = false;
+  bool pCollision = false;
   if (ballPosition.second+0.05>0.8) xCollision = true;
   if (ballPosition.second-0.05<-0.8) xCollision = true;
   if (ballPosition.first+0.05>0.5) yCollision = true;
   if (ballPosition.first-0.05<-0.5) yCollision = true;
-  
+  if (ballPosition.second-0.05<=-0.75 && ballPosition.first<=paddle1Start && ballPosition.first>=paddle1End) pCollision = true;
+  if (ballPosition.second+0.05>=0.75 && ballPosition.first<=paddle2Start && ballPosition.first>=paddle2End) pCollision = true;
+
   if (xCollision)
+  {
+    // GAME OVER
+  }
+  if (pCollision)
   {
     ballPosition.first = ballPosition.first - ballVector.first;
     ballPosition.second = ballPosition.second - ballVector.second;
