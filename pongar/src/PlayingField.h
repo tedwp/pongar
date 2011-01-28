@@ -17,6 +17,6 @@ private:
   float ballAngle;
   std::pair<float, float> ballVector;
   std::pair<float, float> ballPosition;
-  void computeBallPosition();
+  void computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End);
 };
 
