@@ -434,7 +434,7 @@ void Capture::updateMarkerPositions(void)
 			}
 
 			cvReleaseMat (&projMat);
-
+      cvReleaseImage (&iplMarker);
 			delete[] rect;
 		} // end of if(result->total == 4)
 	} // end of loop over contours

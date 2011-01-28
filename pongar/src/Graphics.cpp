@@ -118,11 +118,11 @@ void Graphics::doRender()
 		//set y offset of paddles
 		float paddle1z = cvGet2D(paddle1Mat, 2, 3).val[0];
 		float playingFieldZ = cvGet2D(playingFieldMat, 2, 3).val[0];
-		std::cout << "z field ";
+		/*std::cout << "z field ";
 		std::cout << playingFieldZ;
 		std::cout << " // z paddle1 ";
 		std::cout << paddle1z;
-		std::cout << std::endl;
+		std::cout << std::endl;*/
 
 		float sensitivityFactor = 180;
 		//TODO adjust sensitivityFactor depending on z coordinate?!?
