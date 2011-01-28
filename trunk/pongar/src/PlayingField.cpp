@@ -6,7 +6,9 @@ PlayingField::PlayingField(void)
 
   //init random angle (between 30 and -30 deg)
   //0 deg = ball goes straight up
-  ballAngle = 45.0;
+  srand (time(NULL));
+  ballAngle = rand() % 45 + 30;
+  if ((int)ballAngle % 2==0) ballAngle = 180 - ballAngle;
 
   ballPosition.first = 0.0;
   ballPosition.second = 0.0;
@@ -115,8 +117,8 @@ void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, flo
   if (ballPosition.second-0.05<-0.8) xCollision = true;
   if (ballPosition.first+0.05>0.5) yCollision = true;
   if (ballPosition.first-0.05<-0.5) yCollision = true;
-  if (ballPosition.second-0.05<=-0.75 && ballPosition.first<=paddle1Start && ballPosition.first>=paddle1End) pCollision = true;
-  if (ballPosition.second+0.05>=0.75 && ballPosition.first<=paddle2Start && ballPosition.first>=paddle2End) pCollision = true;
+  if (!xCollision && ballPosition.second-0.05<=-0.75 && ballPosition.first<=paddle1Start && ballPosition.first>=paddle1End) pCollision = true;
+  if (!xCollision && ballPosition.second+0.05>=0.75 && ballPosition.first<=paddle2Start && ballPosition.first>=paddle2End) pCollision = true;
 
   if (xCollision)
   {
