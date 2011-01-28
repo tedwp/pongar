@@ -1,5 +1,6 @@
 #pragma once
 #include "conf.h"
+#include "PlayingField.h"
 
 class Graphics
 {

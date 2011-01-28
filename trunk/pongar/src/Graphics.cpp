@@ -78,17 +78,7 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
-	
-	//Anfang - Über die Marker iterieren
 
-	float resultTransposedMatrix[16];
-	for(unsigned i = 0; i < Game::getMarkers().size(); i++)
-	{
-		/*std::cout << "\nRendering #";
-		std::cout << Game::getMarkers()[i]->getId();*/
-		Game::getMarkers()[i]->render();
-	}
-	
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
@@ -135,6 +125,8 @@ void Graphics::doRender()
 		cvReleaseMat( &paddle1Mat );
 		cvReleaseMat( &paddle2Mat );
 	}
+  
+	PlayingField::getInstance().render();
 
 	redrawDisplay();
 
