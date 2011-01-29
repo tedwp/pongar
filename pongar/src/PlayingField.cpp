@@ -145,6 +145,7 @@ void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, flo
 void PlayingField::drawCircle(float r)
 {
   glBegin(GL_TRIANGLE_FAN);
+  
   for (int i=0; i<360; ++i)
   {
     float degInRad=i*3.14159/180;
