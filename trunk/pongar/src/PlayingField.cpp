@@ -51,7 +51,7 @@ void PlayingField::render()
 			Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
 	
 			// draw white rectangle
-			glColor4f( 1.0, 1.0, 1.0, 1.0 );
+			glColor4f( 1.0, 1.0, 1.0, 0.7 );
       float playingFieldWidth = 1.6;
       float playingFieldHeight = 1.0;
 			glRectf(-playingFieldHeight/2, -playingFieldWidth/2, playingFieldHeight/2, playingFieldWidth/2);
