@@ -7,6 +7,7 @@ Marker::Marker(int id)
 {
 	m_id = id;
 	m_position = new float[16];
+  m_positionChanged = false;
 }
 
 
