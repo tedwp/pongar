@@ -24,7 +24,7 @@ void Graphics::init(int argc, char* argv[])
 {
 	// initialize the window system
     glutInit( &argc, argv);
-    glutInitWindowSize( width, height );
+    glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
     glutCreateWindow("PongAR");
 
@@ -108,12 +108,7 @@ void Graphics::doRender()
 		//set y offset of paddles
 		float paddle1z = cvGet2D(paddle1Mat, 2, 3).val[0];
 		float playingFieldZ = cvGet2D(playingFieldMat, 2, 3).val[0];
-		/*std::cout << "z field ";
-		std::cout << playingFieldZ;
-		std::cout << " // z paddle1 ";
-		std::cout << paddle1z;
-		std::cout << std::endl;*/
-
+		
 		float sensitivityFactor = 180;
 		//TODO adjust sensitivityFactor depending on z coordinate?!?
 		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
@@ -145,10 +140,10 @@ void Graphics::prepareForDisplay(void)
     glMatrixMode( GL_PROJECTION );
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D( 0.0, width, 0.0, height );
+    gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
-    glRasterPos2i( 0, height-1 );
-    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+    glRasterPos2i( 0, CAM_HEIGHT-1 );
+    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 
     glPopMatrix();
 
@@ -173,7 +168,7 @@ void Graphics::doResize( int w, int h)
 {
 
     // set a whole-window viewport
-    glViewport( 0, 0, width, height );
+    glViewport( 0, 0, CAM_WIDTH, CAM_HEIGHT );
 
     // create a perspective projection matrix
     glMatrixMode(GL_PROJECTION);
@@ -184,7 +179,7 @@ void Graphics::doResize( int w, int h)
 	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
 	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
 	// decrease.
-    gluPerspective( camangle, ((double)width/(double)height), 0.01, 100 );
+    gluPerspective( CAM_ANGLE, ((double)CAM_WIDTH/(double)CAM_HEIGHT), 0.01, 100 );
 
     // invalidate display
     glutPostRedisplay();
