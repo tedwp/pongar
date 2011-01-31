@@ -1,102 +1,135 @@
+//Alexcommittest - ignorieren und löschen
 #include <iostream>
+#include <iomanip>
 
-#include <cv.h>
-#include <highgui.h>
+// Added in Exercise 8 - Start *****************************************************************
+#include "GL/glut.h"
+// Added in Exercise 8 - End *****************************************************************
 
-#include "MarkerNotFoundException.h"
-#include "conf.h"
-#include "Game.h"
-#include "Capture.h"
-#include "Marker.h"
+#include "cv.h"
+#include "highgui.h"
 
 #include "PoseEstimation.h"
 
 using namespace std;
 
-Capture::Capture(void)
-{
-	threshold = THRESHOLD;
-	bw_threshold = THRESHOLD_BW;
+int thresh = 100;
+CvCapture* cap;
+
+int bw_thresh = 40;
+
+// Added in Exercise 8 - Start *****************************************************************
+CvMemStorage* memStorage;
+
+float resultMatrix[16];
+
+//camera settings
+const int width = 320; 
+const int height = 240;
+const int camangle = 35;
+
+unsigned char bkgnd[width*height*3];
+// Added in Exercise 8 - End *****************************************************************
+
+void trackbarHandler(int pos) {
+	thresh = pos;
 }
 
-Capture::~Capture(void)
-{
+void bw_trackbarHandler(int pos) {
+	bw_thresh = pos;
 }
 
-Capture& Capture::getInstance(void)
-{
-	static Capture m_instance;
-	return m_instance;
+void initVideoStream() {
+	cap = cvCaptureFromCAM (0);
 
-}
-
-void Capture::init()
-{
-	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
-	cvResizeWindow("Converted", 300, 80);
-	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
-	/*cvNamedWindow ("Marker", 0 );
-	cvResizeWindow("Marker", 120, 120 );*/
-	
-	initVideoStream();
-
-	int value = threshold;
-	int max = 255;
-	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
-	
-	int bw_value = Capture::getInstance().bw_threshold;
-	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
-
-	m_memStorage = cvCreateMemStorage();
-}
-
-
-void Capture::initVideoStream(void)
-{
-	m_cap = cvCaptureFromCAM (CAM_INDEX);
-	if (!m_cap) {
-		cout << "No webcam found\n";
-		exit(0);
+	if (!cap) {
+		cout << "No webcam found, using video file\n";
+		cap = cvCaptureFromFile("C:\\Andi\\Uni\\SVNs\\far_intern\\teaching\\2010WS\\AR\\Exercises\\Solutions\\MarkerMovie.mpg");
+		if (!cap) {
+			cout << "No video file found. Exiting.\n";
+			exit(0);
+		}
 	}
 }
 
-void Capture::updateMarkerPositions(void)
+int subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
+{
+	int x = int( floorf ( p.x ) );
+	int y = int( floorf ( p.y ) );
+
+	if ( x < 0 || x >= pSrc->width  - 1 ||
+		 y < 0 || y >= pSrc->height - 1 )
+		return 127;
+
+	int dx = int ( 256 * ( p.x - floorf ( p.x ) ) );
+	int dy = int ( 256 * ( p.y - floorf ( p.y ) ) );
+
+	unsigned char* i = ( unsigned char* ) ( ( pSrc->imageData + y * pSrc->widthStep ) + x );
+	int a = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
+	i += pSrc->widthStep;
+	int b = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
+	return a + ( ( dy * ( b - a) ) >> 8 );
+}
+
+void init()
+{
+	cvNamedWindow ("Exercise 8 - Original Image", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Exercise 8 - Converted Image", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Exercise 8 - Stripe", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow ("Marker", 0 );
+	cvResizeWindow("Marker", 120, 120 );
+	initVideoStream();
+
+	int value = thresh;
+	int max = 255;
+	cvCreateTrackbar( "Threshold", "Exercise 8 - Converted Image", &value, max, trackbarHandler);
+
+	int bw_value = bw_thresh;
+	cvCreateTrackbar( "BW Threshold", "Exercise 8 - Converted Image", &bw_value, max, bw_trackbarHandler);
+
+	memStorage = cvCreateMemStorage();
+}
+
+void idle()
 {
 	bool isFirstStripe = true;
 
 	bool isFirstMarker = true;
 
-	IplImage* iplGrabbed = cvQueryFrame(Capture::getInstance().m_cap);
+	IplImage* iplGrabbed = cvQueryFrame(cap);
 
 	if(!iplGrabbed){
 		printf("Could not query frame. Trying to reinitialize.\n");
-		cvReleaseCapture (&Capture::getInstance().m_cap);
+		cvReleaseCapture (&cap);
 		initVideoStream();
 		return;
 	}
 
 	CvSize picSize = cvGetSize(iplGrabbed);
-	memcpy( Graphics::getInstance().m_bkgnd, iplGrabbed->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
+
+// Added in Exercise 8 - Start *****************************************************************
+	memcpy( bkgnd, iplGrabbed->imageData, sizeof(bkgnd) );
+// Added in Exercise 8 - End *****************************************************************
 
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 
 	cvConvertImage(iplGrabbed, iplConverted, 0);
-	cvThreshold(iplConverted, iplThreshold, Capture::getInstance().threshold, 255, CV_THRESH_BINARY);
+	cvThreshold(iplConverted, iplThreshold, thresh, 255, CV_THRESH_BINARY);
 	//cvAdaptiveThreshold(iplConverted, iplThreshold, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 33, 5);
 
 	// Find Contours
 	CvSeq* contours;
+
 	cvFindContours(
-		iplThreshold, Capture::getInstance().m_memStorage, &contours, sizeof(CvContour),
+		iplThreshold, memStorage, &contours, sizeof(CvContour),
 		CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE
 	);
 
 	for (; contours; contours = contours->h_next)
 	{
 		CvSeq* result = cvApproxPoly(
-			contours, sizeof(CvContour), Capture::getInstance().m_memStorage, CV_POLY_APPROX_DP,
+			contours, sizeof(CvContour), memStorage, CV_POLY_APPROX_DP,
 			cvContourPerimeter(contours)*0.02, 0
 		);
 
@@ -141,8 +174,8 @@ void Capture::updateMarkerPositions(void)
 
 				//normalize vectors
 				double diffLength = sqrt ( dx*dx+dy*dy );
-				stripeVecX.x = (float) (dx / diffLength);
-				stripeVecX.y = (float) (dy / diffLength);
+				stripeVecX.x = dx / diffLength;
+				stripeVecX.y = dy / diffLength;
 
 				stripeVecY.x =  stripeVecX.y;
 				stripeVecY.y = -stripeVecX.x;
@@ -168,8 +201,8 @@ void Capture::updateMarkerPositions(void)
 						{
 							CvPoint2D32f subPixel;
 
-							subPixel.x =(float) ( (double)p.x + ((double)m * stripeVecX.x) + ((double)n * stripeVecY.x));
-							subPixel.y =(float) ( (double)p.y + ((double)m * stripeVecX.y) + ((double)n * stripeVecY.y));
+							subPixel.x = (double)p.x + ((double)m * stripeVecX.x) + ((double)n * stripeVecY.x);
+							subPixel.y = (double)p.y + ((double)m * stripeVecX.y) + ((double)n * stripeVecY.y);
 
 							CvPoint p2;
 							p2.x = (int)subPixel.x;
@@ -180,7 +213,7 @@ void Capture::updateMarkerPositions(void)
 							else
 								cvCircle (iplGrabbed, p2, 1, CV_RGB(0,255,255), -1);
 
-							int pixel = Capture::getInstance().subpixSampleSafe (iplConverted, subPixel);
+							int pixel = subpixSampleSafe (iplConverted, subPixel);
 
 							int w = m + 1; //add 1 to shift to 0..2
 							int h = n + ( stripeLength >> 1 ); //add stripelenght>>1 to shift to 0..stripeLength
@@ -231,8 +264,8 @@ void Capture::updateMarkerPositions(void)
 					int maxIndexShift = maxIndex - (stripeLength>>1);
 
 					//shift the original edgepoint accordingly
-					edgeCenter.x = (float) ( (double)p.x + (((double)maxIndexShift+pos) * stripeVecY.x));
-					edgeCenter.y = (float) ((double)p.y + (((double)maxIndexShift+pos) * stripeVecY.y));
+					edgeCenter.x = (double)p.x + (((double)maxIndexShift+pos) * stripeVecY.x);
+					edgeCenter.y = (double)p.y + (((double)maxIndexShift+pos) * stripeVecY.y);
 
 					CvPoint p_tmp;
 					p_tmp.x = (int)edgeCenter.x;
@@ -246,7 +279,7 @@ void Capture::updateMarkerPositions(void)
 					{
 						IplImage* iplTmp = cvCreateImage( cvSize(100,300), IPL_DEPTH_8U, 1 );
 						cvResize( iplStripe, iplTmp, CV_INTER_NN );
-						//cvShowImage ( "Stripe", iplTmp );//iplStripe );
+						cvShowImage ( "Exercise 8 - Stripe", iplTmp );//iplStripe );
 						cvReleaseImage( &iplTmp );
 						isFirstStripe = false;
 					}
@@ -298,7 +331,7 @@ void Capture::updateMarkerPositions(void)
 
 				if ( c == 0 ) //lines parallel?
 				{
-					//std::cout << "lines parallel" << std::endl;
+					std::cout << "lines parallel" << std::endl;
 					continue;
 				}
 
@@ -306,14 +339,18 @@ void Capture::updateMarkerPositions(void)
 				b /= c;
 
 				//exact corner
-				corners[i].x = (float) a; 
-				corners[i].y = (float) b;
+				corners[i].x = a; 
+				corners[i].y = b;
 				CvPoint p;
 				p.x = (int)corners[i].x;
 				p.y = (int)corners[i].y;
 
 				cvCircle (iplGrabbed, p, 5, CV_RGB(i*60,i*60,0), -1);
 			} //finished the calculation of the exact corners
+
+// Added in Exercise 8 - Start *****************************************************************
+			// resultMatrix made global variable
+// Added in Exercise 8 - End *****************************************************************
 
 			CvPoint2D32f targetCorners[4];
 			targetCorners[0].x = -0.5; targetCorners[0].y = -0.5;
@@ -334,9 +371,9 @@ void Capture::updateMarkerPositions(void)
 			//change the perspective in the marker image using the previously calculated matrix
 			cvWarpPerspective(iplConverted, iplMarker, projMat, CV_WARP_FILL_OUTLIERS,  cvScalarAll(0));
 			
-			cvThreshold(iplMarker, iplMarker, Capture::getInstance().bw_threshold, 255, CV_THRESH_BINARY);
+			cvThreshold(iplMarker, iplMarker, bw_thresh, 255, CV_THRESH_BINARY);
 
-			//now we have a B/W image of a supposed Marker
+//now we have a B/W image of a supposed Marker
 
 			// check if border is black
 			int code = 0;
@@ -410,83 +447,215 @@ void Capture::updateMarkerPositions(void)
 				for(int i = 0; i < 4; i++)	corners[i] = corrected_corners[i];
 			}
 
+			printf ("Found: %04x\n", code);
+
 			if ( isFirstMarker )
 			{
-				//cvShowImage ( "Marker", iplMarker );
+				cvShowImage ( "Marker", iplMarker );
 				isFirstMarker = false;
 			}
 
 			// transfer camera coords to screen coords
 			for(int i = 0; i<4; i++)
 			{
-				corners[i].x -= CAM_WIDTH/2;
-				corners[i].y = -corners[i].y + CAM_HEIGHT/2;
+				corners[i].x -= width/2;
+				corners[i].y = -corners[i].y + height/2;
 			}
 			
-			Marker* m = Game::getMarkerById(code);
-			if(m != NULL)
-			{
-				float shizzle[16];
-				estimateSquarePose( shizzle, corners, 0.045f );
-				m->updatePosition(shizzle);
+			estimateSquarePose( resultMatrix, corners, 0.045 );
+			for (int i = 0; i<4; ++i) {
+				for (int j = 0; j<4; ++j) {
+					cout << setw(6);
+					cout << setprecision(4);
+					cout << resultMatrix[4*i+j] << " ";
+				}
+				cout << "\n";
 			}
+			cout << "\n";
+			float x,y,z;
+			x = resultMatrix[3];
+			y = resultMatrix[7];
+			z = resultMatrix[11];
+			cout << "length: " << sqrt(x*x+y*y+z*z) << "\n";
+			cout << "\n";
 
 			cvReleaseMat (&projMat);
-			cvReleaseImage (&iplMarker);
+
 			delete[] rect;
 		} // end of if(result->total == 4)
 	} // end of loop over contours
 
-	/*cvShowImage("Original Image", iplGrabbed);
-	cvShowImage("Converted", iplThreshold);
-	*/
+	cvShowImage("Exercise 8 - Original Image", iplGrabbed);
+	cvShowImage("Exercise 8 - Converted Image", iplThreshold);
+
+	int key = cvWaitKey (10);
+	if (key == 27) exit(0);
 
 	isFirstStripe = true;
+
 	isFirstMarker = true;
 
 	cvReleaseImage (&iplConverted);
 	cvReleaseImage (&iplThreshold);
 
-	cvClearMemStorage ( Capture::getInstance().m_memStorage );
+	cvClearMemStorage ( memStorage );
+// Added in Exercise 8 - Start *****************************************************************
+	glutPostRedisplay();
+// Added in Exercise 8 - End *****************************************************************
 }
 
-
-int Capture::subpixSampleSafe ( const IplImage* pSrc, CvPoint2D32f p )
+void cleanup() 
 {
-	int x = int( floorf ( p.x ) );
-	int y = int( floorf ( p.y ) );
+	cvReleaseMemStorage (&memStorage);
 
-	if ( x < 0 || x >= pSrc->width  - 1 ||
-		 y < 0 || y >= pSrc->height - 1 )
-		return 127;
-
-	int dx = int ( 256 * ( p.x - floorf ( p.x ) ) );
-	int dy = int ( 256 * ( p.y - floorf ( p.y ) ) );
-
-	unsigned char* i = ( unsigned char* ) ( ( pSrc->imageData + y * pSrc->widthStep ) + x );
-	int a = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
-	i += pSrc->widthStep;
-	int b = i[ 0 ] + ( ( dx * ( i[ 1 ] - i[ 0 ] ) ) >> 8 );
-	return a + ( ( dy * ( b - a) ) >> 8 );
+	cvReleaseCapture (&cap);
+	cvDestroyWindow ("Exercise 8 - Original Image");
+	cvDestroyWindow ("Exercise 8 - Converted Image");
+	cvDestroyWindow ("Exercise 8 - Stripe");
+	cvDestroyWindow ("Marker");
+	cout << "Finished\n";
 }
 
-void Capture::cleanup()
+void display() 
 {
-	cvReleaseMemStorage (&m_memStorage);
-	cvReleaseCapture (&(Capture::getInstance().m_cap));
-	//cvDestroyWindow ("Original Image");
-	cvDestroyWindow ("Converted");
-	//cvDestroyWindow ("Stripe");
-	//cvDestroyWindow ("Marker");
+    // clear buffers
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // draw background image
+    glDisable( GL_DEPTH_TEST );
+
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D( 0.0, width, 0.0, height );
+
+    glRasterPos2i( 0, height-1 );
+    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, bkgnd );
+
+    glPopMatrix();
+
+    glEnable(GL_DEPTH_TEST);
+
+    // move to origin
+    glMatrixMode( GL_MODELVIEW );
+    
+	float resultTransposedMatrix[16];
+	for (int x=0; x<4; ++x)
+	{
+		for (int y=0; y<4; ++y)
+		{
+			resultTransposedMatrix[x*4+y] = resultMatrix[y*4+x];
+		}
+	}
+
+	//glLoadTransposeMatrixf( resultMatrix );
+	glLoadMatrixf( resultTransposedMatrix );
+    glRotatef( -90, 1, 0, 0 );
+	glScalef(0.03, 0.03, 0.03);
+
+	// draw 3 white spheres
+	glColor4f( 1.0, 1.0, 1.0, 1.0 );
+	glutSolidSphere( 0.8, 10, 10 );
+	glTranslatef( 0.0, 0.8, 0.0 );
+	glutSolidSphere( 0.6, 10, 10 );
+	glTranslatef( 0.0, 0.6, 0.0 );
+	glutSolidSphere( 0.4, 10, 10 );
+
+	// draw the eyes
+	glPushMatrix();
+	glColor4f( 0.0, 0.0, 0.0, 1.0 );
+	glTranslatef( 0.2, 0.2, 0.2 );
+	glutSolidSphere( 0.066, 10, 10 );
+	glTranslatef( 0, 0, -0.4 );
+	glutSolidSphere( 0.066, 10, 10 );
+	glPopMatrix();
+
+	// draw a nose
+	glColor4f( 1.0, 0.5, 0.0, 1.0 );
+	glTranslatef( 0.3, 0.0, 0.0 );
+	glRotatef( 90, 0, 1, 0 );
+	glutSolidCone( 0.1, 0.3, 10, 1 );
+
+    // redraw
+    glutSwapBuffers();
 }
 
-//trackbar
-void Capture::trackbarHandler(int pos)
+void resize( int w, int h) 
 {
-	getInstance().threshold = pos;
+//    width = w;
+  //  height = h;
+
+    // set a whole-window viewport
+    glViewport( 0, 0, width, height );
+
+    // create a perspective projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	// Note: Just setting the Perspective is an easy hack. In fact, the camera should be calibrated.
+	// With such a calibration we would get the projection matrix. This matrix could then be loaded 
+	// to GL_PROJECTION.
+	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
+	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
+	// decrease.
+    gluPerspective( camangle, ((double)width/(double)height), 0.01, 100 );
+
+    // invalidate display
+    glutPostRedisplay();
 }
 
-void Capture::bw_trackbarHandler(int pos)
+int main(int argc, char* argv[]) 
 {
-	getInstance().bw_threshold = pos;
+	cout << "Startup\n";
+
+    // initialize the window system
+    glutInit( &argc, argv );
+    glutInitWindowSize( width, height );
+    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+    glutCreateWindow("AR Exercise 8 - Combine");
+
+    // initialize the GL library
+
+    // pixel storage/packing stuff
+    glPixelStorei( GL_PACK_ALIGNMENT,   1 );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glPixelZoom( 1.0, -1.0 );
+
+    // enable and set colors
+    glEnable( GL_COLOR_MATERIAL );
+    glClearColor( 0, 0, 0, 1.0 );
+
+    // enable and set depth parameters
+    glEnable( GL_DEPTH_TEST );
+    glClearDepth( 1.0 );
+
+    // light parameters
+    GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
+
+    // enable lighting
+    glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
+    glLightfv( GL_LIGHT0, GL_AMBIENT,  light_amb );
+    glLightfv( GL_LIGHT0, GL_DIFFUSE,  light_dif );
+    glEnable( GL_LIGHTING );
+    glEnable( GL_LIGHT0 );
+
+    // make functions known to GLUT
+    glutDisplayFunc( display );
+    glutReshapeFunc( resize  );
+    glutIdleFunc( idle );
+
+    // setup OpenCV
+    init();
+
+    // for tracker debugging...
+    //while (1) idle();
+
+    // start the action
+    glutMainLoop();
+  
+    return 0;
 }

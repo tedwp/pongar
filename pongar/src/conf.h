@@ -3,6 +3,10 @@
 #include <cv.h>
 #include <highgui.h>
 
+//capture
+const int THRESHOLD = 100;
+const int THRESHOLD_BW = 100;
+
 //camera
 const int CAM_WIDTH = 640; 
 const int CAM_HEIGHT = 480;
@@ -27,3 +31,4 @@ const float PADDLE_WIDTH = 0.03f;
 
 //Game
 const bool FULLSCREEN_ENABLED = true;
+const bool SHOW_CAMERA_IMAGE = true;

@@ -27,11 +27,14 @@ void Keyboard::doPressKey(unsigned char key, int x, int y)
 		case 0x66:
 			Graphics::getInstance().fullScreenSwitch();
 			break;
+		
 		case 27:
 			Game::getInstance().end();
 			break;
 	}
 }
+
+
 void Keyboard::pressSpecialKey(int key, int x, int y)
 {
 	getInstance().doPressSpecialKey(key, x, y);
@@ -43,10 +46,5 @@ void Keyboard::doPressSpecialKey(int key, int x, int y) {
 		case GLUT_KEY_F1:
 			Graphics::getInstance().fullScreenSwitch();
 			break;
-		//case GLUT_KEY_
-		/*case GLUT_KEY_F6: 
-			// return to default window
-			Graphics::getInstance().fullScreenLeave();
-			break;*/
 	}
 }
