@@ -8,6 +8,13 @@ Paddle::Paddle(void)
 	m_color[2] = 0;
 	m_marker = NULL;
 	m_isLeft = true;
+	
+	m_historyLength = 0;
+	for(unsigned i = 0; i < SMOOTHING_HISTORYSIZE; i++)
+	{
+		m_historyYPosition[i] = 0;
+		m_timestampsYPosition[i] = 0;
+	}
 }
 
 
@@ -24,9 +31,19 @@ void Paddle::updatePositionFromMarker(void)
 	//TODO
 }
 
-int* Paddle::getColor(void)
+color Paddle::getColor(void)
 {
 	return m_color;
+}
+void Paddle::setColor(color c)
+{
+	m_color = c;
+}
+void Paddle::setColor(int r, int g, int b)
+{
+	m_color.red = r;
+	m_color.green = g;
+	m_color.blue = b;
 }
 float Paddle::getYPosition(void)
 {
