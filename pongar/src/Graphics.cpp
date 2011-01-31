@@ -22,11 +22,12 @@ void Graphics::init(int argc, char* argv[])
 	// initialize the window system
     glutInit( &argc, argv);
 	
-	glutInitWindowSize( width, height );
+	glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
 	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
 	glutCreateWindow("PongAR");
 	
-    // initialize the GL library
+    
+	// initialize the GL library
 
     // pixel storage/packing stuff
     glPixelStorei( GL_PACK_ALIGNMENT,   1 );
@@ -63,6 +64,9 @@ void Graphics::init(int argc, char* argv[])
 	//glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(Keyboard::pressKey);
 	//glutSpecialUpFunc(releaseKey);
+
+	
+	fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -150,10 +154,10 @@ void Graphics::prepareForDisplay(void)
     glMatrixMode( GL_PROJECTION );
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D( 0.0, width, 0.0, height );
+    gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
-    glRasterPos2i( 0, height-1 );
-    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+    glRasterPos2i( 0, CAM_HEIGHT-1 );
+    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 
     glPopMatrix();
 
@@ -178,7 +182,7 @@ void Graphics::doResize( int w, int h)
 {
 
     // set a whole-window viewport
-    glViewport( 0, 0, width, height );
+    glViewport( 0, 0, CAM_HEIGHT, CAM_WIDTH );
 
     // create a perspective projection matrix
     glMatrixMode(GL_PROJECTION);
@@ -189,13 +193,12 @@ void Graphics::doResize( int w, int h)
 	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
 	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
 	// decrease.
-    gluPerspective( camangle, ((double)width/(double)height), 0.01, 100 );
+    gluPerspective( CAM_ANGLE, ((double)CAM_WIDTH/(double)CAM_HEIGHT), 0.01, 100 );
 
     // invalidate display
     glutPostRedisplay();
 
 }
-
 
 void Graphics::arrayToCvMat(float* transform, CvMat* mat){
 	cvZero( mat );
@@ -221,13 +224,9 @@ void Graphics::fullScreenSwitch(void)
 	isInFullScreen ? fullScreenLeave() : fullScreenEnter();
 }
 void Graphics::fullScreenLeave(void)
-{
-	if(isInFullScreen)
-	{
-		glutPositionWindow((glutGet(GLUT_SCREEN_WIDTH) - width) * .5, (glutGet(GLUT_SCREEN_HEIGHT) - height) * .5);
-		glutReshapeWindow(width, height);
+{		glutPositionWindow((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5, (glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5);
+		glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
 		isInFullScreen = false;
-	}
 }
 void showString(char string[], float r, float g, float b, int cx, int y)
 {

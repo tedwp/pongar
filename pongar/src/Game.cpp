@@ -35,6 +35,14 @@ void Game::init( int argc, char* argv[] )
 	Graphics::getInstance().init(argc, argv);
 	
 }
+int Game::getGameStage()
+{
+	return m_gameStage;
+}
+void Game::setGameStage(int gameStage)
+{
+	m_gameStage = gameStage;
+}
 void Game::registerMarker(int id, int purpose)
 {
 	Marker* m = new Marker(id);
