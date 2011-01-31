@@ -23,3 +23,9 @@ const float PLAYINGFIELD_HEIGHT = 1.0;
 
 const float PADDLE_LENGTH = 0.2;
 const float PADDLE_WIDTH = 0.03;
+
+
+//Game
+const bool fullScreenEnabled = true;
+const int fullScreenBitRate = 32;
+const int fullScreenRefreshRate = 60;
