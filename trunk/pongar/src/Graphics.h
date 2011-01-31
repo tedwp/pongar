@@ -18,9 +18,9 @@ public:
 	void fullScreenEnter(void);
 	void fullScreenLeave(void);
 	void fullScreenSwitch(void);
+	void showString(char string[], float r, float g, float b, int cx, int y);
 
 	unsigned char m_bkgnd[CAM_WIDTH*CAM_HEIGHT*3];
-	void showString(char string[], float r, float g, float b, int cx, int y);
 
 private:
 	Graphics(void);
@@ -40,7 +40,7 @@ private:
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
 
-
+	void Graphics::arrayToCvMat(float* transform, CvMat* mat);
 	
 	bool isInFullScreen;
 };
