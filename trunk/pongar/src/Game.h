@@ -31,6 +31,7 @@ private:
 	Game(const Game&);
 	~Game(void);
 	void Game::registerMarker(int id, int purpose);
-	
+	void Game::updateMarkerOffsets();
+	void arrayToCvMat(float* transform, CvMat* mat);
 };
 

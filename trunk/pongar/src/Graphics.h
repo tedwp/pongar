@@ -29,6 +29,5 @@ private:
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
 
-	void arrayToCvMat(float* transform, CvMat* mat);
 };
 
