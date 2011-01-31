@@ -1,17 +1,14 @@
-#include "Capture.h"
-#include "Game.h"
 #include "Graphics.h"
-#include "GL/glut.h"
-
-#include <iostream>
 
 Graphics::Graphics(void)
 {
+	isInFullScreen = false;
 }
 
 
 Graphics::~Graphics(void)
 {
+	fullScreenLeave();
 }
 
 Graphics& Graphics::getInstance(void)
@@ -24,10 +21,11 @@ void Graphics::init(int argc, char* argv[])
 {
 	// initialize the window system
     glutInit( &argc, argv);
-    glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
-    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutCreateWindow("PongAR");
-
+	
+	glutInitWindowSize( width, height );
+	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+	glutCreateWindow("PongAR");
+	
     // initialize the GL library
 
     // pixel storage/packing stuff
@@ -59,6 +57,13 @@ void Graphics::init(int argc, char* argv[])
     glutDisplayFunc( render );
     glutReshapeFunc( resize  );
     glutIdleFunc( getInstance().idle);
+	
+
+	glutIgnoreKeyRepeat(1);
+	//glutKeyboardFunc(processNormalKeys);
+	glutSpecialFunc(Keyboard::pressKey);
+	//glutSpecialUpFunc(releaseKey);
+
 }
 void Graphics::idle(void)
 {
@@ -78,6 +83,53 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
+
+	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
+	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
+	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
+	if(m_playingfield != NULL && m_paddle1 != NULL && m_paddle2 != NULL)
+	{
+		float* playingFieldTf = m_playingfield->getPosition();
+		float* paddle1Tf = m_paddle1->getPosition();
+		float* paddle2Tf = m_paddle2->getPosition();
+	
+		//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
+		CvMat* playingFieldMat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(playingFieldTf, playingFieldMat);
+		CvMat* paddle1Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle1Tf, paddle1Mat);
+		CvMat* paddle2Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle2Tf, paddle2Mat);
+	
+		CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
+		cvInvert(playingFieldMat, playingFieldMatInv);
+
+		cvMul(paddle1Mat, playingFieldMatInv, paddle1Mat);
+		cvMul(paddle2Mat, playingFieldMatInv, paddle2Mat);
+
+		float paddle1offset = cvGet2D(paddle1Mat, 1, 3).val[0];
+		float paddle2offset = cvGet2D(paddle2Mat, 1, 3).val[0];
+		
+		//set y offset of paddles
+		float paddle1z = cvGet2D(paddle1Mat, 2, 3).val[0];
+		float playingFieldZ = cvGet2D(playingFieldMat, 2, 3).val[0];
+		/*std::cout << "z field ";
+		std::cout << playingFieldZ;
+		std::cout << " // z paddle1 ";
+		std::cout << paddle1z;
+		std::cout << std::endl;*/
+
+		float sensitivityFactor = 180;
+		//TODO adjust sensitivityFactor depending on z coordinate?!?
+		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
+		m_paddle2->setOffset(paddle2offset*sensitivityFactor);
+
+		//release matrices
+		cvReleaseMat( &playingFieldMat );
+		cvReleaseMat( &playingFieldMatInv );
+		cvReleaseMat( &paddle1Mat );
+		cvReleaseMat( &paddle2Mat );
+	}
   
 	PlayingField::getInstance().render();
 
@@ -98,10 +150,10 @@ void Graphics::prepareForDisplay(void)
     glMatrixMode( GL_PROJECTION );
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
+    gluOrtho2D( 0.0, width, 0.0, height );
 
-    glRasterPos2i( 0, CAM_HEIGHT-1 );
-    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+    glRasterPos2i( 0, height-1 );
+    glDrawPixels( width, height, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 
     glPopMatrix();
 
@@ -126,7 +178,7 @@ void Graphics::doResize( int w, int h)
 {
 
     // set a whole-window viewport
-    glViewport( 0, 0, CAM_WIDTH, CAM_HEIGHT );
+    glViewport( 0, 0, width, height );
 
     // create a perspective projection matrix
     glMatrixMode(GL_PROJECTION);
@@ -137,9 +189,64 @@ void Graphics::doResize( int w, int h)
 	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
 	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
 	// decrease.
-    gluPerspective( CAM_ANGLE, ((double)CAM_WIDTH/(double)CAM_HEIGHT), 0.01, 100 );
+    gluPerspective( camangle, ((double)width/(double)height), 0.01, 100 );
 
     // invalidate display
     glutPostRedisplay();
 
+}
+
+
+void Graphics::arrayToCvMat(float* transform, CvMat* mat){
+	cvZero( mat );
+	for (unsigned i = 0; i < 16; i++){
+		cvmSet( mat, i/4, i%4, transform[i] );
+	}
+}
+void Graphics::fullScreenEnter(void)
+{
+	if(!isInFullScreen && fullScreenEnabled)
+	{	char* result = "";
+		//sprintf( result, "%dx%d:%d@%d", width ,height, fullScreenBitRate ,fullScreenRefreshRate);
+		result = "640x480:32@60";
+		//glutGameModeString( result);
+		//glutEnterGameMode();
+		//TODO fix above only if gamemode is needed
+		isInFullScreen = true;
+		glutFullScreen();
+	}
+}
+void Graphics::fullScreenSwitch(void)
+{
+	isInFullScreen ? fullScreenLeave() : fullScreenEnter();
+}
+void Graphics::fullScreenLeave(void)
+{
+	if(isInFullScreen)
+	{
+		glutPositionWindow((glutGet(GLUT_SCREEN_WIDTH) - width) * .5, (glutGet(GLUT_SCREEN_HEIGHT) - height) * .5);
+		glutReshapeWindow(width, height);
+		isInFullScreen = false;
+	}
+}
+void showString(char string[], float r, float g, float b, int cx, int y)
+{
+        glColor3f(r, g, b); // our fonts color
+
+        /* think of the following this way:
+         * our center x is x.
+         * take the length of our string and * by 9 for the char width
+         * and thats how wide in pixels the resulting thing will be.
+         * right?
+         * now, divide that by 2 to center it
+         */
+        int x = cx - ((strlen(string) * 9) / 2);
+        y = y - 7; // y - ~(15 / 2). id rather not use float, so 7 isn't too diff than 7.5
+
+        for(unsigned int i = 0; i != strlen(string) - 1; ++i)
+        {
+                glRasterPos3f(x, y, 0);
+                glutBitmapCharacter(GLUT_BITMAP_9_BY_15, string[i]);
+                x = x + 9; // accomidate for the next letter
+        }
 }
