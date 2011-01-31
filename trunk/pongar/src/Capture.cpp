@@ -54,7 +54,7 @@ void Capture::init()
 
 void Capture::initVideoStream(void)
 {
-	m_cap = cvCaptureFromCAM (camindex);
+	m_cap = cvCaptureFromCAM (CAM_INDEX);
 	if (!m_cap) {
 		cout << "No webcam found\n";
 		exit(0);
@@ -421,8 +421,8 @@ void Capture::updateMarkerPositions(void)
 			// transfer camera coords to screen coords
 			for(int i = 0; i<4; i++)
 			{
-				corners[i].x -= width/2;
-				corners[i].y = -corners[i].y + height/2;
+				corners[i].x -= CAM_WIDTH/2;
+				corners[i].y = -corners[i].y + CAM_HEIGHT/2;
 			}
 			
 			Marker* m = Game::getMarkerById(code);
