@@ -4,6 +4,7 @@
 #include "Marker.h"
 #include "Capture.h"
 #include "Graphics.h"
+#include <vector>
 
 class Game
 {

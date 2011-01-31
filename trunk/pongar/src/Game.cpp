@@ -1,6 +1,4 @@
 #include "Game.h"
-#include "Graphics.h"
-#include <vector>
 
 using namespace std;
 

@@ -7,8 +7,8 @@ PlayingField::PlayingField(void)
 
 	//init random angle (between 30 and -30 deg)
 	//0 deg = ball goes straight up
-	srand (time(NULL));
-	ballAngle = rand() % 45 + 30;
+	srand ((unsigned) time(NULL));
+	ballAngle = (float) (rand() % 45 + 30);
 	if ((int)ballAngle % 2==0) ballAngle = 180 - ballAngle;
 
 	ballPosition.first = 0.0;
@@ -43,7 +43,7 @@ void PlayingField::render()
 			}
 	
 			glLoadMatrixf( resultTransposedMatrix );
-			glScalef(0.20, 0.20, 0.20);
+			glScalef(0.20f, 0.20f, 0.20f);
 
 			Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 			Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
@@ -54,7 +54,7 @@ void PlayingField::render()
 			
 			if(m_paddle1 != NULL && m_paddle2 != NULL)
 			{
-				glTranslatef( 0.0, 0.0, -0.01 );
+				glTranslatef( 0.0f, 0.0f, -0.01f );
 	
 				// green rectangle
 				float paddle1YStart =  PADDLE_LENGTH/2 - m_paddle1->getOffset();
@@ -69,7 +69,7 @@ void PlayingField::render()
 					paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 					paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
 				}
-				glRectf(paddle1YEnd, -0.78, paddle1YStart, -0.78+PADDLE_WIDTH);
+				glRectf(paddle1YEnd, -0.78f, paddle1YStart, -0.78f + PADDLE_WIDTH);
 				// red rectangle
 				float paddle2YStart =  PADDLE_LENGTH/2 - m_paddle2->getOffset();
 		        float paddle2YEnd = -PADDLE_LENGTH/2 - m_paddle2->getOffset();
@@ -83,7 +83,7 @@ void PlayingField::render()
 					paddle2YStart = -PLAYINGFIELD_HEIGHT/2;
 					paddle2YEnd = paddle2YStart + PADDLE_LENGTH;
 				}
-				glRectf(paddle2YEnd, 0.75, paddle2YStart, 0.75+PADDLE_WIDTH);
+				glRectf(paddle2YEnd, 0.75f, paddle2YStart, 0.75f+PADDLE_WIDTH);
 
 				if (Game::getInstance().getGameStage() == Game::STAGE_RUNNING){
 					computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
@@ -99,7 +99,7 @@ void PlayingField::render()
 
 void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End)
 {
-	float degInRad=ballAngle*3.14159/180;
+	float degInRad=ballAngle*3.14159f/180;
 	ballVector.first = ballSpeed * sin(degInRad);
 	ballVector.second = ballSpeed * cos(degInRad);
 
@@ -143,7 +143,7 @@ void PlayingField::drawCircle(float r)
   
 	for (int i=0; i<360; ++i)
 	{
-		float degInRad=i*3.14159/180;
+		float degInRad=i*3.14159f/180;
 		glVertex2f(cos(degInRad)*r, sin(degInRad)*r);
 	}
 	glEnd();

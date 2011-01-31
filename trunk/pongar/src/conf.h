@@ -13,19 +13,17 @@ const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-const float BALL_SPEED_INIT = 3.14159265358979*0.005;
-const float BALL_SPEED_INCREASE_FACTOR = 1.2;
+const float BALL_SPEED_INIT = 3.14159265358979f*0.005f;
+const float BALL_SPEED_INCREASE_FACTOR = 1.2f;
 
-const float BALL_RADIUS = 0.05;
+const float BALL_RADIUS = 0.05f;
 
-const float PLAYINGFIELD_WIDTH = 1.6;
-const float PLAYINGFIELD_HEIGHT = 1.0;
+const float PLAYINGFIELD_WIDTH = 1.6f;
+const float PLAYINGFIELD_HEIGHT = 1.0f;
 
-const float PADDLE_LENGTH = 0.2;
-const float PADDLE_WIDTH = 0.03;
+const float PADDLE_LENGTH = 0.2f;
+const float PADDLE_WIDTH = 0.03f;
 
 
 //Game
-const bool fullScreenEnabled = true;
-const int fullScreenBitRate = 32;
-const int fullScreenRefreshRate = 60;
+const bool FULLSCREEN_ENABLED = true;
