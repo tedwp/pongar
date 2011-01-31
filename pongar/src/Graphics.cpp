@@ -85,7 +85,7 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
-	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. Ändern.
+	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. plz Ändern.
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
