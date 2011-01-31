@@ -3,6 +3,9 @@
 #include <cv.h>
 #include <highgui.h>
 
+//Smoothing
+const int SMOOTHING_HISTORYSIZE = 10;
+
 //capture
 const int THRESHOLD = 100;
 const int THRESHOLD_BW = 100;
@@ -32,3 +35,7 @@ const float PADDLE_WIDTH = 0.03f;
 //Game
 const bool FULLSCREEN_ENABLED = true;
 const bool SHOW_CAMERA_IMAGE = true;
+
+//Colors
+//#include "Color.h"
+//const Color BallColor = {red:10,green:10,blue:10};

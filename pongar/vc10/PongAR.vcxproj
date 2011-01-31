@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Ball.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -100,6 +101,8 @@
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Ball.h" />
+    <ClInclude Include="..\src\Color.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\Graphics.h" />
     <ClInclude Include="..\src\Keyboard.h" />
@@ -110,6 +113,10 @@
     <ClInclude Include="..\src\Capture.h" />
     <ClInclude Include="..\src\conf.h" />
     <ClInclude Include="..\src\UI.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PongAR.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
