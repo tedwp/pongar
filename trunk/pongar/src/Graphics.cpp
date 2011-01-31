@@ -54,6 +54,7 @@ void Graphics::init(int argc, char* argv[])
     //glEnable( GL_LIGHTING );
     //glEnable( GL_LIGHT0 );
 
+
     // make functions known to GLUT
     glutDisplayFunc( render );
     glutReshapeFunc( resize  );
@@ -84,7 +85,7 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
-
+	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. Ändern.
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
@@ -153,8 +154,12 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
     glRasterPos2i( 0, CAM_HEIGHT-1 );
-    if(SHOW_CAMERA_IMAGE) glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
-
+    if(SHOW_CAMERA_IMAGE)
+	{
+		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+	}
+	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0,0,255,100,100);
+	
     glPopMatrix();
 
     glEnable(GL_DEPTH_TEST);
@@ -227,22 +232,10 @@ void Graphics::fullScreenLeave(void)
 }
 void Graphics::showString(char string[], float r, float g, float b, int cx, int y)
 {
-        glColor3f(r, g, b); // our fonts color
-
-        /* think of the following this way:
-         * our center x is x.
-         * take the length of our string and * by 9 for the char width
-         * and thats how wide in pixels the resulting thing will be.
-         * right?
-         * now, divide that by 2 to center it
-         */
-        int x = cx - ((strlen(string) * 9) / 2);
-        y = y - 7; // y - ~(15 / 2). id rather not use float, so 7 isn't too diff than 7.5
-
-        for(unsigned int i = 0; i != strlen(string) - 1; ++i)
+        glColor3f(r, g, b);
+		glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
+        for(unsigned int i = 0; i < strlen(string); i++)
         {
-                glRasterPos3f((GLfloat) x, (GLfloat) y, (GLfloat) 0);
-                glutBitmapCharacter(GLUT_BITMAP_9_BY_15, string[i]);
-                x = x + 9; // accomidate for the next letter
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 , string[i]);
         }
 }
