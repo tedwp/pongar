@@ -78,6 +78,9 @@ Marker* Game::getMarkerByPurpose(int purpose)
 void Game::idle( void )
 {
 	Capture::getInstance().updateMarkerPositions();
+
+	Game::getInstance().updateMarkerOffsets();
+
 	/**
 	Hier kommt die Spiellogik rein
 	Diese Methode wird von Anfang an immer wieder aufgerufen.
@@ -115,7 +118,59 @@ void Game::idle( void )
 
 }
 
+void Game::updateMarkerOffsets(){
+	
+	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
+	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
+	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
+	if(m_playingfield != NULL && m_paddle1 != NULL && m_paddle2 != NULL)
+	{
+		float* playingFieldTf = m_playingfield->getPosition();
+		float* paddle1Tf = m_paddle1->getPosition();
+		float* paddle2Tf = m_paddle2->getPosition();
+	
+		//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
+		CvMat* playingFieldMat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(playingFieldTf, playingFieldMat);
+		CvMat* paddle1Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle1Tf, paddle1Mat);
+		CvMat* paddle2Mat = cvCreateMat( 4, 4, CV_32FC1 );
+		arrayToCvMat(paddle2Tf, paddle2Mat);
+	
+		CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
+		cvInvert(playingFieldMat, playingFieldMatInv);
+
+		cvMul(paddle1Mat, playingFieldMatInv, paddle1Mat);
+		cvMul(paddle2Mat, playingFieldMatInv, paddle2Mat);
+
+		float paddle1offset = cvGet2D(paddle1Mat, 1, 3).val[0];
+		float paddle2offset = cvGet2D(paddle2Mat, 1, 3).val[0];
+		
+		//set y offset of paddles
+		float paddle1z = cvGet2D(paddle1Mat, 2, 3).val[0];
+		float playingFieldZ = cvGet2D(playingFieldMat, 2, 3).val[0];
+		
+		float sensitivityFactor = 180;
+		//TODO adjust sensitivityFactor depending on z coordinate?!?
+		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
+		m_paddle2->setOffset(paddle2offset*sensitivityFactor);
+
+		//release matrices
+		cvReleaseMat( &playingFieldMat );
+		cvReleaseMat( &playingFieldMatInv );
+		cvReleaseMat( &paddle1Mat );
+		cvReleaseMat( &paddle2Mat );
+	}
+}
+
 void Game::cleanup( void )
 {
 	Capture::getInstance().cleanup();
+}
+
+void Game::arrayToCvMat(float* transform, CvMat* mat){
+	cvZero( mat );
+	for (unsigned i = 0; i < 16; i++){
+		cvmSet( mat, i/4, i%4, transform[i] );
+	}
 }

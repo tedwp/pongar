@@ -69,7 +69,7 @@ void PlayingField::render()
 					paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 					paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
 				}
-				glRectf(paddle1YEnd, -0.78, paddle1YStart, -0.75);
+				glRectf(paddle1YEnd, -0.78, paddle1YStart, -0.78+PADDLE_WIDTH);
 				// red rectangle
 				float paddle2YStart =  PADDLE_LENGTH/2 - m_paddle2->getOffset();
 		        float paddle2YEnd = -PADDLE_LENGTH/2 - m_paddle2->getOffset();
@@ -83,7 +83,7 @@ void PlayingField::render()
 					paddle2YStart = -PLAYINGFIELD_HEIGHT/2;
 					paddle2YEnd = paddle2YStart + PADDLE_LENGTH;
 				}
-				glRectf(paddle2YEnd, 0.75, paddle2YStart, 0.78);
+				glRectf(paddle2YEnd, 0.75, paddle2YStart, 0.75+PADDLE_WIDTH);
 
 				computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
 				glTranslatef( ballPosition.first, ballPosition.second, 0.0 );
