@@ -7,10 +7,11 @@ Marker::Marker(int id)
 {
 	m_id = id;
 	m_position = new float[16];
-  if(id=Game::PURPOSE_PLAYINGFIELD)
-    m_positionChanged = false;
-  else
-    m_positionChanged = true;
+	m_lastUpdateTime = 0;
+	if(id == Game::PURPOSE_PLAYINGFIELD)
+		m_positionChanged = false;
+	else
+		m_positionChanged = true;
 }
 
 
@@ -35,6 +36,8 @@ void Marker::updatePosition(float position [16])
 		for( int i = 0; i < 16; i++ )
 			m_position[ i ] = position[ i ];
 	}
+
+	m_lastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 float* Marker::getPosition(void)
@@ -66,4 +69,8 @@ void Marker::setOffset(float offset){
 }
 float Marker::getOffset(){
 	return m_offset;
+}
+
+int Marker::getLastUpdateTime(){
+	return m_lastUpdateTime;
 }

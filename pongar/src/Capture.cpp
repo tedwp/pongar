@@ -410,8 +410,6 @@ void Capture::updateMarkerPositions(void)
 				for(int i = 0; i < 4; i++)	corners[i] = corrected_corners[i];
 			}
 
-			//printf ("Found: %04x\n", code);
-
 			if ( isFirstMarker )
 			{
 				//cvShowImage ( "Marker", iplMarker );
@@ -434,7 +432,7 @@ void Capture::updateMarkerPositions(void)
 			}
 
 			cvReleaseMat (&projMat);
-      cvReleaseImage (&iplMarker);
+			cvReleaseImage (&iplMarker);
 			delete[] rect;
 		} // end of if(result->total == 4)
 	} // end of loop over contours
