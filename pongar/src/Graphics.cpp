@@ -43,9 +43,9 @@ void Graphics::init(int argc, char* argv[])
     glClearDepth( 1.0 );
 
     // light parameters
-    GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
-    GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
+    GLfloat light_pos[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    GLfloat light_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat light_dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
 
     // enable lighting
     glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
@@ -58,11 +58,10 @@ void Graphics::init(int argc, char* argv[])
     glutDisplayFunc( render );
     glutReshapeFunc( resize  );
     glutIdleFunc( getInstance().idle);
-	
 
 	glutIgnoreKeyRepeat(1);
-	//glutKeyboardFunc(processNormalKeys);
-	glutSpecialFunc(Keyboard::pressKey);
+	glutKeyboardFunc(Keyboard::pressKey);
+	glutSpecialFunc(Keyboard::pressSpecialKey);
 	//glutSpecialUpFunc(releaseKey);
 
 	
@@ -111,12 +110,12 @@ void Graphics::doRender()
 		cvMul(paddle1Mat, playingFieldMatInv, paddle1Mat);
 		cvMul(paddle2Mat, playingFieldMatInv, paddle2Mat);
 
-		float paddle1offset = cvGet2D(paddle1Mat, 1, 3).val[0];
-		float paddle2offset = cvGet2D(paddle2Mat, 1, 3).val[0];
+		float paddle1offset = (float) cvGet2D(paddle1Mat, 1, 3).val[0];
+		float paddle2offset = (float) cvGet2D(paddle2Mat, 1, 3).val[0];
 		
 		//set y offset of paddles
-		float paddle1z = cvGet2D(paddle1Mat, 2, 3).val[0];
-		float playingFieldZ = cvGet2D(playingFieldMat, 2, 3).val[0];
+		float paddle1z = (float) cvGet2D(paddle1Mat, 2, 3).val[0];
+		float playingFieldZ = (float) cvGet2D(playingFieldMat, 2, 3).val[0];
 		/*std::cout << "z field ";
 		std::cout << playingFieldZ;
 		std::cout << " // z paddle1 ";
@@ -223,9 +222,10 @@ void Graphics::fullScreenSwitch(void)
 	isInFullScreen ? fullScreenLeave() : fullScreenEnter();
 }
 void Graphics::fullScreenLeave(void)
-{		glutPositionWindow((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5, (glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5);
-		glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
-		isInFullScreen = false;
+{
+	glutPositionWindow((int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5), (int)  ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5));
+	glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
+	isInFullScreen = false;
 }
 void Graphics::showString(char string[], float r, float g, float b, int cx, int y)
 {
@@ -243,7 +243,7 @@ void Graphics::showString(char string[], float r, float g, float b, int cx, int 
 
         for(unsigned int i = 0; i != strlen(string) - 1; ++i)
         {
-                glRasterPos3f(x, y, 0);
+                glRasterPos3f((GLfloat) x, (GLfloat) y, (GLfloat) 0);
                 glutBitmapCharacter(GLUT_BITMAP_9_BY_15, string[i]);
                 x = x + 9; // accomidate for the next letter
         }

@@ -120,7 +120,10 @@ void Game::idle( void )
 
 	
 }
-
+void Game::end(void)
+{
+	exit(0);
+}
 void Game::cleanup( void )
 {
 	Capture::getInstance().cleanup();
