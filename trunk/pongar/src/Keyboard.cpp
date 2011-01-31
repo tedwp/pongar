@@ -15,18 +15,35 @@ Keyboard& Keyboard::getInstance(void)
 	return m_instance;
 }
 
-void Keyboard::pressKey(int key, int x, int y)
+
+void Keyboard::pressKey(unsigned char key, int x, int y)
 {
 	getInstance().doPressKey(key, x, y);
 }
-void Keyboard::doPressKey(int key, int x, int y) {
+void Keyboard::doPressKey(unsigned char key, int x, int y)
+{
+	switch(key)
+	{
+		case 0x66:
+			Graphics::getInstance().fullScreenSwitch();
+			break;
+		case 27:
+			Game::getInstance().end();
+			break;
+	}
+}
+void Keyboard::pressSpecialKey(int key, int x, int y)
+{
+	getInstance().doPressSpecialKey(key, x, y);
+}
+void Keyboard::doPressSpecialKey(int key, int x, int y) {
 
 	switch (key)
 	{
 		case GLUT_KEY_F1:
 			Graphics::getInstance().fullScreenSwitch();
 			break;
-
+		//case GLUT_KEY_
 		/*case GLUT_KEY_F6: 
 			// return to default window
 			Graphics::getInstance().fullScreenLeave();

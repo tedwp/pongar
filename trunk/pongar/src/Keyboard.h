@@ -6,7 +6,8 @@ class Keyboard
 {
 public:
 	static Keyboard& getInstance(void);
-	static void pressKey(int key, int x, int y);
+	static void pressSpecialKey(int key, int x, int y);
+	static void pressKey(unsigned char key, int x, int y);
 	
 private:
 	static Keyboard& m_instance;
@@ -14,6 +15,7 @@ private:
 	Keyboard(void);
 	Keyboard(const Keyboard&);
 	~Keyboard(void);
-	void doPressKey(int key, int x, int y);
+	void doPressSpecialKey(int key, int x, int y);
+	void doPressKey(unsigned char key, int x, int y);
 };
 
