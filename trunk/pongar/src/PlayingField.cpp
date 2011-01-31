@@ -85,7 +85,9 @@ void PlayingField::render()
 				}
 				glRectf(paddle2YEnd, 0.75, paddle2YStart, 0.75+PADDLE_WIDTH);
 
-				computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
+				if (Game::getInstance().getGameStage() == Game::STAGE_RUNNING){
+					computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
+				}
 				glTranslatef( ballPosition.first, ballPosition.second, 0.0 );
 				glColor3f(0.0, 0.0, 0.0);
 				drawCircle(BALL_RADIUS);
@@ -114,12 +116,10 @@ void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, flo
 	if (!xCollision && ballPosition.second-BALL_RADIUS <= -0.75 && ballPosition.first<=paddle1Start && ballPosition.first>=paddle1End) pCollision = true;
 	if (!xCollision && ballPosition.second+BALL_RADIUS >= 0.75 && ballPosition.first<=paddle2Start && ballPosition.first>=paddle2End) pCollision = true;
 
-	if (xCollision)
-	{
+	if (xCollision) {
 		// GAME OVER
-	}
-	if (pCollision)
-	{
+		Game::getInstance().setGameStage(Game::STAGE_OVER);
+	} else if (pCollision) {
 		ballPosition.first = ballPosition.first - ballVector.first;
 		ballPosition.second = ballPosition.second - ballVector.second;
 		ballAngle = 180-ballAngle;
@@ -128,9 +128,7 @@ void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, flo
 
 		//increase ball speed
 		ballSpeed = ballSpeed * BALL_SPEED_INCREASE_FACTOR;
-	}
-	if (yCollision)
-	{
+	} else if (yCollision) {
 		ballPosition.first = ballPosition.first - ballVector.first;
 		ballPosition.second = ballPosition.second - ballVector.second;
 		ballAngle = 360-ballAngle;

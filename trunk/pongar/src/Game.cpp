@@ -27,13 +27,16 @@ Game& Game::getInstance(void)
 
 void Game::init( int argc, char* argv[] )
 {
+	m_gameStage = STAGE_INITIALIZATION;
+
 	getInstance().registerMarker(2884, PURPOSE_PADDLE1);
 	getInstance().registerMarker(626, PURPOSE_PADDLE2);
 	getInstance().registerMarker(90, PURPOSE_PLAYINGFIELD);
 		
 	Capture::getInstance().init();
 	Graphics::getInstance().init(argc, argv);
-	
+
+	glutTimerFunc( 25, timer, 0 );
 }
 void Game::registerMarker(int id, int purpose)
 {
@@ -75,12 +78,9 @@ Marker* Game::getMarkerByPurpose(int purpose)
 	return NULL;
 }
 
-void Game::idle( void )
+void Game::timer(int value)
 {
-	Capture::getInstance().updateMarkerPositions();
-
-	Game::getInstance().updateMarkerOffsets();
-
+	
 	/**
 	Hier kommt die Spiellogik rein
 	Diese Methode wird von Anfang an immer wieder aufgerufen.
@@ -95,30 +95,51 @@ void Game::idle( void )
 	 - Zugriff auf Paddle-Marker mit Hilfe von Game::getMarkerByPurpose();
 	 - Jedes Paddle-Objekt hat ein Marker-Property, mit dem es seine Position aktualisieren kann.
 	 **/
-
-	// Das folgende uncommenten:
-	/*switch(m_gameStage)
+	int gameStage = Game::getInstance().getGameStage();
+	switch(gameStage)
 	{
-		case Game.STAGE_INITIALIZATION:
+		case STAGE_INITIALIZATION:
 			// Nicht zu verwechseln mit init()! Hier wird das Spiel aus Sicht der Benutzers initialisiert, alles technische geschieht hingegen in init()
-			performInitialization();
+			Game::getInstance().performInitialization();
 			break;
 		
-		case Game.STAGE_RUNNING:
-			performRunning();
+		case STAGE_RUNNING:
+			Game::getInstance().updateMarkerOffsets();
+
+			//performRunning();
 			break;
 
-		case Game.STAGE_PAUSE:
-			performPause();
+		case STAGE_PAUSE:
+			//performPause();
 			break;
 		default:
 		break;
-	}*/
-
-
+	}
+ 
+	glutTimerFunc( 25, timer, 0 );
+}
+void Game::idle( void )
+{
+	Capture::getInstance().updateMarkerPositions();
 }
 
-void Game::updateMarkerOffsets(){
+void Game::performInitialization(void){
+	Marker* m_PlayingField = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
+	if(m_PlayingField!=NULL){
+		int currentTime = glutGet(GLUT_ELAPSED_TIME);
+		int lastUpdateTime = m_PlayingField->getLastUpdateTime();
+		if (lastUpdateTime == 0){
+			lastUpdateTime = currentTime;
+		}
+		int elapsedTime = currentTime - lastUpdateTime;
+		if (elapsedTime > 5000){
+			//playing field marker is now invisible for 5 seconds -> start game!
+			m_gameStage = STAGE_RUNNING;
+		}
+	}
+}
+
+void Game::updateMarkerOffsets(void){
 	
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
@@ -166,6 +187,14 @@ void Game::updateMarkerOffsets(){
 void Game::cleanup( void )
 {
 	Capture::getInstance().cleanup();
+}
+
+int Game::getGameStage(){
+	return m_gameStage;
+}
+
+void Game::setGameStage(int stage){
+	m_gameStage = stage;
 }
 
 void Game::arrayToCvMat(float* transform, CvMat* mat){

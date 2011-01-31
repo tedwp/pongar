@@ -19,10 +19,13 @@ public:
 
 	bool hasPositionChanged(void);
 
+	int getLastUpdateTime();
+
 private:
 	int m_id;
 	float* m_position;
 	bool m_positionChanged;
 	int m_purpose;
 	float m_offset;
+	int m_lastUpdateTime;
 };

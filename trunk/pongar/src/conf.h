@@ -13,7 +13,7 @@ const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-const float BALL_SPEED_INIT = 3.14159265358979*0.003;
+const float BALL_SPEED_INIT = 3.14159265358979*0.005;
 const float BALL_SPEED_INCREASE_FACTOR = 1.2;
 
 const float BALL_RADIUS = 0.05;
