@@ -66,7 +66,7 @@ void Graphics::init(int argc, char* argv[])
 	//glutSpecialUpFunc(releaseKey);
 
 	
-	fullScreenLeave();
+	//fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -136,7 +136,6 @@ void Graphics::doRender()
 	}
   
 	PlayingField::getInstance().render();
-
 	redrawDisplay();
 
 }
@@ -208,7 +207,7 @@ void Graphics::arrayToCvMat(float* transform, CvMat* mat){
 }
 void Graphics::fullScreenEnter(void)
 {
-	if(!isInFullScreen && fullScreenEnabled)
+	if(!isInFullScreen && FULLSCREEN_ENABLED)
 	{	char* result = "";
 		//sprintf( result, "%dx%d:%d@%d", width ,height, fullScreenBitRate ,fullScreenRefreshRate);
 		result = "640x480:32@60";
@@ -228,7 +227,7 @@ void Graphics::fullScreenLeave(void)
 		glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
 		isInFullScreen = false;
 }
-void showString(char string[], float r, float g, float b, int cx, int y)
+void Graphics::showString(char string[], float r, float g, float b, int cx, int y)
 {
         glColor3f(r, g, b); // our fonts color
 
