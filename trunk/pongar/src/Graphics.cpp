@@ -62,10 +62,8 @@ void Graphics::init(int argc, char* argv[])
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
-	//glutSpecialUpFunc(releaseKey);
-
-	
-	//fullScreenLeave();
+		
+	fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -155,7 +153,7 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
     glRasterPos2i( 0, CAM_HEIGHT-1 );
-    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+    if(SHOW_CAMERA_IMAGE) glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 
     glPopMatrix();
 
