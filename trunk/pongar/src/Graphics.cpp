@@ -87,7 +87,7 @@ void Graphics::doRender()
 	prepareForDisplay();
 	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. plz Ändern.
 	//TODO: Das gehört hier alles absolut nicht rein.
-	/*
+	
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
@@ -136,7 +136,7 @@ void Graphics::doRender()
 	}
   
 	PlayingField::getInstance().render();
-	*/
+	
 	redrawDisplay();
 
 }
@@ -181,11 +181,11 @@ void Graphics::redrawDisplay(void)
 }
 void Graphics::drawStuffOnTop(void)
 {
-	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0,0,255,100,100);
+	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0, 0, 255, 100, 100);
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{
 		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );
-		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
+		//glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
 	}
 }
 void Graphics::resize( int w, int h) 
@@ -216,7 +216,8 @@ void Graphics::doResize( int w, int h)
 
 void Graphics::arrayToCvMat(float* transform, CvMat* mat){
 	cvZero( mat );
-	for (unsigned i = 0; i < 16; i++){
+	for (unsigned i = 0; i < 16; i++)
+	{
 		cvmSet( mat, i/4, i%4, transform[i] );
 	}
 }
