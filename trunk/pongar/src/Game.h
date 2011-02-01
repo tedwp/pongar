@@ -25,6 +25,8 @@ public:
 	static Marker* getMarkerByPurpose(int purpose);
 	void end(void);
 
+	IplImage* m_markerImage;
+
 	static const int PURPOSE_PADDLE1 = 1;
 	static const int PURPOSE_PADDLE2 = 2;
 	static const int PURPOSE_PLAYINGFIELD = 3;
