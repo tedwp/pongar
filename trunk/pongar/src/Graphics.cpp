@@ -1,4 +1,9 @@
+#include "Capture.h"
+#include "Game.h"
 #include "Graphics.h"
+#include "GL/glut.h"
+
+#include <iostream>
 
 Graphics::Graphics(void)
 {
@@ -21,13 +26,11 @@ void Graphics::init(int argc, char* argv[])
 {
 	// initialize the window system
     glutInit( &argc, argv);
-	
-	glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
-	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-	glutCreateWindow("PongAR");
-	
-    
-	// initialize the GL library
+    glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
+    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+    glutCreateWindow("PongAR");
+
+    // initialize the GL library
 
     // pixel storage/packing stuff
     glPixelStorei( GL_PACK_ALIGNMENT,   1 );
@@ -43,9 +46,9 @@ void Graphics::init(int argc, char* argv[])
     glClearDepth( 1.0 );
 
     // light parameters
-    GLfloat light_pos[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-    GLfloat light_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-    GLfloat light_dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+    GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
 
     // enable lighting
     glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
@@ -54,17 +57,15 @@ void Graphics::init(int argc, char* argv[])
     //glEnable( GL_LIGHTING );
     //glEnable( GL_LIGHT0 );
 
-
     // make functions known to GLUT
     glutDisplayFunc( render );
     glutReshapeFunc( resize  );
     glutIdleFunc( getInstance().idle);
 
+	
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
-		
-	fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -140,6 +141,15 @@ void Graphics::doRender()
 	redrawDisplay();
 
 }
+
+void Graphics::arrayToCvMat(float* transform, CvMat* mat)
+{
+	cvZero( mat );
+	for (unsigned i = 0; i < 16; i++)
+	{
+		cvmSet( mat, i/4, i%4, transform[i] );
+	}
+}
 void Graphics::prepareForDisplay(void)
 {
 	// clear buffers
@@ -157,14 +167,8 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
     glRasterPos2i( 0, CAM_HEIGHT-1 );
-    if(SHOW_CAMERA_IMAGE)
-	{
-		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
-	}
-	
-	
-	drawStuffOnTop();
-	//TODO is it correct to drawStuffOnTop() before popMatrix?
+    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+
     glPopMatrix();
 
     glEnable(GL_DEPTH_TEST);
@@ -179,15 +183,7 @@ void Graphics::redrawDisplay(void)
 	// redraw
     glutSwapBuffers();
 }
-void Graphics::drawStuffOnTop(void)
-{
-	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0, 0, 255, 100, 100);
-	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
-	{
-		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );
-		//glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
-	}
-}
+
 void Graphics::resize( int w, int h) 
 {
 	Graphics::getInstance().doResize(w, h);
@@ -196,15 +192,8 @@ void Graphics::doResize( int w, int h)
 {
 
     // set a whole-window viewport
-	glViewport( 0, (int) (-CAM_HEIGHT *.3333), CAM_HEIGHT, CAM_WIDTH );
+    glViewport( 0, 0, CAM_WIDTH, CAM_HEIGHT );
 
-	/*glViewport(
-				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5 - CAM_WIDTH * .5),
-				(int) ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5 + CAM_HEIGHT * .5),
-				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_WIDTH,
-				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_HEIGHT
-				);
-				*/
     // create a perspective projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -219,14 +208,6 @@ void Graphics::doResize( int w, int h)
     // invalidate display
     glutPostRedisplay();
 
-}
-
-void Graphics::arrayToCvMat(float* transform, CvMat* mat){
-	cvZero( mat );
-	for (unsigned i = 0; i < 16; i++)
-	{
-		cvmSet( mat, i/4, i%4, transform[i] );
-	}
 }
 void Graphics::fullScreenEnter(void)
 {
@@ -259,4 +240,14 @@ void Graphics::showString(char string[], float r, float g, float b, int cx, int 
         {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 , string[i]);
         }
+}
+
+void Graphics::drawStuffOnTop(void)
+{
+	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0, 0, 255, 100, 100);
+	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
+	{
+		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );
+		//glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
+	}
 }
