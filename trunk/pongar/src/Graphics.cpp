@@ -130,7 +130,10 @@ void Graphics::prepareForDisplay(void)
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     prepare2D();
-    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+	if(SHOW_CAMERA_IMAGE)
+	{
+		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+	}
 	finish2D();
 
 }
