@@ -123,16 +123,17 @@ void Game::performStageBeamerCalibration(void)
 		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
 		/* display the image * /
 		cvShowImage( "image", img );*/
+	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 0.5f);
 	setGameStage(STAGE_STARTUP);
 }
 void Game::performStageStartup(void)
 {
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
+		PlayingField::getInstance().setCorrespondingMarker(getMarkerByPurpose(PURPOSE_PLAYINGFIELD));
 		if(getTimeSinceStart() - timerStart> STARTUP_DURATION)
 		{
-			PlayingField::getInstance().setCorrespondingMarker(getMarkerByPurpose(PURPOSE_PLAYINGFIELD));
-			//TODO here: Fix playing field
+			PlayingField::getInstance().getCorrespondingMarker()->lock();
 			setGameStage(STAGE_INITIALIZATION);
 		}
 	}
@@ -148,8 +149,16 @@ void Game::performStageInitialization(void)
 {
 	if(isMarkerPresent(PURPOSE_PADDLE1) && isMarkerPresent(PURPOSE_PADDLE2) )
 	{
-		if(timerStart - getTimeSinceStart() > INITIALIZATION_DURATION)
+		if(getTimeSinceStart() - timerStart > INITIALIZATION_DURATION)
 		{
+			Paddle* leftPaddle = PlayingField::getInstance().spawnPaddle(true);
+			leftPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE1));
+			leftPaddle->setColor(1.0f, 0.0f, 1.0f, 1.0f);
+
+			Paddle* rightPaddle = PlayingField::getInstance().spawnPaddle(false);
+			rightPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE2));
+			rightPaddle->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+			
 			setGameStage(STAGE_RUNNING);
 		}
 	}

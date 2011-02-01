@@ -67,6 +67,8 @@ void Graphics::init(int argc, char* argv[])
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
 
+	fullScreenLeave();
+
 }
 void Graphics::idle(void)
 {
@@ -86,20 +88,18 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
-	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. plz Ändern.
-	//TODO: Das gehört hier alles absolut nicht rein.
 	
 	PlayingField::getInstance().render();
 	
+	prepare2D();
+	drawStuffOnTop();
+	finish2D();
 	redrawDisplay();
 
 }
-void Graphics::prepareForDisplay(void)
+void Graphics::prepare2D(void)
 {
-	// clear buffers
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // draw background image
@@ -111,21 +111,30 @@ void Graphics::prepareForDisplay(void)
     gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
 
     glRasterPos2i( 0, CAM_HEIGHT-1 );
-    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
-
-	drawStuffOnTop();
-
-    glPopMatrix();
-
-    glEnable(GL_DEPTH_TEST);
+   
+}
+void Graphics::finish2D(void)
+{
+	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
 
 	
-    // move to origin
+	// move to origin
     glMatrixMode( GL_MODELVIEW );
+}
+void Graphics::prepareForDisplay(void)
+{
+	// clear buffers
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    prepare2D();
+    glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+	finish2D();
 
 }
 void Graphics::redrawDisplay(void)
 {
+
 	// redraw
     glutSwapBuffers();
 }

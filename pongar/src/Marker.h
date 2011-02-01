@@ -23,6 +23,8 @@ public:
 
 	int getLastUpdateTime();
 	bool isVisible(void);
+	void lock(void);
+	void unLock(void);
 
 private:
 	int m_id;
@@ -31,4 +33,5 @@ private:
 	int m_purpose;
 	float m_offset;
 	long int m_lastUpdateTime;
+	bool m_locked;
 };

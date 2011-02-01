@@ -2,6 +2,15 @@
 
 PlayingField::PlayingField(void)
 {
+	m_leftPaddle = NULL;
+	m_rightPaddle = NULL;
+	
+	m_color.red = 255;
+	m_color.green = 0;
+	m_color.blue = 255;
+	m_color.alpha = 255;
+
+
 	ballSpeed = BALL_SPEED_INIT;
 
 	//init random angle (between 30 and -30 deg)
@@ -12,11 +21,17 @@ PlayingField::PlayingField(void)
 
 	ballPosition.first = 0.0;
 	ballPosition.second = 0.0;
+
+	
 }
 
 
 PlayingField::~PlayingField(void)
 {
+	if(m_leftPaddle != NULL)
+		delete	m_leftPaddle;
+	if(m_rightPaddle != NULL)
+		delete m_rightPaddle;
 }
 
 PlayingField& PlayingField::getInstance()
@@ -27,72 +42,59 @@ PlayingField& PlayingField::getInstance()
 
 void PlayingField::render()
 {
-	//m_leftPaddle->render();
-	//m_rightPaddle->render();
-	
-
-
-	Marker* m_PlayingField = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
-	if(m_PlayingField != NULL && m_PlayingField->hasPositionChanged())
+	if(getCorrespondingMarker() != NULL)
 	{
-		if (m_PlayingField->getPurpose() == Game::PURPOSE_PLAYINGFIELD){
-			float* m_position = m_PlayingField->getPosition();
-			float resultTransposedMatrix[16];
-			transposeMatrix(m_position, resultTransposedMatrix);
+		float* m_position = getCorrespondingMarker()->getPosition();
+		float resultTransposedMatrix[16];
+		transposeMatrix(m_position, resultTransposedMatrix);
 	
-			glLoadMatrixf( resultTransposedMatrix );
-			glScalef(0.20f, 0.20f, 0.20f);
-
-			Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
-			Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
-	
-			// draw white rectangle
-			glColor4f( 1.0, 1.0, 1.0, 1.0 );
-			glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
-			
-			if(m_paddle1 != NULL && m_paddle2 != NULL)
-			{
-				glTranslatef( 0.0f, 0.0f, -0.01f );
-	
-				// green rectangle
-				float paddle1YStart =  PADDLE_LENGTH/2 - m_paddle1->getOffset();
-				float paddle1YEnd = -PADDLE_LENGTH/2 - m_paddle1->getOffset();
-				// draw green rectangle
-				glColor4f( 0.0, 1.0, 0.0, 1.0 );
-				if (paddle1YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2) {
-					paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
-					paddle1YStart = paddle1YEnd - PADDLE_LENGTH;
-				}
-				if (paddle1YStart-PADDLE_LENGTH < -PLAYINGFIELD_HEIGHT/2) {
-					paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
-					paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
-				}
-				//glRectf(paddle1YEnd, -0.78f, paddle1YStart, -0.78f + PADDLE_WIDTH);
-				// red rectangle
-				float paddle2YStart =  PADDLE_LENGTH/2 - m_paddle2->getOffset();
-		        float paddle2YEnd = -PADDLE_LENGTH/2 - m_paddle2->getOffset();
-				// draw green rectangle
-				glColor4f( 1.0, 0.0, 0.0, 1.0 );
-				if (paddle2YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2) {
-					paddle2YEnd = PLAYINGFIELD_HEIGHT/2;
-					paddle2YStart = paddle2YEnd - PADDLE_LENGTH;
-				}
-				if (paddle2YStart-PADDLE_LENGTH < -PLAYINGFIELD_HEIGHT/2) {
-					paddle2YStart = -PLAYINGFIELD_HEIGHT/2;
-					paddle2YEnd = paddle2YStart + PADDLE_LENGTH;
-				}
-				glRectf(paddle2YEnd, 0.75f, paddle2YStart, 0.75f+PADDLE_WIDTH);
-
-				if (Game::getInstance().getGameStage() == Game::STAGE_RUNNING){
-					computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
-				}
-				glTranslatef( ballPosition.first, ballPosition.second, 0.0 );
-				glColor3f(0.0, 0.0, 0.0);
-				drawCircle(BALL_RADIUS);
-
-			}
-		}
+		glLoadMatrixf( resultTransposedMatrix );
+		glScalef(0.20f, 0.20f, 0.20f);
+		// draw white rectangle
+		glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);
+		glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
 	}
+	/*
+
+	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
+	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
+	
+
+	if(false && m_paddle1 != NULL && m_paddle2 != NULL)
+	{
+			
+		float paddle2YStart =  PADDLE_LENGTH/2 - m_paddle2->getOffset();
+		float paddle2YEnd = -PADDLE_LENGTH/2 - m_paddle2->getOffset();
+		// draw red rectangle
+		glColor4f( 1.0, 0.0, 0.0, 1.0 );
+		if (paddle2YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2) {
+			paddle2YEnd = PLAYINGFIELD_HEIGHT/2;
+			paddle2YStart = paddle2YEnd - PADDLE_LENGTH;
+		}
+		if (paddle2YStart-PADDLE_LENGTH < -PLAYINGFIELD_HEIGHT/2) {
+			paddle2YStart = -PLAYINGFIELD_HEIGHT/2;
+			paddle2YEnd = paddle2YStart + PADDLE_LENGTH;
+		}
+		glRectf(paddle2YEnd, 0.75f, paddle2YStart, 0.75f+PADDLE_WIDTH);
+
+
+
+		if (Game::getInstance().getGameStage() == Game::STAGE_RUNNING){
+			//computeBallPosition(paddle1YStart, paddle1YEnd, paddle2YStart, paddle2YEnd);
+		}
+		glTranslatef( ballPosition.first, ballPosition.second, 0.0 );
+		glColor3f(0.0, 0.0, 0.0);
+		drawCircle(BALL_RADIUS);
+
+	}*/
+
+	
+	if( m_leftPaddle != NULL )
+		m_leftPaddle->render();
+
+	if( m_rightPaddle != NULL)
+		m_rightPaddle->render();
+
 }
 
 void PlayingField::computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End)
@@ -166,15 +168,46 @@ Marker* PlayingField::getCorrespondingMarker(void)
 }
 void PlayingField::updatePaddlePositions(void)
 {
-	//m_leftPaddle->updatePositionFromMarker();
-	//m_rightPaddle->updatePositionFromMarker();
+	m_leftPaddle->updatePositionFromMarker();
+	m_rightPaddle->updatePositionFromMarker();
 }
-//void PlayingField::setPaddle(Paddle* paddle, bool isLeft)
-//{
-//	paddle->setLeft(isLeft);
-//	//paddle->setPlayingField(this);
-//	if(isLeft)
-//		m_leftPaddle = paddle;
-//	else
-//		m_rightPaddle = paddle;
-//}
+Paddle* PlayingField::spawnPaddle(bool isLeft)
+{
+	if(m_leftPaddle == NULL && isLeft)
+	{
+		setPaddle(new Paddle(), true);
+		return m_leftPaddle;
+	}
+	else if(m_rightPaddle == NULL && !isLeft)
+	{
+		setPaddle(new Paddle(), false);
+		return m_rightPaddle;
+	}
+	return NULL;
+}
+void PlayingField::setPaddle(Paddle* paddle, bool isLeft)
+{
+	paddle->setLeft(isLeft);
+	paddle->setPlayingField(this);
+	if(isLeft)
+		m_leftPaddle = paddle;
+	else
+		m_rightPaddle = paddle;
+}
+
+
+Color PlayingField::getColor(void)
+{
+	return m_color;
+}
+void PlayingField::setColor(Color& c)
+{
+	m_color = c;
+}
+void PlayingField::setColor(float r, float g, float b, float a)
+{
+	m_color.red = r;
+	m_color.green = g;
+	m_color.blue = b;
+	m_color.alpha = a;
+}

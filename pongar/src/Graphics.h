@@ -41,6 +41,7 @@ private:
 	void drawStuffOnTop(void);
 
 	void arrayToCvMat(float* transform, CvMat* mat);
-
+	void prepare2D(void);
+	void finish2D(void);
 };
 
