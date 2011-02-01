@@ -14,8 +14,8 @@ const int THRESHOLD = 100;
 const int THRESHOLD_BW = 100;
 
 //camera
-const int CAM_WIDTH = 640; 
-const int CAM_HEIGHT = 480;
+const int CAM_WIDTH = 320; 
+const int CAM_HEIGHT = 240;
 
 //macbook pro camera: CAM_ANGLE = 60
 //cheap logilink camera: CAM_ANGLE = 75

@@ -196,15 +196,15 @@ void Graphics::doResize( int w, int h)
 {
 
     // set a whole-window viewport
-    //glViewport( 0, 0, CAM_HEIGHT, CAM_WIDTH );
+	glViewport( 0, (int) (-CAM_HEIGHT *.3333), CAM_HEIGHT, CAM_WIDTH );
 
-	glViewport(
+	/*glViewport(
 				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5 - CAM_WIDTH * .5),
 				(int) ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5 + CAM_HEIGHT * .5),
 				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_WIDTH,
 				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_HEIGHT
 				);
-
+				*/
     // create a perspective projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
