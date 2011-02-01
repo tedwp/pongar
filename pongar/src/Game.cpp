@@ -1,5 +1,7 @@
 #include "Game.h"
 #include <iostream>
+#include "UI.h"
+
 using namespace std;
 
 Game::Game(void) 
@@ -79,27 +81,27 @@ void Game::idle( void )
 	switch(m_gameStage)
 	{
 		case STAGE_BEAMERCALIBRATION:
-			Graphics::getInstance().m_currentString  = "STAGE_BEAMERCALIBRATION";
+			UI::getInstance().showHeading("STAGE_BEAMERCALIBRATION");
 			performStageBeamerCalibration();
 		break;
 
 		case STAGE_STARTUP:
-			Graphics::getInstance().m_currentString  = "STAGE_STARTUP";
+			UI::getInstance().showHeading("STAGE_STARTUP");
 			performStageStartup();
 		break;
 		
 		case STAGE_INITIALIZATION:
-			Graphics::getInstance().m_currentString  = "STAGE_INITIALIZATION";
+			UI::getInstance().showHeading("STAGE_INITIALIZATION");
 			performStageInitialization();
 			break;
 		
 		case STAGE_RUNNING:
-			Graphics::getInstance().m_currentString  = "STAGE_RUNNING";
+			UI::getInstance().showHeading("STAGE_RUNNING");
 			performStageRunning();
 			break;
 
 		case STAGE_PAUSE:
-			Graphics::getInstance().m_currentString  = "STAGE_PAUSE";
+			UI::getInstance().showHeading( "STAGE_PAUSE");
 			performStagePause();
 			break;
 		default:
@@ -123,16 +125,22 @@ void Game::performStageBeamerCalibration(void)
 		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
 		/* display the image * /
 		cvShowImage( "image", img );*/
-	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 0.5f);
+	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
 	setGameStage(STAGE_STARTUP);
 }
+
 void Game::performStageStartup(void)
 {
+	UI::getInstance().showInstruction("Bitte Spielfeldmarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
+		UI::getInstance().showPercentageString("Spielfeldmarker initialisieren: ", getTimeSinceStart() - timerStart, STARTUP_DURATION);
 		PlayingField::getInstance().setCorrespondingMarker(getMarkerByPurpose(PURPOSE_PLAYINGFIELD));
 		if(getTimeSinceStart() - timerStart> STARTUP_DURATION)
 		{
+			PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			//TODO remove line above
+
 			PlayingField::getInstance().getCorrespondingMarker()->lock();
 			setGameStage(STAGE_INITIALIZATION);
 		}
@@ -147,18 +155,23 @@ void Game::performStageStartup(void)
 }
 void Game::performStageInitialization(void)
 {
+	UI::getInstance().showInstruction("Bitte Paddlemarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PADDLE1) && isMarkerPresent(PURPOSE_PADDLE2) )
 	{
+		UI::getInstance().showPercentageString("Paddlemarker initialisieren: ", getTimeSinceStart() - timerStart, INITIALIZATION_DURATION);
 		if(getTimeSinceStart() - timerStart > INITIALIZATION_DURATION)
 		{
 			Paddle* leftPaddle = PlayingField::getInstance().spawnPaddle(true);
 			leftPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE1));
-			leftPaddle->setColor(1.0f, 0.0f, 1.0f, 1.0f);
+			leftPaddle->setColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 			Paddle* rightPaddle = PlayingField::getInstance().spawnPaddle(false);
 			rightPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE2));
 			rightPaddle->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 			
+			Ball* ball = PlayingField::getInstance().spawnBall();
+			ball->setColor(0.0f, 0.0f, 1.0f, 1.0f);
+
 			setGameStage(STAGE_RUNNING);
 		}
 	}
@@ -173,10 +186,12 @@ void Game::performStageRunning(void)
 	PlayingField::getInstance().updatePaddlePositions();
 	PlayingField::getInstance().render();
 
+
 	if(isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_PAUSE);
 	else
 	{
+		UI::getInstance().showInstruction("Vorsicht! Zu spät...");
 		if(isActionMarkerPresent())
 		{
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))

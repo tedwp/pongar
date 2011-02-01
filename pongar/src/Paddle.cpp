@@ -79,23 +79,6 @@ void Paddle::arrayToCvMat(float* transform, CvMat* mat)
 	}
 }
 
-
-
-Color Paddle::getColor(void)
-{
-	return m_color;
-}
-void Paddle::setColor(Color& c)
-{
-	m_color = c;
-}
-void Paddle::setColor(float r, float g, float b, float a)
-{
-	m_color.red = r;
-	m_color.green = g;
-	m_color.blue = b;
-	m_color.alpha = a;
-}
 float Paddle::getYPosition(void)
 {
 	return m_yPosition;

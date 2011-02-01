@@ -1,9 +1,11 @@
+#include <iostream>
+
 #include "Capture.h"
 #include "Game.h"
 #include "Graphics.h"
 #include "GL/glut.h"
+#include "UI.h"
 
-#include <iostream>
 
 Graphics::Graphics(void)
 {
@@ -67,7 +69,11 @@ void Graphics::init(int argc, char* argv[])
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
 
-	fullScreenLeave();
+	char* result = "640x480:32@60";
+	glutGameModeString( result);
+	glutEnterGameMode();
+
+	//fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -92,7 +98,7 @@ void Graphics::doRender()
 	PlayingField::getInstance().render();
 	
 	prepare2D();
-	drawStuffOnTop();
+	UI::getInstance().drawStuffOnTop();
 	finish2D();
 	redrawDisplay();
 
@@ -197,12 +203,15 @@ void Graphics::showString(std::string& str, float r, float g, float b, int cx, i
         }
 }
 
-void Graphics::drawStuffOnTop(void)
+
+
+void Graphics::transposeMatrix(float* src, float* dst)
 {
-	getInstance().showString(m_currentString, 0, 0, 255, 100, 100);
-	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
+	for (int x=0; x<4; ++x)
 	{
-		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );
-		//glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
+		for (int y=0; y<4; ++y)
+		{
+			dst[x*4+y] = src[y*4+x];
+		}
 	}
 }

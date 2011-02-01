@@ -5,6 +5,7 @@
 #include "Capture.h"
 #include "Graphics.h"
 #include "PlayingField.h"
+#include "Ball.h"
 
 class Game
 {

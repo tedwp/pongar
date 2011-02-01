@@ -1,4 +1,8 @@
 #pragma once
+#include <string>
+std::string toString(int a);
+std::string toString(long a);
+std::string toString(double a);
 
 #include <cv.h>
 #include <highgui.h>
