@@ -5,8 +5,6 @@ using namespace std;
 Game::Game(void) 
 {
 }
-
-
 Game::~Game(void)
 {
 	for(unsigned i = 0; i < m_markers.size(); i++)
@@ -24,9 +22,7 @@ Game& Game::getInstance(void)
 
 void Game::init( int argc, char* argv[] )
 {
-	getInstance().registerMarker(2884, PURPOSE_PADDLE1);
-	getInstance().registerMarker(626, PURPOSE_PADDLE2);
-	getInstance().registerMarker(90, PURPOSE_PLAYINGFIELD);
+	getInstance().registerMarkers();
 		
 	
 	m_gameStage = STAGE_STARTUP;
@@ -37,53 +33,17 @@ void Game::init( int argc, char* argv[] )
 	
 	
 }
-int Game::getGameStage()
+void Game::registerMarkers(void)
 {
-	return m_gameStage;
-}
-void Game::setGameStage(int gameStage)
-{
-	m_gameStage = gameStage;
-}
-void Game::registerMarker(int id, int purpose)
-{
-	Marker* m = new Marker(id);
-	m->setPurpose(purpose);
-	m_markers.push_back(m);
+	registerMarker(2884, PURPOSE_PADDLE1);
+	registerMarker(626, PURPOSE_PADDLE2);
+	registerMarker(90, PURPOSE_PLAYINGFIELD);
 }
 void Game::start(void)
 {
 	Graphics::getInstance().start();
 }
 
-vector<Marker*> Game::getMarkers(void)
-{
-	return getInstance().m_markers;
-}
-
-Marker* Game::getMarkerById(int id)
-{
-	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
-	{
-		if(	(getInstance().m_markers[i])->getId() == id)
-		{
-			return getInstance().m_markers[i];
-		}
-	}
-	return NULL;
-}
-
-Marker* Game::getMarkerByPurpose(int purpose)
-{
-	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
-	{
-		if(	(getInstance().m_markers[i])->getPurpose() == purpose)
-		{
-			return getInstance().m_markers[i];
-		}
-	}
-	return NULL;
-}
 
 void Game::idle( void )
 {
@@ -143,7 +103,7 @@ void Game::performStageStartup(void)
 		if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
 		{
 			//TODO here: Fix playing field
-			m_gameStage = STAGE_INITIALIZATION;
+			setGameStage(STAGE_INITIALIZATION);
 		}
 	}
 	else
@@ -160,7 +120,7 @@ void Game::performStageInitialization(void)
 	{
 		if(timerStart - getTimeSinceStart() > INITIALIZATION_DURATION)
 		{
-			m_gameStage = STAGE_RUNNING;
+			setGameStage(STAGE_RUNNING);
 		}
 	}
 	else
@@ -172,55 +132,58 @@ void Game::performStageInitialization(void)
 void Game::performStageRunning(void)
 {
 	if(isMarkerPresent(PURPOSE_PAUSE))
-		m_gameStage = STAGE_PAUSE;
-			
-	if(isActionMarkerPresent())
+		setGameStage(STAGE_PAUSE);
+	else
 	{
-		if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))
+		if(isActionMarkerPresent())
 		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE2))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE1))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE2))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_GAME))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE2))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_GAME))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
-		{
-		}
-		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE2))
-		{
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE2))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE1))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE2))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_GAME))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE2))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_GAME))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
+			{
+			}
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE2))
+			{
+			}
 		}
 	}
 }
 void Game::performStagePause(void)
 {
 	if(isMarkerPresent(PURPOSE_PAUSE))
-		m_gameStage = STAGE_RUNNING;
+		setGameStage(STAGE_RUNNING);
 			
 	if(isMarkerPresent(PURPOSE_RESTARTGAME))
 	{
 		/*
 		TODO do restart stuff
 		*/
-		m_gameStage = STAGE_RUNNING;
+		setGameStage(STAGE_RUNNING);
 	}
 }
+
 bool Game::isActionMarkerPresent(void)
 {
 	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
@@ -236,7 +199,6 @@ bool Game::isMarkerPresent(int purpose)
 	Marker* m = getMarkerByPurpose(purpose);
 	return m != NULL && m->isVisible();
 }
-//#define markerPresent(a) false
 void Game::end(void)
 {
 	exit(0);
@@ -244,4 +206,44 @@ void Game::end(void)
 void Game::cleanup( void )
 {
 	Capture::getInstance().cleanup();
+}
+vector<Marker*> Game::getMarkers(void)
+{
+	return getInstance().m_markers;
+}
+Marker* Game::getMarkerById(int id)
+{
+	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
+	{
+		if(	(getInstance().m_markers[i])->getId() == id)
+		{
+			return getInstance().m_markers[i];
+		}
+	}
+	return NULL;
+}
+Marker* Game::getMarkerByPurpose(int purpose)
+{
+	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
+	{
+		if(	(getInstance().m_markers[i])->getPurpose() == purpose)
+		{
+			return getInstance().m_markers[i];
+		}
+	}
+	return NULL;
+}
+int Game::getGameStage()
+{
+	return m_gameStage;
+}
+void Game::setGameStage(int gameStage)
+{
+	m_gameStage = gameStage;
+}
+void Game::registerMarker(int id, int purpose)
+{
+	Marker* m = new Marker(id);
+	m->setPurpose(purpose);
+	m_markers.push_back(m);
 }
