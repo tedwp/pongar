@@ -69,11 +69,7 @@ void Graphics::init(int argc, char* argv[])
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
 
-	char* result = "640x480:32@60";
-	glutGameModeString( result);
-	glutEnterGameMode();
-
-	//fullScreenLeave();
+	fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -195,12 +191,38 @@ void Graphics::fullScreenLeave(void)
 }
 void Graphics::showString(std::string& str, float r, float g, float b, int cx, int y)
 {
-        glColor3f(r, g, b);
-		glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
-		for(unsigned int i = 0; i < str.length(); i++)
-        {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 , str[i]);
-        }
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	int f = 2;
+	glRasterPos3f((GLfloat) cx -f, (GLfloat) y -f, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+	
+	glRasterPos3f((GLfloat) cx -f, (GLfloat) y, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+
+	glRasterPos3f((GLfloat) cx, (GLfloat) y -f, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+	
+	glRasterPos3f((GLfloat) cx +f, (GLfloat) y, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+
+	glRasterPos3f((GLfloat) cx, (GLfloat) y+f, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+	
+	glRasterPos3f((GLfloat) cx +f, (GLfloat) y+f, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+
+
+
+    glColor3f(r, g, b);
+	glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
+	for(unsigned int i = 0; i < str.length(); i++)
+    	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 }
 
 
