@@ -4,6 +4,7 @@ using namespace std;
 
 Game::Game(void) 
 {
+	m_markerImage = NULL;
 }
 Game::~Game(void)
 {
@@ -102,20 +103,20 @@ void Game::idle( void )
 }
 void Game::performStageBeamerCalibration(void)
 {
-	std::cout << "Calib  ";
-	    /* load the image,
-       use CV_LOAD_IMAGE_GRAYSCALE to load the image in grayscale */
-    IplImage *img = 0;
-	img = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_GRAYSCALE );
-   
-    /* always check */
-    if( img != 0 ) {
-		/* create a window */
-		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
-		/* display the image */
-		cvShowImage( "image", img );
-	// Display Marker
+	//Graphics::showImage("marker.jpg");
+	//Track the marker and estimate the canvas' pose
+
+	// load the image
+    if(m_markerImage == NULL)
+	{
+		m_markerImage = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 	}
+	/*
+    	/* create a window * /
+		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
+		/* display the image * /
+		cvShowImage( "image", img );*/
+	
 }
 void Game::performStageStartup(void)
 {

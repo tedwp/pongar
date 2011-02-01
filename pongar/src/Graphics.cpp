@@ -86,6 +86,8 @@ void Graphics::doRender()
 {
 	prepareForDisplay();
 	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. plz Ändern.
+	//TODO: Das gehört hier alles absolut nicht rein.
+	/*
 	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
 	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
 	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
@@ -115,11 +117,11 @@ void Graphics::doRender()
 		//set y offset of paddles
 		float paddle1z = (float) cvGet2D(paddle1Mat, 2, 3).val[0];
 		float playingFieldZ = (float) cvGet2D(playingFieldMat, 2, 3).val[0];
-		/*std::cout << "z field ";
-		std::cout << playingFieldZ;
-		std::cout << " // z paddle1 ";
-		std::cout << paddle1z;
-		std::cout << std::endl;*/
+		//std::cout << "z field ";
+		//std::cout << playingFieldZ;
+		//std::cout << " // z paddle1 ";
+		//std::cout << paddle1z;
+		//std::cout << std::endl;
 
 		float sensitivityFactor = 4.0;
 		//TODO adjust sensitivityFactor depending on z coordinate?!?
@@ -134,6 +136,7 @@ void Graphics::doRender()
 	}
   
 	PlayingField::getInstance().render();
+	*/
 	redrawDisplay();
 
 }
@@ -158,8 +161,10 @@ void Graphics::prepareForDisplay(void)
 	{
 		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 	}
-	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0,0,255,100,100);
 	
+	
+	drawStuffOnTop();
+	//TODO is it correct to drawStuffOnTop() before popMatrix?
     glPopMatrix();
 
     glEnable(GL_DEPTH_TEST);
@@ -174,7 +179,15 @@ void Graphics::redrawDisplay(void)
 	// redraw
     glutSwapBuffers();
 }
-
+void Graphics::drawStuffOnTop(void)
+{
+	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0,0,255,100,100);
+	if(Game::getInstance().getGameStage() == Game.STAGE_BEAMERCALIBRATION)
+	{
+		memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
+		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+	}
+}
 void Graphics::resize( int w, int h) 
 {
 	Graphics::getInstance().doResize(w, h);

@@ -23,10 +23,13 @@ public:
 	unsigned char m_bkgnd[CAM_WIDTH*CAM_HEIGHT*3];
 
 private:
+	
+	bool isInFullScreen;
+	static Graphics& m_instance;
+
 	Graphics(void);
 	Graphics(const Graphics&);
 	~Graphics(void);
-	static Graphics& m_instance;
 
 	
 	static void render();
@@ -39,9 +42,9 @@ private:
 
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
+	void Graphics::drawStuffOnTop(void);
 
 	void Graphics::arrayToCvMat(float* transform, CvMat* mat);
 	
-	bool isInFullScreen;
 };
 
