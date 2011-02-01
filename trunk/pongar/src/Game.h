@@ -4,7 +4,7 @@
 #include "Marker.h"
 #include "Capture.h"
 #include "Graphics.h"
-
+#include "PlayingField.h"
 
 class Game
 {
@@ -24,6 +24,7 @@ public:
 	static Marker* getMarkerById(int id);
 	static Marker* getMarkerByPurpose(int purpose);
 	void end(void);
+	bool isMarkerPresent(int purpose);
 
 	//IplImage* m_markerImage;
 
@@ -67,7 +68,6 @@ private:
 	void updateMarkerOffsets(void);
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void performInitialization(void);
-	bool isMarkerPresent(int purpose);
 	bool isActionMarkerPresent(void);
 	void performStageBeamerCalibration(void);
 	void performStageStartup(void);

@@ -2,6 +2,8 @@
 #include "Marker.h"
 #include "PlayingField.h"
 #include "Color.h"
+
+
 class Paddle
 {
 public:
@@ -15,18 +17,20 @@ public:
 	int getScore(void);
 	void updatePositionFromMarker(void);
 	void setMarker(Marker* marker);
-	void render(PlayingField* playingField );
+	void render(void);
 	bool isLeft(void);
 	void setLeft(bool isLeft);
 
+
+	//void setPlayingField(PlayingField* playingField);
+
 private:
 	float m_yPosition;
-	float* m_historyYPosition[SMOOTHING_HISTORYSIZE];
-	double* m_timestampsYPosition[SMOOTHING_HISTORYSIZE];
-	int m_historyLength;
 	bool m_isLeft;
 	int m_score;
 	Color m_color;
 	Marker* m_marker;
+	//PlayingField* m_playingField;
+	void arrayToCvMat(float* transform, CvMat* mat);
 };
 

@@ -1,5 +1,4 @@
 #include "PlayingField.h"
-#include "conf.h"
 
 PlayingField::PlayingField(void)
 {
@@ -28,8 +27,13 @@ PlayingField& PlayingField::getInstance()
 
 void PlayingField::render()
 {
+	//m_leftPaddle->render();
+	//m_rightPaddle->render();
+	
+
+
 	Marker* m_PlayingField = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
-	if(m_PlayingField!=NULL && m_PlayingField->hasPositionChanged())
+	if(m_PlayingField != NULL && m_PlayingField->hasPositionChanged())
 	{
 		if (m_PlayingField->getPurpose() == Game::PURPOSE_PLAYINGFIELD){
 			float* m_position = m_PlayingField->getPosition();
@@ -63,7 +67,7 @@ void PlayingField::render()
 					paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 					paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
 				}
-				glRectf(paddle1YEnd, -0.78f, paddle1YStart, -0.78f + PADDLE_WIDTH);
+				//glRectf(paddle1YEnd, -0.78f, paddle1YStart, -0.78f + PADDLE_WIDTH);
 				// red rectangle
 				float paddle2YStart =  PADDLE_LENGTH/2 - m_paddle2->getOffset();
 		        float paddle2YEnd = -PADDLE_LENGTH/2 - m_paddle2->getOffset();
@@ -150,3 +154,27 @@ void PlayingField::transposeMatrix(float* src, float* dst){
 		}
 	}
 }
+
+void PlayingField::setCorrespondingMarker(Marker* marker)
+{
+	m_correspondingMarker = marker;
+}
+
+Marker* PlayingField::getCorrespondingMarker(void)
+{
+	return m_correspondingMarker;
+}
+void PlayingField::updatePaddlePositions(void)
+{
+	//m_leftPaddle->updatePositionFromMarker();
+	//m_rightPaddle->updatePositionFromMarker();
+}
+//void PlayingField::setPaddle(Paddle* paddle, bool isLeft)
+//{
+//	paddle->setLeft(isLeft);
+//	//paddle->setPlayingField(this);
+//	if(isLeft)
+//		m_leftPaddle = paddle;
+//	else
+//		m_rightPaddle = paddle;
+//}

@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <iostream>
 using namespace std;
 
 Game::Game(void) 
@@ -36,8 +36,8 @@ void Game::init( int argc, char* argv[] )
 }
 void Game::registerMarkers(void)
 {
-	registerMarker(2884, PURPOSE_PADDLE1);
-	registerMarker(626, PURPOSE_PADDLE2);
+	registerMarker(1, PURPOSE_PADDLE1);
+	registerMarker(2, PURPOSE_PADDLE2);
 	registerMarker(90, PURPOSE_PLAYINGFIELD);
 }
 void Game::start(void)
@@ -48,6 +48,8 @@ void Game::start(void)
 
 void Game::idle( void )
 {
+	for(unsigned i = 0; i < m_markers.size(); i++)
+		m_markers[i]->clearHasPositionChanged();
 	Capture::getInstance().updateMarkerPositions();
 	/**
 	Hier kommt die Spiellogik rein
@@ -77,22 +79,27 @@ void Game::idle( void )
 	switch(m_gameStage)
 	{
 		case STAGE_BEAMERCALIBRATION:
+			Graphics::getInstance().m_currentString  = "STAGE_BEAMERCALIBRATION";
 			performStageBeamerCalibration();
 		break;
 
 		case STAGE_STARTUP:
+			Graphics::getInstance().m_currentString  = "STAGE_STARTUP";
 			performStageStartup();
 		break;
 		
 		case STAGE_INITIALIZATION:
+			Graphics::getInstance().m_currentString  = "STAGE_INITIALIZATION";
 			performStageInitialization();
 			break;
 		
 		case STAGE_RUNNING:
+			Graphics::getInstance().m_currentString  = "STAGE_RUNNING";
 			performStageRunning();
 			break;
 
 		case STAGE_PAUSE:
+			Graphics::getInstance().m_currentString  = "STAGE_PAUSE";
 			performStagePause();
 			break;
 		default:
@@ -116,14 +123,15 @@ void Game::performStageBeamerCalibration(void)
 		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
 		/* display the image * /
 		cvShowImage( "image", img );*/
-	
+	setGameStage(STAGE_STARTUP);
 }
 void Game::performStageStartup(void)
 {
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
-		if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
+		if(getTimeSinceStart() - timerStart> STARTUP_DURATION)
 		{
+			PlayingField::getInstance().setCorrespondingMarker(getMarkerByPurpose(PURPOSE_PLAYINGFIELD));
 			//TODO here: Fix playing field
 			setGameStage(STAGE_INITIALIZATION);
 		}
@@ -153,6 +161,9 @@ void Game::performStageInitialization(void)
 }
 void Game::performStageRunning(void)
 {
+	PlayingField::getInstance().updatePaddlePositions();
+	PlayingField::getInstance().render();
+
 	if(isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_PAUSE);
 	else
@@ -194,7 +205,7 @@ void Game::performStageRunning(void)
 }
 void Game::performStagePause(void)
 {
-	if(isMarkerPresent(PURPOSE_PAUSE))
+	if(!isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_RUNNING);
 			
 	if(isMarkerPresent(PURPOSE_RESTARTGAME))

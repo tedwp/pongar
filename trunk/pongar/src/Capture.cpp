@@ -1,15 +1,4 @@
-#include <iostream>
-
-#include <cv.h>
-#include <highgui.h>
-
-#include "MarkerNotFoundException.h"
-#include "conf.h"
-#include "Game.h"
 #include "Capture.h"
-#include "Marker.h"
-
-#include "PoseEstimation.h"
 
 using namespace std;
 
@@ -426,7 +415,7 @@ void Capture::updateMarkerPositions(void)
 				corners[i].x -= CAM_WIDTH/2;
 				corners[i].y = -corners[i].y + CAM_HEIGHT/2;
 			}
-			
+			//std::cout << "\nMarker found: " << code;
 			Marker* m = Game::getMarkerById(code);
 			if(m != NULL)
 			{

@@ -18,7 +18,7 @@ public:
 
 	void setOffset(float offset);
 	float getOffset();
-
+	void clearHasPositionChanged(void);
 	bool hasPositionChanged(void);
 
 	int getLastUpdateTime();
