@@ -2,9 +2,6 @@
 
 using namespace std;
 
-#define markerPresent(a) ( getMarkerByPurpose(a) != NULL && getMarkerByPurpose(a)->isVisible())
-//#define markerPresent(a) false
-
 Game::Game(void) 
 {
 }
@@ -108,69 +105,30 @@ void Game::idle( void )
 
 	
 //	if(getMarkerByPurpose(PURPOSE_REINIT) != NULL && getMarkerByPurpose(PURPOSE_REINIT)->isVisible())
-	if(markerPresent(PURPOSE_REINIT))
+	if(isMarkerPresent(PURPOSE_REINIT))
 	{
+		// In the eyes of the players Restarts the whole application. Asks for all markers again
 		/*
-		do restart stuff
+		do reinit stuff 
 		*/
 		m_gameStage = STAGE_STARTUP;
 	}
-	
 	switch(m_gameStage)
 	{
 		case STAGE_STARTUP:
-			if(markerPresent(PURPOSE_PLAYINGFIELD))
-			{
-				if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
-				{
-					//TODO here: Fix playing field
-					m_gameStage = STAGE_INITIALIZATION;
-					break;
-				}
-			}
-			else
-			{
-				timerStart = getTimeSinceStart();
-			}
-			/*
-			Do nothing except, wait until playing field is positioned
-			*/
+			performStageStartup();
 		break;
 		
 		case STAGE_INITIALIZATION:
-			if(markerPresent(PURPOSE_PADDLE1) && markerPresent(PURPOSE_PADDLE2) )
-			{
-				if(timerStart - getTimeSinceStart() > INITIALIZATION_DURATION)
-				{
-					m_gameStage = STAGE_RUNNING;
-				}
-			}
-			else
-			{
-				timerStart = getTimeSinceStart();
-			}
-			// Nicht zu verwechseln mit init()! Hier wird das Spiel aus Sicht der Benutzers initialisiert, alles technische geschieht hingegen in init()
-			//performInitialization();
+			performStageInitialization();
 			break;
 		
 		case STAGE_RUNNING:
-			if(markerPresent(PURPOSE_PAUSE))
-				m_gameStage = STAGE_PAUSE;
-			
-			//performRunning();
+			performStageRunning();
 			break;
 
 		case STAGE_PAUSE:
-			if(markerPresent(PURPOSE_PAUSE))
-				m_gameStage = STAGE_RUNNING;
-			
-			if(markerPresent(PURPOSE_RESTARTGAME))
-			{
-				/*
-				do restart stuff
-				*/
-				m_gameStage = STAGE_RUNNING;
-			}
+			performStagePause();
 			break;
 		default:
 		break;
@@ -178,7 +136,107 @@ void Game::idle( void )
 
 	
 }
-
+void Game::performStageStartup(void)
+{
+	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
+	{
+		if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
+		{
+			//TODO here: Fix playing field
+			m_gameStage = STAGE_INITIALIZATION;
+		}
+	}
+	else
+	{
+		timerStart = getTimeSinceStart();
+	}
+	/*
+	Do nothing except, wait until playing field is positioned
+	*/
+}
+void Game::performStageInitialization(void)
+{
+	if(isMarkerPresent(PURPOSE_PADDLE1) && isMarkerPresent(PURPOSE_PADDLE2) )
+	{
+		if(timerStart - getTimeSinceStart() > INITIALIZATION_DURATION)
+		{
+			m_gameStage = STAGE_RUNNING;
+		}
+	}
+	else
+	{
+		timerStart = getTimeSinceStart();
+	}
+	// Nicht zu verwechseln mit init()! Hier wird das Spiel aus Sicht der Benutzers initialisiert, alles technische geschieht hingegen in init()
+}
+void Game::performStageRunning(void)
+{
+	if(isMarkerPresent(PURPOSE_PAUSE))
+		m_gameStage = STAGE_PAUSE;
+			
+	if(isActionMarkerPresent())
+	{
+		if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE2))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE1))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE2))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_GAME))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE2))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_GAME))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
+		{
+		}
+		if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE2))
+		{
+		}
+	}
+}
+void Game::performStagePause(void)
+{
+	if(isMarkerPresent(PURPOSE_PAUSE))
+		m_gameStage = STAGE_RUNNING;
+			
+	if(isMarkerPresent(PURPOSE_RESTARTGAME))
+	{
+		/*
+		TODO do restart stuff
+		*/
+		m_gameStage = STAGE_RUNNING;
+	}
+}
+bool Game::isActionMarkerPresent(void)
+{
+	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)
+	{
+		int p = (getInstance().m_markers[i])->getPurpose();
+		if(	p > 100 && p < 200)
+			return true;
+	}
+	return false;
+}
+bool Game::isMarkerPresent(int purpose)
+{
+	Marker* m = getMarkerByPurpose(purpose);
+	return m != NULL && m->isVisible();
+}
+//#define markerPresent(a) false
 void Game::end(void)
 {
 	exit(0);

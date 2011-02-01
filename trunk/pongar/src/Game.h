@@ -31,6 +31,20 @@ public:
 	static const int PURPOSE_PAUSE = 4;
 	static const int PURPOSE_REINIT = 5;
 	static const int PURPOSE_RESTARTGAME = 6;
+	
+	static const int PURPOSE_ACTION_INCREASESIZE_PADDLE1 = 101;
+	static const int PURPOSE_ACTION_INCREASESIZE_PADDLE2 = 102;
+
+	static const int PURPOSE_ACTION_DECREASESIZE_PADDLE1 = 103;
+	static const int PURPOSE_ACTION_DECREASESIZE_PADDLE2 = 104;
+	
+	static const int PURPOSE_ACTION_INCREASESPEED_GAME = 105;
+	static const int PURPOSE_ACTION_INCREASESPEED_PADDLE1 = 106;
+	static const int PURPOSE_ACTION_INCREASESPEED_PADDLE2 = 107;
+	
+	static const int PURPOSE_ACTION_DECREASESPEED_GAME = 108;
+	static const int PURPOSE_ACTION_DECREASESPEED_PADDLE1 = 109;
+	static const int PURPOSE_ACTION_DECREASESPEED_PADDLE2 = 110;
 
 	static const int STAGE_STARTUP = 1;
 	static const int STAGE_INITIALIZATION = 2;
@@ -50,7 +64,12 @@ private:
 	void updateMarkerOffsets(void);
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void performInitialization(void);
-
+	bool isMarkerPresent(int purpose);
+	bool isActionMarkerPresent(void);
+	void performStageStartup(void);
+	void performStageInitialization(void);
+	void performStageRunning(void);
+	void performStagePause(void);
 	long int timerStart;
 };
 
