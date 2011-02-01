@@ -106,7 +106,7 @@ void Game::performStageBeamerCalibration(void)
 	    /* load the image,
        use CV_LOAD_IMAGE_GRAYSCALE to load the image in grayscale */
     IplImage *img = 0;
-	img = cvLoadImage("marker.jpeg", CV_LOAD_IMAGE_GRAYSCALE );
+	img = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_GRAYSCALE );
    
     /* always check */
     if( img != 0 ) {
