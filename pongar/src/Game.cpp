@@ -107,10 +107,10 @@ void Game::performStageBeamerCalibration(void)
 	//Track the marker and estimate the canvas' pose
 
 	// load the image
-    if(m_markerImage == NULL)
+    /*if(m_markerImage == NULL)
 	{
 		m_markerImage = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_COLOR);
-	}
+	}*/
 	/*
     	/* create a window * /
 		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);

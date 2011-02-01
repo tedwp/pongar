@@ -199,7 +199,7 @@ void Graphics::doResize( int w, int h)
     //glViewport( 0, 0, CAM_HEIGHT, CAM_WIDTH );
 
 	glViewport(
-				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5),
+				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5 - CAM_WIDTH * .5),
 				(int) ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5),
 				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_WIDTH,
 				(int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5) + CAM_HEIGHT
