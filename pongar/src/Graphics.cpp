@@ -184,7 +184,7 @@ void Graphics::drawStuffOnTop(void)
 	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0,0,255,100,100);
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{
-		memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
+		memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Graphics::getInstance().m_markerImage) );
 		glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
 	}
 }
