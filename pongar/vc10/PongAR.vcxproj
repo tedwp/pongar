@@ -113,7 +113,6 @@
     <ClInclude Include="..\src\Capture.h" />
     <ClInclude Include="..\src\conf.h" />
     <ClInclude Include="..\src\UI.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PongAR.rc" />
