@@ -17,7 +17,7 @@ public:
 	void start(void);
 	int getGameStage();
 	void setGameStage(int stage);
-
+	void registerMarkers(void);
 	static void timer(int value);
 
 	static std::vector<Marker*> getMarkers(void);
