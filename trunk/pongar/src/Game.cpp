@@ -25,7 +25,7 @@ void Game::init( int argc, char* argv[] )
 	getInstance().registerMarkers();
 		
 	
-	m_gameStage = STAGE_STARTUP;
+	m_gameStage = STAGE_BEAMERCALIBRATION;
 	timerStart = getTimeSinceStart();
 	
 	Capture::getInstance().init();
