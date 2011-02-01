@@ -109,7 +109,7 @@ void Game::performStageBeamerCalibration(void)
 	// load the image
     if(m_markerImage == NULL)
 	{
-		m_markerImage = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+		m_markerImage = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_COLOR);
 	}
 	/*
     	/* create a window * /
