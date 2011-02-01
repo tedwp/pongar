@@ -6,12 +6,9 @@
 
 #define getTimeSinceStart() (glutGet(GLUT_ELAPSED_TIME))
 
-//Smoothing
-const int SMOOTHING_HISTORYSIZE = 10;
-
 //capture
-const int THRESHOLD = 100;
-const int THRESHOLD_BW = 100;
+const int THRESHOLD = 160;
+const int THRESHOLD_BW = 130;
 
 //camera
 const int CAM_WIDTH = 640; 

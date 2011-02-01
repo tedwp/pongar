@@ -46,9 +46,9 @@ void Graphics::init(int argc, char* argv[])
     glClearDepth( 1.0 );
 
     // light parameters
-    GLfloat light_pos[] = { 1.0, 1.0, 1.0, 0.0 };
-    GLfloat light_amb[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat light_dif[] = { 0.7, 0.7, 0.7, 1.0 };
+    GLfloat light_pos[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    GLfloat light_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat light_dif[] = { 0.7f, 0.7f, 0.7f, 1.0f };
 
     // enable lighting
     glLightfv( GL_LIGHT0, GL_POSITION, light_pos );
@@ -89,66 +89,10 @@ void Graphics::doRender()
 	//TODO: Ein Marker ist kein Paddle und hat erstmal auch nichts damit zu tun. plz Ändern.
 	//TODO: Das gehört hier alles absolut nicht rein.
 	
-	Marker* m_playingfield = Game::getMarkerByPurpose(Game::PURPOSE_PLAYINGFIELD);
-	Marker* m_paddle1 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE1);
-	Marker* m_paddle2 = Game::getMarkerByPurpose(Game::PURPOSE_PADDLE2);
-	if(m_playingfield != NULL && m_paddle1 != NULL && m_paddle2 != NULL)
-	{
-		float* playingFieldTf = m_playingfield->getPosition();
-		float* paddle1Tf = m_paddle1->getPosition();
-		float* paddle2Tf = m_paddle2->getPosition();
-	
-		//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
-		CvMat* playingFieldMat = cvCreateMat( 4, 4, CV_32FC1 );
-		arrayToCvMat(playingFieldTf, playingFieldMat);
-		CvMat* paddle1Mat = cvCreateMat( 4, 4, CV_32FC1 );
-		arrayToCvMat(paddle1Tf, paddle1Mat);
-		CvMat* paddle2Mat = cvCreateMat( 4, 4, CV_32FC1 );
-		arrayToCvMat(paddle2Tf, paddle2Mat);
-	
-		CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
-		cvInvert(playingFieldMat, playingFieldMatInv);
-
-		cvGEMM(paddle1Mat, playingFieldMatInv, 1, NULL, 0, paddle1Mat, 0);
-		cvGEMM(paddle2Mat, playingFieldMatInv, 1, NULL, 0, paddle2Mat, 0);
-
-		float paddle1offset = (float) cvGet2D(paddle1Mat, 1, 3).val[0];
-		float paddle2offset = (float) cvGet2D(paddle2Mat, 1, 3).val[0];
-		
-		//set y offset of paddles
-		float paddle1z = (float) cvGet2D(paddle1Mat, 2, 3).val[0];
-		float playingFieldZ = (float) cvGet2D(playingFieldMat, 2, 3).val[0];
-		//std::cout << "z field ";
-		//std::cout << playingFieldZ;
-		//std::cout << " // z paddle1 ";
-		//std::cout << paddle1z;
-		//std::cout << std::endl;
-
-		float sensitivityFactor = 4.0;
-		//TODO adjust sensitivityFactor depending on z coordinate?!?
-		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
-		m_paddle2->setOffset(paddle2offset*sensitivityFactor);
-
-		//release matrices
-		cvReleaseMat( &playingFieldMat );
-		cvReleaseMat( &playingFieldMatInv );
-		cvReleaseMat( &paddle1Mat );
-		cvReleaseMat( &paddle2Mat );
-	}
-  
 	PlayingField::getInstance().render();
 	
 	redrawDisplay();
 
-}
-
-void Graphics::arrayToCvMat(float* transform, CvMat* mat)
-{
-	cvZero( mat );
-	for (unsigned i = 0; i < 16; i++)
-	{
-		cvmSet( mat, i/4, i%4, transform[i] );
-	}
 }
 void Graphics::prepareForDisplay(void)
 {
@@ -168,6 +112,8 @@ void Graphics::prepareForDisplay(void)
 
     glRasterPos2i( 0, CAM_HEIGHT-1 );
     glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_bkgnd );
+
+	drawStuffOnTop();
 
     glPopMatrix();
 
@@ -232,19 +178,19 @@ void Graphics::fullScreenLeave(void)
 	glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
 	isInFullScreen = false;
 }
-void Graphics::showString(char string[], float r, float g, float b, int cx, int y)
+void Graphics::showString(std::string& str, float r, float g, float b, int cx, int y)
 {
         glColor3f(r, g, b);
 		glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
-        for(unsigned int i = 0; i < strlen(string); i++)
+		for(unsigned int i = 0; i < str.length(); i++)
         {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 , string[i]);
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 , str[i]);
         }
 }
 
 void Graphics::drawStuffOnTop(void)
 {
-	getInstance().showString("Warum zum Henker steht das auf dem Kopf?", 0, 0, 255, 100, 100);
+	getInstance().showString(m_currentString, 0, 0, 255, 100, 100);
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{
 		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );

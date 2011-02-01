@@ -2,6 +2,8 @@
 #include "conf.h"
 #include "PlayingField.h"
 #include "Keyboard.h"
+#include <string>
+
 class Graphics
 {
 public:
@@ -14,7 +16,8 @@ public:
 	void fullScreenEnter(void);
 	void fullScreenLeave(void);
 	void fullScreenSwitch(void);
-	void showString(char string[], float r, float g, float b, int cx, int y);
+	void showString(std::string& str, float r, float g, float b, int cx, int y);
+	std::string m_currentString;
 
 private:
 	bool isInFullScreen;

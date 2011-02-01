@@ -20,15 +20,17 @@ Marker::~Marker(void)
 	delete(m_position);
 }
 
-
+void Marker::clearHasPositionChanged(void)
+{
+	m_positionChanged = false;
+}
 void Marker::updatePosition(float position [16])
 {
 	m_positionChanged = false;
-	
 	for(unsigned i = 0; i < 16; i++)
 	{
 		if(position[i] != m_position[i])
-		m_positionChanged = true;
+			m_positionChanged = true;
 	}
 	
 	if(m_positionChanged)

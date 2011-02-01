@@ -1,10 +1,16 @@
 #pragma once
 #include <vector>
-#include "conf.h"
-#include "PoseEstimation.h"
-#include <cv.h>
-#include "Marker.h"
 #include <highgui.h>
+#include <iostream>
+#include <cv.h>
+
+#include "conf.h"
+
+#include "PoseEstimation.h"
+#include "Marker.h"
+#include "Game.h"
+
+
 class Capture
 {
 public:
