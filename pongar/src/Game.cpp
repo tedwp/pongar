@@ -102,6 +102,7 @@ void Game::idle( void )
 }
 void Game::performStageBeamerCalibration(void)
 {
+	std::cout << "Calib  ";
 	    /* load the image,
        use CV_LOAD_IMAGE_GRAYSCALE to load the image in grayscale */
     IplImage *img = 0;
