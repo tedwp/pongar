@@ -38,7 +38,7 @@ const float PADDLE_WIDTH = 0.03f;
 
 //Game
 const bool FULLSCREEN_ENABLED = true;
-const bool SHOW_CAMERA_IMAGE = true;
+const bool SHOW_CAMERA_IMAGE = false;
 
 //How long after the last update should a marker still be considered visible?
 const int MARKER_VISIBILITYTIMEOUT = 100; //millisec
