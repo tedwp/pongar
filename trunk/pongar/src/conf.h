@@ -2,6 +2,9 @@
 
 #include <cv.h>
 #include <highgui.h>
+#include "GL\glut.h"
+
+#define getTimeSinceStart() (glutGet(GLUT_ELAPSED_TIME))
 
 //Smoothing
 const int SMOOTHING_HISTORYSIZE = 10;
@@ -35,6 +38,14 @@ const float PADDLE_WIDTH = 0.03f;
 //Game
 const bool FULLSCREEN_ENABLED = true;
 const bool SHOW_CAMERA_IMAGE = true;
+
+//How long after the last update should a marker still be considered visible?
+const int MARKER_VISIBILITYTIMEOUT = 100; //millisec
+
+// How long should the playing field marker have been continously visible before the game accepts it?
+const int STARTUP_DURATION = 3000; //millisec
+//How long should the two markers be in the game at a time before the game actually starts?
+const int INITIALIZATION_DURATION = 3000; //millisec
 
 //Colors
 //#include "Color.h"

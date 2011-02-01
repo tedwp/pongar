@@ -1,5 +1,7 @@
 #pragma once
+
 #include <cv.h>
+#include "GL\glut.h"
 
 class Marker
 {
@@ -20,6 +22,7 @@ public:
 	bool hasPositionChanged(void);
 
 	int getLastUpdateTime();
+	bool isVisible(void);
 
 private:
 	int m_id;
@@ -27,5 +30,5 @@ private:
 	bool m_positionChanged;
 	int m_purpose;
 	float m_offset;
-	int m_lastUpdateTime;
+	long int m_lastUpdateTime;
 };

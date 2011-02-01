@@ -7,7 +7,7 @@ PlayingField::PlayingField(void)
 
 	//init random angle (between 30 and -30 deg)
 	//0 deg = ball goes straight up
-	srand ((unsigned) time(NULL));
+	srand ((unsigned) getTimeSinceStart());
 	ballAngle = (float) (rand() % 45 + 30);
 	if ((int)ballAngle % 2==0) ballAngle = 180 - ballAngle;
 

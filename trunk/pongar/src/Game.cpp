@@ -2,6 +2,9 @@
 
 using namespace std;
 
+#define markerPresent(a) ( getMarkerByPurpose(a) != NULL && getMarkerByPurpose(a)->isVisible())
+//#define markerPresent(a) false
+
 Game::Game(void) 
 {
 }
@@ -20,7 +23,6 @@ Game& Game::getInstance(void)
 {
 	static Game m_instance;
 	return m_instance;
-
 }
 
 void Game::init( int argc, char* argv[] )
@@ -29,8 +31,13 @@ void Game::init( int argc, char* argv[] )
 	getInstance().registerMarker(626, PURPOSE_PADDLE2);
 	getInstance().registerMarker(90, PURPOSE_PLAYINGFIELD);
 		
+	
+	m_gameStage = STAGE_STARTUP;
+	timerStart = getTimeSinceStart();
+	
 	Capture::getInstance().init();
 	Graphics::getInstance().init(argc, argv);
+	
 	
 }
 int Game::getGameStage()
@@ -99,27 +106,78 @@ void Game::idle( void )
 	 - Jedes Paddle-Objekt hat ein Marker-Property, mit dem es seine Position aktualisieren kann.
 	 **/
 
-	// Das folgende uncommenten:
-	/*switch(m_gameStage)
+	
+//	if(getMarkerByPurpose(PURPOSE_REINIT) != NULL && getMarkerByPurpose(PURPOSE_REINIT)->isVisible())
+	if(markerPresent(PURPOSE_REINIT))
 	{
-		case Game.STAGE_INITIALIZATION:
+		/*
+		do restart stuff
+		*/
+		m_gameStage = STAGE_STARTUP;
+	}
+	
+	switch(m_gameStage)
+	{
+		case STAGE_STARTUP:
+			if(markerPresent(PURPOSE_PLAYINGFIELD))
+			{
+				if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
+				{
+					m_gameStage = STAGE_INITIALIZATION;
+					break;
+				}
+			}
+			else
+			{
+				timerStart = getTimeSinceStart();
+			}
+			/*
+			Do nothing except, wait until playing field is positioned
+			*/
+		break;
+		
+		case STAGE_INITIALIZATION:
+			if(markerPresent(PURPOSE_PADDLE1) && markerPresent(PURPOSE_PADDLE2) )
+			{
+				if(timerStart - getTimeSinceStart() > INITIALIZATION_DURATION)
+				{
+					m_gameStage = STAGE_RUNNING;
+				}
+			}
+			else
+			{
+				timerStart = getTimeSinceStart();
+			}
 			// Nicht zu verwechseln mit init()! Hier wird das Spiel aus Sicht der Benutzers initialisiert, alles technische geschieht hingegen in init()
-			performInitialization();
+			//performInitialization();
 			break;
 		
-		case Game.STAGE_RUNNING:
-			performRunning();
+		case STAGE_RUNNING:
+			if(markerPresent(PURPOSE_PAUSE))
+				m_gameStage = STAGE_PAUSE;
+			
+			//performRunning();
 			break;
 
-		case Game.STAGE_PAUSE:
-			performPause();
+		case STAGE_PAUSE:
+			if(markerPresent(PURPOSE_PAUSE))
+				m_gameStage = STAGE_RUNNING;
+			
+			if(markerPresent(PURPOSE_RESTARTGAME))
+			{
+				/*
+				do restart stuff
+				*/
+				m_gameStage = STAGE_RUNNING;
+			}
 			break;
 		default:
 		break;
-	}*/
+	}
 
 	
 }
+
 void Game::end(void)
 {
 	exit(0);
