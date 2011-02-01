@@ -12,11 +12,13 @@ public:
 	static PlayingField& getInstance();
 	void render();
 	void drawCircle(float r);
+	void computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End);
 private:
 	float ballSpeed;
 	float ballAngle;
 	std::pair<float, float> ballVector;
 	std::pair<float, float> ballPosition;
-	void computeBallPosition(float paddle1Start, float paddle1End, float paddle2Start, float paddle2End);
+	void transposeMatrix(float* src, float* dst);
+
 };
 
