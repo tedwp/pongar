@@ -63,7 +63,7 @@ private:
 	Game(void);
 	Game(const Game&);
 	~Game(void);
-	void Game::registerMarker(int id, int purpose);
+	void registerMarker(int id, int purpose);
 	void updateMarkerOffsets(void);
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void performInitialization(void);

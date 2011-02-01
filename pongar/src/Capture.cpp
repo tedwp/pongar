@@ -40,7 +40,7 @@ void Capture::init()
 	cvResizeWindow("Marker", 120, 120 );*/
 	
 	initVideoStream();
-
+	
 	int value = threshold;
 	int max = 255;
 	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
@@ -55,6 +55,10 @@ void Capture::init()
 void Capture::initVideoStream(void)
 {
 	m_cap = cvCaptureFromCAM (CAM_INDEX);
+	m_cap = cvCreateCameraCapture (CAM_INDEX);
+	cvSetCaptureProperty(m_cap, CV_CAP_PROP_FRAME_WIDTH, CAM_WIDTH);
+	cvSetCaptureProperty(m_cap, CV_CAP_PROP_FRAME_HEIGHT, CAM_HEIGHT);
+	
 	if (!m_cap) {
 		cout << "No webcam found\n";
 		exit(0);
