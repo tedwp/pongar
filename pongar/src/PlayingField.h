@@ -3,7 +3,6 @@
 #include "GL\glut.h"
 #include "Marker.h"
 #include "Game.h"
-#include <time.h>
 
 class PlayingField
 {

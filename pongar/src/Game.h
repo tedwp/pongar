@@ -1,10 +1,10 @@
 #pragma once
+#include "conf.h"
 #include <vector>
-
 #include "Marker.h"
 #include "Capture.h"
 #include "Graphics.h"
-#include <vector>
+
 
 class Game
 {
@@ -28,11 +28,15 @@ public:
 	static const int PURPOSE_PADDLE1 = 1;
 	static const int PURPOSE_PADDLE2 = 2;
 	static const int PURPOSE_PLAYINGFIELD = 3;
+	static const int PURPOSE_PAUSE = 4;
+	static const int PURPOSE_REINIT = 5;
+	static const int PURPOSE_RESTARTGAME = 6;
 
-	static const int STAGE_INITIALIZATION = 1;
-	static const int STAGE_RUNNING = 2;
-	static const int STAGE_PAUSE = 3;
-	static const int STAGE_OVER = 4;
+	static const int STAGE_STARTUP = 1;
+	static const int STAGE_INITIALIZATION = 2;
+	static const int STAGE_RUNNING = 3;
+	static const int STAGE_PAUSE = 4;
+	static const int STAGE_OVER = 5;
 
 private:
 	static Game& m_instance;
@@ -46,5 +50,8 @@ private:
 	void updateMarkerOffsets(void);
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void performInitialization(void);
+
+	long int timerStart;
 };
+
 

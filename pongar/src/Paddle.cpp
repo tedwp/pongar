@@ -3,9 +3,9 @@
 
 Paddle::Paddle(void)
 {
-	m_color[0] = 0;
-	m_color[1] = 0;
-	m_color[2] = 0;
+	m_color.red = 0;
+	m_color.green = 0;
+	m_color.blue = 0;
 	m_marker = NULL;
 	m_isLeft = true;
 	
@@ -31,11 +31,11 @@ void Paddle::updatePositionFromMarker(void)
 	//TODO
 }
 
-color Paddle::getColor(void)
+Color Paddle::getColor(void)
 {
 	return m_color;
 }
-void Paddle::setColor(color c)
+void Paddle::setColor(Color c)
 {
 	m_color = c;
 }

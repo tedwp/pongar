@@ -1,17 +1,17 @@
 #include "Marker.h"
 #include "Game.h"
 
-#include "GL\glut.h"
 
 Marker::Marker(int id)
 {
 	m_id = id;
 	m_position = new float[16];
-	m_lastUpdateTime = 0;
+	m_lastUpdateTime = -1;
 	if(id == Game::PURPOSE_PLAYINGFIELD)
 		m_positionChanged = false;
 	else
 		m_positionChanged = true;
+	//TODO was haben die 4 zeilen darüber zu bedeuten?
 }
 
 
@@ -37,9 +37,12 @@ void Marker::updatePosition(float position [16])
 			m_position[ i ] = position[ i ];
 	}
 
-	m_lastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
+	m_lastUpdateTime = getTimeSinceStart();
 }
-
+bool Marker::isVisible(void)
+{
+	return m_lastUpdateTime != -1 && (getTimeSinceStart() - m_lastUpdateTime < MARKER_VISIBILITYTIMEOUT);
+}
 float* Marker::getPosition(void)
 {
 	return m_position;
