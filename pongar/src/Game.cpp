@@ -123,6 +123,7 @@ void Game::idle( void )
 			{
 				if(timerStart - getTimeSinceStart() > STARTUP_DURATION)
 				{
+					//TODO here: Fix playing field
 					m_gameStage = STAGE_INITIALIZATION;
 					break;
 				}
