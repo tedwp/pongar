@@ -17,7 +17,8 @@ public:
 	void fullScreenLeave(void);
 	void fullScreenSwitch(void);
 	void showString(std::string& str, float r, float g, float b, int cx, int y);
-	std::string m_currentString;
+
+	static void transposeMatrix(float* src, float* dst);
 
 private:
 	bool isInFullScreen;
@@ -38,7 +39,6 @@ private:
 
 	void prepareForDisplay(void);
 	void redrawDisplay(void);
-	void drawStuffOnTop(void);
 
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void prepare2D(void);

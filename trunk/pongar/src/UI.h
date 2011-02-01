@@ -1,15 +1,29 @@
 #pragma once
+#include <iostream>
+#include <string>
+
+#include "conf.h"
+
+#include "Graphics.h"
+
 class UI
 {
 public:
-	UI(void);
-	~UI(void);
-	bool isMarkerVisible(int purpose);
-	/*
-	 * Greift auf Game.getMarkers() zu, um zu überprüfen, welche Marker gerade zu sehen sind.
-	 * Jeder Marker sollte über einen lastVisible-timestamp verfügen, so dass Marker, die seit mehr als z.B. drei Sekunden
-	 * nicht mehr sichtbar waren, als unsichtbar gelten.
-	 */
-	void updateMarkerVisibilities(void);
-};
+	static UI& getInstance(void);
 
+	void showPercentageString(std::string str, int value, int max);
+	void showHeading(std::string heading);
+	void showInstruction(std::string instruction);
+	void drawStuffOnTop(void);
+	
+
+private:
+	UI(void);
+	UI(const UI&);
+	~UI(void);
+	std::string m_heading;
+	std::string m_instructions;
+};
+/*
+std::string UI::m_heading;
+std::string UI::m_instructions;*/

@@ -89,6 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Ball.cpp" />
+    <ClCompile Include="..\src\ColoredObject.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -103,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\Ball.h" />
     <ClInclude Include="..\src\Color.h" />
+    <ClInclude Include="..\src\ColoredObject.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\Graphics.h" />
     <ClInclude Include="..\src\Keyboard.h" />
