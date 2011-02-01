@@ -3,12 +3,13 @@
 
 Paddle::Paddle(void)
 {
-	m_color.red = 0;
+	m_color.red = 255;
 	m_color.green = 0;
-	m_color.blue = 0;
+	m_color.blue = 255;
+	m_color.alpha = 255;
 	m_marker = NULL;
 	m_isLeft = true;
-	
+	m_playingField = NULL;
 }
 
 
@@ -17,12 +18,30 @@ Paddle::~Paddle(void)
 }
 void Paddle::render(void)
 {
-	//Todo use yPosition, isLeft, color and m_playingField to render paddle
+	glTranslatef( 0.0f, 0.0f, -0.01f );
+	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
+	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
+	// draw rectangle
+	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
+	if (paddle1YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2)
+	{
+		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
+		paddle1YStart = paddle1YEnd - PADDLE_LENGTH;
+	}
+	if (paddle1YStart-PADDLE_LENGTH < -PLAYINGFIELD_HEIGHT/2)
+	{
+		paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
+		paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
+	}
+	if(isLeft())
+		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
+	else
+		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
 }
 
 void Paddle::updatePositionFromMarker(void)
 {
-/*	float* playingFieldTf = m_playingField->getCorrespondingMarker()->getPosition();
+	float* playingFieldTf = m_playingField->getCorrespondingMarker()->getPosition();
 	float* paddle1Tf = m_marker->getPosition();
 	
 	//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
@@ -46,7 +65,7 @@ void Paddle::updatePositionFromMarker(void)
 	//release matrices
 	cvReleaseMat( &playingFieldMat );
 	cvReleaseMat( &playingFieldMatInv );
-	cvReleaseMat( &paddle1Mat );*/
+	cvReleaseMat( &paddle1Mat );
 
 }
 
@@ -66,15 +85,16 @@ Color Paddle::getColor(void)
 {
 	return m_color;
 }
-void Paddle::setColor(Color c)
+void Paddle::setColor(Color& c)
 {
 	m_color = c;
 }
-void Paddle::setColor(int r, int g, int b)
+void Paddle::setColor(float r, float g, float b, float a)
 {
 	m_color.red = r;
 	m_color.green = g;
 	m_color.blue = b;
+	m_color.alpha = a;
 }
 float Paddle::getYPosition(void)
 {
@@ -97,7 +117,7 @@ void Paddle::setLeft(bool isLeft)
 	m_isLeft = isLeft;
 }
 
-/*void Paddle::setPlayingField(PlayingField* playingField)
+void Paddle::setPlayingField(PlayingField* playingField)
 {
 	m_playingField = playingField;
-}*/
+}

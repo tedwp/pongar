@@ -7,10 +7,12 @@ Marker::Marker(int id)
 	m_id = id;
 	m_position = new float[16];
 	m_lastUpdateTime = -1;
-	if(id == Game::PURPOSE_PLAYINGFIELD)
+
+	m_locked = false;
+	/*if(id == Game::PURPOSE_PLAYINGFIELD)
 		m_positionChanged = false;
 	else
-		m_positionChanged = true;
+		m_positionChanged = true;*/
 	//TODO was haben die 4 zeilen darüber zu bedeuten?
 }
 
@@ -26,20 +28,23 @@ void Marker::clearHasPositionChanged(void)
 }
 void Marker::updatePosition(float position [16])
 {
-	m_positionChanged = false;
-	for(unsigned i = 0; i < 16; i++)
+	if(!m_locked)
 	{
-		if(position[i] != m_position[i])
-			m_positionChanged = true;
-	}
+		m_positionChanged = false;
+		for(unsigned i = 0; i < 16; i++)
+		{
+			if(position[i] != m_position[i])
+				m_positionChanged = true;
+		}
 	
-	if(m_positionChanged)
-	{
-		for( int i = 0; i < 16; i++ )
-			m_position[ i ] = position[ i ];
-	}
+		if(m_positionChanged)
+		{
+			for( int i = 0; i < 16; i++ )
+				m_position[ i ] = position[ i ];
+		}
 
-	m_lastUpdateTime = getTimeSinceStart();
+		m_lastUpdateTime = getTimeSinceStart();
+	}
 }
 bool Marker::isVisible(void)
 {
@@ -78,4 +83,12 @@ float Marker::getOffset(){
 
 int Marker::getLastUpdateTime(){
 	return m_lastUpdateTime;
+}
+void Marker::lock(void)
+{
+	m_locked = true;
+}
+void Marker::unLock(void)
+{
+	m_locked = false;
 }
