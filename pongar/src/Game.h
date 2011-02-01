@@ -45,12 +45,13 @@ public:
 	static const int PURPOSE_ACTION_DECREASESPEED_GAME = 108;
 	static const int PURPOSE_ACTION_DECREASESPEED_PADDLE1 = 109;
 	static const int PURPOSE_ACTION_DECREASESPEED_PADDLE2 = 110;
-
-	static const int STAGE_STARTUP = 1;
-	static const int STAGE_INITIALIZATION = 2;
-	static const int STAGE_RUNNING = 3;
-	static const int STAGE_PAUSE = 4;
-	static const int STAGE_OVER = 5;
+	
+	static const int STAGE_BEAMERCALIBRATION = 1;
+	static const int STAGE_STARTUP = 2;
+	static const int STAGE_INITIALIZATION = 3;
+	static const int STAGE_RUNNING = 4;
+	static const int STAGE_PAUSE = 5;
+	static const int STAGE_OVER = 6;
 
 private:
 	static Game& m_instance;
@@ -66,6 +67,7 @@ private:
 	void performInitialization(void);
 	bool isMarkerPresent(int purpose);
 	bool isActionMarkerPresent(void);
+	void performStageBeamerCalibration(void);
 	void performStageStartup(void);
 	void performStageInitialization(void);
 	void performStageRunning(void);

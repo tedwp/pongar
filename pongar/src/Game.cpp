@@ -75,6 +75,10 @@ void Game::idle( void )
 	}
 	switch(m_gameStage)
 	{
+		case STAGE_BEAMERCALIBRATION:
+			performStageBeamerCalibration();
+		break;
+
 		case STAGE_STARTUP:
 			performStageStartup();
 		break;
@@ -95,6 +99,22 @@ void Game::idle( void )
 	}
 
 	
+}
+void Game::performStageBeamerCalibration(void)
+{
+	    /* load the image,
+       use CV_LOAD_IMAGE_GRAYSCALE to load the image in grayscale */
+    IplImage *img = 0;
+	img = cvLoadImage("marker.jpeg", CV_LOAD_IMAGE_GRAYSCALE );
+   
+    /* always check */
+    if( img != 0 ) {
+		/* create a window */
+		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
+		/* display the image */
+		cvShowImage( "image", img );
+	// Display Marker
+	}
 }
 void Game::performStageStartup(void)
 {
