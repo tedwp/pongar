@@ -4,7 +4,7 @@ using namespace std;
 
 Game::Game(void) 
 {
-	m_markerImage = NULL;
+	//m_markerImage = NULL;
 }
 Game::~Game(void)
 {
