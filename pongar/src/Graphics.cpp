@@ -64,7 +64,7 @@ void Graphics::init(int argc, char* argv[])
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
 		
-	fullScreenLeave();
+	//fullScreenLeave();
 
 }
 void Graphics::idle(void)
