@@ -240,7 +240,7 @@ void Graphics::fullScreenSwitch(void)
 }
 void Graphics::fullScreenLeave(void)
 {
-	glutPositionWindow((int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5), (int)  ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5));
+	glutPositionWindow((int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5), 0/*(int)  ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5)*/);
 	glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
 	isInFullScreen = false;
 }
