@@ -34,13 +34,7 @@ void PlayingField::render()
 		if (m_PlayingField->getPurpose() == Game::PURPOSE_PLAYINGFIELD){
 			float* m_position = m_PlayingField->getPosition();
 			float resultTransposedMatrix[16];
-			for (int x=0; x<4; ++x)
-			{
-				for (int y=0; y<4; ++y)
-				{
-					resultTransposedMatrix[x*4+y] = m_position[y*4+x];
-				}
-			}
+			transposeMatrix(m_position, resultTransposedMatrix);
 	
 			glLoadMatrixf( resultTransposedMatrix );
 			glScalef(0.20f, 0.20f, 0.20f);
@@ -147,4 +141,12 @@ void PlayingField::drawCircle(float r)
 		glVertex2f(cos(degInRad)*r, sin(degInRad)*r);
 	}
 	glEnd();
+}
+
+void PlayingField::transposeMatrix(float* src, float* dst){
+	for (int x=0; x<4; ++x){
+		for (int y=0; y<4; ++y){
+			dst[x*4+y] = src[y*4+x];
+		}
+	}
 }

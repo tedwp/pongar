@@ -106,8 +106,8 @@ void Graphics::doRender()
 		CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
 		cvInvert(playingFieldMat, playingFieldMatInv);
 
-		cvMul(paddle1Mat, playingFieldMatInv, paddle1Mat);
-		cvMul(paddle2Mat, playingFieldMatInv, paddle2Mat);
+		cvGEMM(paddle1Mat, playingFieldMatInv, 1, NULL, 0, paddle1Mat, 0);
+		cvGEMM(paddle2Mat, playingFieldMatInv, 1, NULL, 0, paddle2Mat, 0);
 
 		float paddle1offset = (float) cvGet2D(paddle1Mat, 1, 3).val[0];
 		float paddle2offset = (float) cvGet2D(paddle2Mat, 1, 3).val[0];
@@ -121,7 +121,7 @@ void Graphics::doRender()
 		std::cout << paddle1z;
 		std::cout << std::endl;*/
 
-		float sensitivityFactor = 180;
+		float sensitivityFactor = 4.0;
 		//TODO adjust sensitivityFactor depending on z coordinate?!?
 		m_paddle1->setOffset(paddle1offset*sensitivityFactor);
 		m_paddle2->setOffset(paddle2offset*sensitivityFactor);
