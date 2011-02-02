@@ -185,13 +185,29 @@ void Game::performStageRunning(void)
 {
 	PlayingField::getInstance().updatePaddlePositions();
 	PlayingField::getInstance().render();
-
+	if(PlayingField::getInstance().getBall()->getState() != Ball::ONFIELD)
+	{
+		if(PlayingField::getInstance().getBall()->getState() == Ball::LEFTOUT)
+		{
+			PlayingField::getInstance().getRightPaddle()->increaseScore();
+		}
+		if(PlayingField::getInstance().getBall()->getState() != Ball::RIGHTOUT)
+		{
+			PlayingField::getInstance().getLeftPaddle()->increaseScore();
+		}
+	}
 
 	if(isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_PAUSE);
 	else
 	{
-		UI::getInstance().showInstruction("Vorsicht! Zu spät...");
+		UI::getInstance().showScores();
+		//TODO Idee haben: Aktuell müssen alle actions erst deaktiviert werden
+		
+		PlayingField::getInstance().getBall()->disableActionSpeedIncrease();
+		PlayingField::getInstance().getBall()->disableActionSpeedDecrease();
+
+
 		if(isActionMarkerPresent())
 		{
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))
@@ -206,8 +222,9 @@ void Game::performStageRunning(void)
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE2))
 			{
 			}
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_GAME))
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_BALL))
 			{
+				PlayingField::getInstance().getBall()->enableActionSpeedIncrease();
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
 			{
@@ -215,8 +232,9 @@ void Game::performStageRunning(void)
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE2))
 			{
 			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_GAME))
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_BALL))
 			{
+				PlayingField::getInstance().getBall()->enableActionSpeedDecrease();
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
 			{

@@ -28,7 +28,7 @@ public:
 	void setBall(Ball* ball);
 	Paddle* getLeftPaddle(void);
 	Paddle* getRightPaddle(void);
-
+	Ball* getBall(void);
 private:
 	
 	Marker* m_correspondingMarker;

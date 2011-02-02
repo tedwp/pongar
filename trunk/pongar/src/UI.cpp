@@ -39,7 +39,7 @@ void UI::showInstruction(std::string instruction)
 
 void UI::drawStuffOnTop(void)
 {
-	Graphics::getInstance().showString(m_instructions, 0, 0, 255, 0, 100);
+	Graphics::getInstance().showString(m_instructions, 0, 0, 255, 10, 10);
 
 
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
@@ -47,4 +47,10 @@ void UI::drawStuffOnTop(void)
 		//memcpy(m_bkgnd, Game::getInstance().m_markerImage->imageData, sizeof(Game::getInstance().m_markerImage) );
 		//glDrawPixels( CAM_WIDTH, CAM_HEIGHT, GL_BGR_EXT, GL_UNSIGNED_BYTE, Game::getInstance().m_markerImage->imageData );
 	}
+}
+void UI::showScores(void)
+{
+	m_instructions = toString(PlayingField::getInstance().getLeftPaddle()->getScore())
+				   + "    <->    "
+				   + toString(PlayingField::getInstance().getRightPaddle()->getScore());
 }

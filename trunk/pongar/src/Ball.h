@@ -13,18 +13,34 @@ public:
 	~Ball(void);
 	void render();
 	void setPlayingField(PlayingField* playingField);
+	
+	int getState(void);
+
+	void enableActionSpeedIncrease(void);
+	void disableActionSpeedIncrease(void);
+	void enableActionSpeedDecrease(void);
+	void disableActionSpeedDecrease(void);
+	
+	
+	static const int ONFIELD = 1;
+	static const int LEFTOUT = 2;
+	static const int RIGHTOUT = 3;
 
 private:
 	Color m_color;
-	double m_x;
-	double m_y;
+	float m_x;
+	float m_y;
+	int m_state;
+
 	PlayingField* m_playingField;
-	float speed;
-	float angle;
-	std::pair<float, float> vector;
-	std::pair<float, float> position;
+	float m_speed;
+	float m_angle;
+	std::pair<float, float> m_movementVector;
 	
+	bool m_actionSpeedIncreaseEnabled;
+	bool m_actionSpeedDecreaseEnabled;
 
 	void drawCircle(float r);
+	void updateMovement(void);
 };
 

@@ -74,13 +74,6 @@ bool Marker::hasPositionChanged(void)
 	return m_positionChanged;
 }
 
-void Marker::setOffset(float offset){
-	m_offset = offset;
-}
-float Marker::getOffset(){
-	return m_offset;
-}
-
 int Marker::getLastUpdateTime(){
 	return m_lastUpdateTime;
 }

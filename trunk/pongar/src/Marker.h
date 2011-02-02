@@ -31,7 +31,6 @@ private:
 	float* m_position;
 	bool m_positionChanged;
 	int m_purpose;
-	float m_offset;
 	long int m_lastUpdateTime;
 	bool m_locked;
 };

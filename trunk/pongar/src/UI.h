@@ -14,8 +14,8 @@ public:
 	void showPercentageString(std::string str, int value, int max);
 	void showHeading(std::string heading);
 	void showInstruction(std::string instruction);
+	void showScores(void);
 	void drawStuffOnTop(void);
-	
 
 private:
 	UI(void);
