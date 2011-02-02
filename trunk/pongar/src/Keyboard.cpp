@@ -39,11 +39,11 @@ void Keyboard::doPressKey(unsigned char key, int x, int y)
 			Capture::getInstance().decreaseThresholdBW();
 			break;
 
-		case 0x66:
+		case 0x66: // "f"
 			Graphics::getInstance().fullScreenSwitch();
 			break;
 		
-		case 27:
+		case 27: // Escape
 			Game::getInstance().end();
 			break;
 	}
