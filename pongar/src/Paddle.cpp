@@ -33,14 +33,14 @@ void Paddle::render(void)
 		paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
 	}
 
+	m_yRenderPosition = paddle1YStart;
+
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())
 		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
 	else
 		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
-
-	m_yRenderPosition = paddle1YStart;
 }
 
 void Paddle::updatePositionFromMarker(void)
@@ -88,6 +88,7 @@ void Paddle::updatePositionFromMarker(void)
 	float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	
 	m_yPosition = paddle1offset;
+	m_yRenderPosition = paddle1offset;
 }
 
 
@@ -136,5 +137,6 @@ int Paddle::getScore(void)
 void Paddle::reset(void)
 {
 	m_yPosition = 0;
+	m_yRenderPosition = 0;
 	m_score = 0;
 }
