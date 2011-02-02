@@ -19,11 +19,12 @@ public:
 	void showString(std::string& str, float r, float g, float b, int cx, int y);
 
 	static void transposeMatrix(float* src, float* dst);
+	void cleanup(void);
 
 private:
 	bool isInFullScreen;
 	static Graphics& m_instance;
-
+	int m_mainWindow;
 	Graphics(void);
 	Graphics(const Graphics&);
 	~Graphics(void);

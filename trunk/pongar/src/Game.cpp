@@ -305,6 +305,8 @@ bool Game::isMarkerPresent(int purpose)
 }
 void Game::end(void)
 {
+	Graphics::getInstance().cleanup();
+	Capture::getInstance().cleanup();
 	exit(0);
 }
 void Game::cleanup( void )
