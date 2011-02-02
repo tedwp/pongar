@@ -1,10 +1,15 @@
 #include "UI.h"
 #include <string>
+#include <windows.h>
 
 using namespace std;
 
 UI::UI(void) 
 {
+	m_textColor.red = 0;
+	m_textColor.green = 0;
+	m_textColor.blue  = 0;
+	m_textColor.alpha = 1.0f;
 	//m_markerImage = NULL;
 }
 UI::~UI(void)
@@ -28,6 +33,10 @@ void UI::showPercentageString(string str, int value, int max)
 		m_instructions  = str + toString(((float)value / (float)max) * 100.0f) + "%";
 	}
 }
+void UI::beep(void)
+{
+	Beep(522, 100);
+}
 void UI::showHeading(string heading)
 {
 	m_heading = heading;
@@ -39,8 +48,12 @@ void UI::showInstruction(std::string instruction)
 
 void UI::drawStuffOnTop(void)
 {
-	Graphics::getInstance().showString(m_instructions, 0, 0, 255, 10, 10);
+	Graphics::getInstance().showString(m_instructions, m_textColor, 100, 100);
 
+	string th =  toString(Capture::getInstance().getThreshold()/255.0 * 100);
+	string thbw =  toString(Capture::getInstance().getThresholdBW()/255.0 * 100);
+
+	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 100, 10);
 
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{

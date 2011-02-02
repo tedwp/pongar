@@ -3,7 +3,6 @@ Keyboard::Keyboard(void)
 {
 }
 
-
 Keyboard::~Keyboard(void)
 {
 	
@@ -24,6 +23,22 @@ void Keyboard::doPressKey(unsigned char key, int x, int y)
 {
 	switch(key)
 	{
+		case 0x2b: // "+"
+			Capture::getInstance().increaseThreshold();
+			break;
+
+		case 0x2d: // "-"
+			Capture::getInstance().decreaseThreshold();
+			break;
+
+		case 0x2a: // "*"
+			Capture::getInstance().increaseThresholdBW();
+			break;
+		
+		case 0x2f: // "/"
+			Capture::getInstance().decreaseThresholdBW();
+			break;
+
 		case 0x66:
 			Graphics::getInstance().fullScreenSwitch();
 			break;

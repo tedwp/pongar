@@ -20,6 +20,12 @@ public:
 	void cleanup();
 
 	void updateMarkerPositions(void);
+	int getThreshold(void);
+	int getThresholdBW(void);
+	void increaseThreshold(void);
+	void increaseThresholdBW(void);
+	void decreaseThreshold(void);
+	void decreaseThresholdBW(void);
 
 private:
 	static Capture& m_instance;
@@ -34,12 +40,12 @@ private:
 	void initVideoStream(void);
 
 	//thresholding
-	int threshold;
-	int bw_threshold;
+	int m_threshold;
+	int m_thresholdBW;
 
 	//trackbar for thresholding
-	static void trackbarHandler(int pos);
-	static void bw_trackbarHandler(int pos);
+	/*static void trackbarHandler(int pos);
+	static void bw_trackbarHandler(int pos);*/
 
 	//capture variables
 	CvCapture* m_cap;

@@ -67,30 +67,34 @@ void Ball::updateMovement(void)
 	
 	if(!xCollision)
 		m_state = ONFIELD;
-
-	if (xCollision)
+	if(xCollision || pCollision || yCollision)
 	{
-		// Left or right?
-		m_state = LEFTOUT;
-		m_state = RIGHTOUT;
+		UI::getInstance().beep();
 
-	} else if (pCollision)
-	{
-		m_x-= vector.first;
-		m_y-= vector.second;
-		m_angle = 180 - m_angle;
-		m_x+= vector.first;
-		m_y+= vector.second;
+		if (xCollision)
+		{
+			// Left or right?
+			m_state = LEFTOUT;
+			m_state = RIGHTOUT;
 
-		//increase ball m_speed
-		m_speed*= BALL_SPEED_INCREASE_FACTOR;
-	} else if (yCollision)
-	{
-		m_x-= vector.first;
-		m_y-= vector.second;
-		m_angle = 360 - m_angle;
-		m_x+=  vector.first;
-		m_y+=  vector.second;
+		} else if (pCollision)
+		{
+			m_x-= vector.first;
+			m_y-= vector.second;
+			m_angle = 180 - m_angle;
+			m_x+= vector.first;
+			m_y+= vector.second;
+
+			//increase ball m_speed
+			m_speed*= BALL_SPEED_INCREASE_FACTOR;
+		} else if (yCollision)
+		{
+			m_x-= vector.first;
+			m_y-= vector.second;
+			m_angle = 360 - m_angle;
+			m_x+=  vector.first;
+			m_y+=  vector.second;
+		}
 	}
 	m_lastUpdate = getTimeSinceStart();
 }

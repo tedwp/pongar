@@ -303,12 +303,6 @@ bool Game::isMarkerPresent(int purpose)
 	Marker* m = getMarkerByPurpose(purpose);
 	return m != NULL && m->isVisible();
 }
-void Game::end(void)
-{
-	Graphics::getInstance().cleanup();
-	Capture::getInstance().cleanup();
-	exit(0);
-}
 void Game::cleanup( void )
 {
 	Capture::getInstance().cleanup();
@@ -352,4 +346,11 @@ void Game::registerMarker(int id, int purpose)
 	Marker* m = new Marker(id);
 	m->setPurpose(purpose);
 	m_markers.push_back(m);
+}
+
+void Game::end(void)
+{
+	Graphics::getInstance().cleanup();
+	Capture::getInstance().cleanup();
+	exit(0);
 }
