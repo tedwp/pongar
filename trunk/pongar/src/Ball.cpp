@@ -27,12 +27,6 @@ void Ball::updateMovement(void)
 	float paddle1End = paddle1Start + PADDLE_LENGTH;
 	float paddle2End = paddle2Start + PADDLE_LENGTH;
 
-	std::cout << "paddle2Start ";
-	std::cout << paddle2Start;
-	std::cout << " - paddle2End ";
-	std::cout << paddle2End;
-	std::cout << std::endl;
-
 	float degInRad = m_angle*3.14159f/180;
 	
 	std::pair<float, float> vector;
