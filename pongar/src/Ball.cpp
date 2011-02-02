@@ -21,11 +21,17 @@ void Ball::updateMovement(void)
 {
 	int timePassed = getTimeSinceStart() - m_lastUpdate;
 	//TODO take this into account, right now ball is only dependent on cpu cycles! btw: wtf?!
-	float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYPosition();
-	float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYPosition();
+	float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
+	float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
 
 	float paddle1End = paddle1Start + PADDLE_LENGTH;
 	float paddle2End = paddle2Start + PADDLE_LENGTH;
+
+	std::cout << "paddle2Start ";
+	std::cout << paddle2Start;
+	std::cout << " - paddle2End ";
+	std::cout << paddle2End;
+	std::cout << std::endl;
 
 	float degInRad = m_angle*3.14159f/180;
 	
@@ -69,7 +75,8 @@ void Ball::updateMovement(void)
 		m_state = ONFIELD;
 	if(xCollision || pCollision || yCollision)
 	{
-		UI::getInstance().beep();
+		//beep war nervig, deswegen auskommentiert
+		//UI::getInstance().beep();
 
 		if (xCollision)
 		{

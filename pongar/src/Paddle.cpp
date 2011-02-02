@@ -22,8 +22,6 @@ void Paddle::render(void)
 	glTranslatef( 0.0f, 0.0f, -0.01f );
 	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
 	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
-	// draw rectangle
-	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if (paddle1YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
@@ -34,10 +32,15 @@ void Paddle::render(void)
 		paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 		paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
 	}
+
+	// draw paddle
+	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())
 		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
 	else
 		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
+
+	m_yRenderPosition = paddle1YStart;
 }
 
 void Paddle::updatePositionFromMarker(void)
@@ -45,29 +48,46 @@ void Paddle::updatePositionFromMarker(void)
 	float* playingFieldTf = m_playingField->getCorrespondingMarker()->getPosition();
 	float* paddle1Tf = m_marker->getPosition();
 	
-	//invert playingFieldTf and apply to paddle1Tf and paddle2Tf
-	CvMat* playingFieldMat = cvCreateMat( 4, 4, CV_32FC1 );
-	arrayToCvMat(playingFieldTf, playingFieldMat);
-	CvMat* paddle1Mat = cvCreateMat( 4, 4, CV_32FC1 );
-	arrayToCvMat(paddle1Tf, paddle1Mat);
+	float vec1[3];
+	vec1[0] = paddle1Tf[3]-playingFieldTf[3];
+	vec1[1] = paddle1Tf[7]-playingFieldTf[7];
+	vec1[2] = 0.0;
+
+	//get point on inner axis and paddle axis
+	float xaxisVectorInp[4] = {0,1,0,0};
+	float xaxisVector[4] = {0,0,0,0};
+	//mult vector by matrix
+	for(int i=0; i<4; i++){
+		xaxisVector[i] = 0;
+		for(int j=0; j<4; j++){
+			xaxisVector[i] += playingFieldTf[4*i + j] * xaxisVectorInp[j];
+		}
+	}
+
+	float vec2[3];
+	vec2[0] = xaxisVector[0]-playingFieldTf[3];
+	vec2[1] = xaxisVector[1]-playingFieldTf[7];
+	vec2[2] = 0.0;
+
+	//calculate angle between these vectors
+	//first normalize vectors
+	float help = sqrt( vec1[0]*vec1[0] + vec1[1]*vec1[1] + vec1[2]*vec1[2] );
+	vec1[0] /= help;
+	vec1[1] /= help;
+	vec1[2] /= help;
+
+	help = sqrt( vec2[0]*vec2[0] + vec2[1]*vec2[1] + vec2[2]*vec2[2] );
+	vec2[0] /= help;
+	vec2[1] /= help;
+	vec2[2] /= help;
+
+	//then calculate the angle
+	float angle = (180 / 3.14159f) * acos( vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2] );
+	if((vec1[0] * vec2[1] - vec1[1] * vec2[0]) < 0 ) angle *= -1;
+
+	float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	
-	CvMat* playingFieldMatInv = cvCreateMat(4, 4, CV_32FC1);
-	cvInvert(playingFieldMat, playingFieldMatInv);
-
-	cvGEMM(paddle1Mat, playingFieldMatInv, 1, NULL, 0, paddle1Mat, 0);
-
-	float paddle1offset = (float) cvGet2D(paddle1Mat, 1, 3).val[0];
-		
-
-	float sensitivityFactor = 4.0;
-	//TODO adjust sensitivityFactor depending on z coordinate?!?
-	m_yPosition = paddle1offset*sensitivityFactor;
-
-	//release matrices
-	cvReleaseMat( &playingFieldMat );
-	cvReleaseMat( &playingFieldMatInv );
-	cvReleaseMat( &paddle1Mat );
-
+	m_yPosition = paddle1offset;
 }
 
 
@@ -83,6 +103,10 @@ void Paddle::arrayToCvMat(float* transform, CvMat* mat)
 float Paddle::getYPosition(void)
 {
 	return m_yPosition;
+}
+float Paddle::getYRenderPosition(void)
+{
+	return m_yRenderPosition;
 }
 void Paddle::setMarker(Marker* marker)
 {
