@@ -13,15 +13,14 @@ Ball::~Ball(void)
 void Ball::render(void)
 {
 	updateMovement();
-
 	glTranslatef( m_x, m_y, 0.0f );
 	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
 	drawCircle(BALL_RADIUS);
-
-	//TODO render Ball relative to playingField
 }
 void Ball::updateMovement(void)
 {
+	int timePassed = getTimeSinceStart() - m_lastUpdate;
+	//TODO take this into account, right now ball is only dependent on cpu cycles! btw: wtf?!
 	float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYPosition();
 	float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYPosition();
 
@@ -75,7 +74,8 @@ void Ball::updateMovement(void)
 		m_state = LEFTOUT;
 		m_state = RIGHTOUT;
 
-	} else if (pCollision) {
+	} else if (pCollision)
+	{
 		m_x-= vector.first;
 		m_y-= vector.second;
 		m_angle = 180 - m_angle;
@@ -84,23 +84,24 @@ void Ball::updateMovement(void)
 
 		//increase ball m_speed
 		m_speed*= BALL_SPEED_INCREASE_FACTOR;
-	} else if (yCollision) {
+	} else if (yCollision)
+	{
 		m_x-= vector.first;
 		m_y-= vector.second;
 		m_angle = 360 - m_angle;
 		m_x+=  vector.first;
 		m_y+=  vector.second;
 	}
+	m_lastUpdate = getTimeSinceStart();
 }
 
 void Ball::drawCircle(float r)
 {
 	glBegin(GL_TRIANGLE_FAN);
-  
-	for (int i=0; i<360; ++i)
+	for (int i=0; i<360; i++)
 	{
 		float degInRad = i * 3.14159f/180;
-		glVertex2f(cos(degInRad)*r, sin(degInRad)*r);
+		glVertex2f(cos(degInRad) * r, sin(degInRad)*r);
 	}
 	glEnd();
 }

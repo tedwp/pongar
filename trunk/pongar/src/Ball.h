@@ -42,5 +42,6 @@ private:
 
 	void drawCircle(float r);
 	void updateMovement(void);
+	long int m_lastUpdate;
 };
 
