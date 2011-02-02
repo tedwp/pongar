@@ -22,7 +22,7 @@ public:
 	void setPlayingField(PlayingField* playingField);
 	void increaseScore(void);
 	int getScore(void);
-	void resetScore(void);
+	void reset();
 
 private:
 	float m_yPosition;

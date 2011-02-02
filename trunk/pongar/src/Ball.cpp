@@ -2,15 +2,7 @@
 
 Ball::Ball(void)
 {
-	m_speed = BALL_SPEED_INIT;
-
-	//init random m_angle (between 30 and -30 deg)
-	//0 deg = ball goes straight up
-	srand ((unsigned) getTimeSinceStart());
-	m_angle = (float) (rand() % 60 - 30);
-
-	m_x = 0.0f;
-	m_y = 0.0f;
+	reset();
 }
 
 
@@ -37,11 +29,14 @@ void Ball::updateMovement(void)
 	float paddle2End = paddle2Start + PADDLE_LENGTH;
 
 	float degInRad = m_angle*3.14159f/180;
-	m_movementVector.first = m_speed * sin(degInRad);
-	m_movementVector.second = m_speed * cos(degInRad);
+	
+	std::pair<float, float> vector;
 
-	m_x+= m_movementVector.first;
-	m_y+= m_movementVector.second;
+	vector.first = m_speed * sin(degInRad);
+	vector.second = m_speed * cos(degInRad);
+
+	m_x+= vector.first;
+	m_y+= vector.second;
 
 	bool xCollision = false;
 	bool yCollision = false;
@@ -81,20 +76,20 @@ void Ball::updateMovement(void)
 		m_state = RIGHTOUT;
 
 	} else if (pCollision) {
-		m_x-= m_movementVector.first;
-		m_y-= m_movementVector.second;
+		m_x-= vector.first;
+		m_y-= vector.second;
 		m_angle = 180 - m_angle;
-		m_x+= m_movementVector.first;
-		m_y+= m_movementVector.second;
+		m_x+= vector.first;
+		m_y+= vector.second;
 
 		//increase ball m_speed
 		m_speed*= BALL_SPEED_INCREASE_FACTOR;
 	} else if (yCollision) {
-		m_x-= m_movementVector.first;
-		m_y-= m_movementVector.second;
+		m_x-= vector.first;
+		m_y-= vector.second;
 		m_angle = 360 - m_angle;
-		m_x+=  m_movementVector.first;
-		m_y+=  m_movementVector.second;
+		m_x+=  vector.first;
+		m_y+=  vector.second;
 	}
 }
 
@@ -110,7 +105,14 @@ void Ball::drawCircle(float r)
 	glEnd();
 }
 
-
+void Ball::reset(void)
+{
+	m_speed = BALL_SPEED_INIT;
+	srand ((unsigned) getTimeSinceStart());
+	m_angle = (float) (rand() % 60 - 30);
+	m_x = 0.0f;
+	m_y = 0.0f;
+}
 void Ball::setPlayingField(PlayingField* playingField)
 {
 	m_playingField = playingField;

@@ -109,7 +109,8 @@ int Paddle::getScore(void)
 {
 	return m_score;
 }
-void Paddle::resetScore(void)
+void Paddle::reset(void)
 {
+	m_yPosition = 0;
 	m_score = 0;
 }
