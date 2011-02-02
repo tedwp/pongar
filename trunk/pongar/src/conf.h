@@ -20,20 +20,20 @@ const int CAM_HEIGHT = 480;
 
 //macbook pro camera: CAM_ANGLE = 60
 //cheap logilink camera: CAM_ANGLE = 75
-const int CAM_ANGLE = 62;
+const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-const float BALL_SPEED_INIT = 3.14159265358979f*0.005f;
+const float BALL_SPEED_INIT = 3.14159265358979f*0.01f;
 const float BALL_SPEED_INCREASE_FACTOR = 1.2f;
 
-const float BALL_RADIUS = 0.05f;
+const float BALL_RADIUS = 0.15f;
 
-const float PLAYINGFIELD_WIDTH = 0.8f;
-const float PLAYINGFIELD_HEIGHT = 0.4f;
+const float PLAYINGFIELD_WIDTH = 8.0f;
+const float PLAYINGFIELD_HEIGHT = 4.0f;
 
-const float PADDLE_LENGTH = 0.2f;
-const float PADDLE_WIDTH = 0.03f;
+const float PADDLE_LENGTH = 1.0f;
+const float PADDLE_WIDTH = 0.2f;
 
 
 //Game

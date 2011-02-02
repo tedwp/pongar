@@ -39,7 +39,7 @@ void PlayingField::render()
 		Graphics::transposeMatrix(m_position, resultTransposedMatrix);
 	
 		glLoadMatrixf( resultTransposedMatrix );
-		glScalef(0.20f, 0.20f, 0.20f);
+		glScalef(0.03, 0.03, 0.03);
 		// draw white rectangle
 		glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);
 		glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
