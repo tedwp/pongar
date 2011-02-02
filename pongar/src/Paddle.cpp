@@ -10,6 +10,7 @@ Paddle::Paddle(void)
 	m_marker = NULL;
 	m_isLeft = true;
 	m_playingField = NULL;
+	m_score = 0;
 }
 
 
@@ -83,10 +84,6 @@ float Paddle::getYPosition(void)
 {
 	return m_yPosition;
 }
-int Paddle::getScore(void)
-{
-	return m_score;
-}
 void Paddle::setMarker(Marker* marker)
 {
 	m_marker = marker;
@@ -103,4 +100,16 @@ void Paddle::setLeft(bool isLeft)
 void Paddle::setPlayingField(PlayingField* playingField)
 {
 	m_playingField = playingField;
+}
+void Paddle::increaseScore(void)
+{
+	m_score++;
+}
+int Paddle::getScore(void)
+{
+	return m_score;
+}
+void Paddle::resetScore(void)
+{
+	m_score = 0;
 }

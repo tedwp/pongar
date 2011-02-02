@@ -1,19 +1,16 @@
 #include "Ball.h"
 
-
 Ball::Ball(void)
 {
-	speed = BALL_SPEED_INIT;
+	m_speed = BALL_SPEED_INIT;
 
-	//init random angle (between 30 and -30 deg)
+	//init random m_angle (between 30 and -30 deg)
 	//0 deg = ball goes straight up
 	srand ((unsigned) getTimeSinceStart());
-	angle = (float) (rand() % 60 - 30);
+	m_angle = (float) (rand() % 60 - 30);
 
-	position.first = 0.0;
-	position.second = 0.0;
-
-	
+	m_x = 0.0f;
+	m_y = 0.0f;
 }
 
 
@@ -23,59 +20,82 @@ Ball::~Ball(void)
 
 void Ball::render(void)
 {
+	updateMovement();
+
+	glTranslatef( m_x, m_y, 0.0f );
+	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
+	drawCircle(BALL_RADIUS);
+
+	//TODO render Ball relative to playingField
+}
+void Ball::updateMovement(void)
+{
 	float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYPosition();
 	float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYPosition();
 
 	float paddle1End = paddle1Start + PADDLE_LENGTH;
 	float paddle2End = paddle2Start + PADDLE_LENGTH;
 
-	float degInRad=angle*3.14159f/180;
-	vector.first = speed * sin(degInRad);
-	vector.second = speed * cos(degInRad);
+	float degInRad = m_angle*3.14159f/180;
+	m_movementVector.first = m_speed * sin(degInRad);
+	m_movementVector.second = m_speed * cos(degInRad);
 
-	position.first = position.first + vector.first;
-	position.second = position.second + vector.second;
+	m_x+= m_movementVector.first;
+	m_y+= m_movementVector.second;
 
 	bool xCollision = false;
 	bool yCollision = false;
 	bool pCollision = false;
-	if (position.second+BALL_RADIUS > PLAYINGFIELD_WIDTH/2) xCollision = true;
-	if (position.second-BALL_RADIUS < -PLAYINGFIELD_WIDTH/2) xCollision = true;
-	if (position.first+BALL_RADIUS > PLAYINGFIELD_HEIGHT/2) yCollision = true;
-	if (position.first-BALL_RADIUS < -PLAYINGFIELD_HEIGHT/2) yCollision = true;
-	if (!xCollision && position.second-BALL_RADIUS <= -0.75 && position.first<=paddle1Start && position.first>=paddle1End) pCollision = true;
-	if (!xCollision && position.second+BALL_RADIUS >= 0.75 && position.first<=paddle2Start && position.first>=paddle2End) pCollision = true;
+	if (m_y + BALL_RADIUS > PLAYINGFIELD_WIDTH/2)
+		xCollision = true;
+	
+	if (m_y - BALL_RADIUS < -PLAYINGFIELD_WIDTH/2)
+		xCollision = true;
+	
+	if (m_x + BALL_RADIUS > PLAYINGFIELD_HEIGHT/2)
+		yCollision = true;
+	
+	if (m_x - BALL_RADIUS < -PLAYINGFIELD_HEIGHT/2)
+		yCollision = true;
+	
+	if (!xCollision
+		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH
+		&& m_x<=paddle1Start && m_x>=paddle1End
+		)
+		pCollision = true;
+	
+	if (!xCollision
+		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH
+		&& m_x<=paddle2Start && m_x>=paddle2End
+		)
+		pCollision = true;
+	
+	
+	if(!xCollision)
+		m_state = ONFIELD;
 
 	if (xCollision)
 	{
-		// GAME OVER
-		Game::getInstance().setGameStage(Game::STAGE_OVER);
+		// Left or right?
+		m_state = LEFTOUT;
+		m_state = RIGHTOUT;
+
 	} else if (pCollision) {
-		position.first = position.first - vector.first;
-		position.second = position.second - vector.second;
-		angle = 180-angle;
-		position.first = position.first + vector.first;
-		position.second = position.second + vector.second;
+		m_x-= m_movementVector.first;
+		m_y-= m_movementVector.second;
+		m_angle = 180 - m_angle;
+		m_x+= m_movementVector.first;
+		m_y+= m_movementVector.second;
 
-		//increase ball speed
-		speed = speed * BALL_SPEED_INCREASE_FACTOR;
+		//increase ball m_speed
+		m_speed*= BALL_SPEED_INCREASE_FACTOR;
 	} else if (yCollision) {
-		position.first = position.first - vector.first;
-		position.second = position.second - vector.second;
-		angle = 360-angle;
-		position.first = position.first + vector.first;
-		position.second = position.second + vector.second;
+		m_x-= m_movementVector.first;
+		m_y-= m_movementVector.second;
+		m_angle = 360 - m_angle;
+		m_x+=  m_movementVector.first;
+		m_y+=  m_movementVector.second;
 	}
-
-
-
-	glTranslatef( position.first, position.second, 0.0 );
-	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
-	drawCircle(BALL_RADIUS);
-
-
-	//TODO render Ball relative to playingField
-	//TODO render as a Circle due to backprojection
 }
 
 void Ball::drawCircle(float r)
@@ -84,16 +104,52 @@ void Ball::drawCircle(float r)
   
 	for (int i=0; i<360; ++i)
 	{
-		float degInRad=i*3.14159f/180;
+		float degInRad = i * 3.14159f/180;
 		glVertex2f(cos(degInRad)*r, sin(degInRad)*r);
 	}
 	glEnd();
 }
 
 
-
-
 void Ball::setPlayingField(PlayingField* playingField)
 {
 	m_playingField = playingField;
+}
+
+int Ball::getState(void)
+{
+	return m_state;
+}
+
+void Ball::enableActionSpeedIncrease(void)
+{
+	if(!m_actionSpeedIncreaseEnabled)
+	{
+		m_speed *= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_actionSpeedIncreaseEnabled = true;
+	}
+}
+void Ball::disableActionSpeedIncrease(void)
+{
+	if(m_actionSpeedIncreaseEnabled)
+	{
+		m_speed /= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_actionSpeedIncreaseEnabled = false;
+	}
+}
+void Ball::enableActionSpeedDecrease(void)
+{
+	if(!m_actionSpeedDecreaseEnabled)
+	{
+		m_speed *= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_actionSpeedDecreaseEnabled = true;
+	}
+}
+void Ball::disableActionSpeedDecrease(void)
+{
+	if(m_actionSpeedDecreaseEnabled)
+	{
+		m_speed /= ACTION_DECREASESPEED_BALL_FACTOR;
+		m_actionSpeedDecreaseEnabled = false;
+	}
 }

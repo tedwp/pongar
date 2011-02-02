@@ -119,9 +119,7 @@ void Graphics::finish2D(void)
 {
 	glPopMatrix();
 	glEnable(GL_DEPTH_TEST);
-
-	
-	// move to origin
+// move to origin
     glMatrixMode( GL_MODELVIEW );
 }
 void Graphics::prepareForDisplay(void)
@@ -139,8 +137,6 @@ void Graphics::prepareForDisplay(void)
 }
 void Graphics::redrawDisplay(void)
 {
-
-	// redraw
     glutSwapBuffers();
 }
 
@@ -172,10 +168,7 @@ void Graphics::doResize( int w, int h)
 void Graphics::fullScreenEnter(void)
 {
 	if(!isInFullScreen && FULLSCREEN_ENABLED)
-	{	char* result = "";
-		//sprintf( result, "%dx%d:%d@%d", width ,height, fullScreenBitRate ,fullScreenRefreshRate);
-		result = "640x480:32@60";
-		//glutGameModeString( result);
+	{	//glutGameModeString( "640x480:32@60");
 		//glutEnterGameMode();
 		//TODO fix above only if gamemode is needed
 		isInFullScreen = true;
@@ -194,6 +187,7 @@ void Graphics::fullScreenLeave(void)
 }
 void Graphics::showString(std::string& str, float r, float g, float b, int cx, int y)
 {
+	y = CAM_HEIGHT - y;
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	int f = 2;
 	glRasterPos3f((GLfloat) cx -f, (GLfloat) y -f, (GLfloat) 0);

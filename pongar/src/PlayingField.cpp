@@ -120,3 +120,7 @@ Paddle* PlayingField::getRightPaddle(void)
 {
 	return m_rightPaddle;
 }
+Ball* PlayingField::getBall(void)
+{
+	return m_ball;
+}

@@ -52,3 +52,8 @@ const int INITIALIZATION_DURATION = 3000; //millisec
 //#include "Color.h"
 //const Color BallColor = {red:10,green:10,blue:10};
 
+
+//Actions
+
+const float ACTION_INCREASESPEED_BALL_FACTOR = 1.1f;
+const float ACTION_DECREASESPEED_BALL_FACTOR = 0.9f;
