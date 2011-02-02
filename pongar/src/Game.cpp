@@ -81,28 +81,29 @@ void Game::idle( void )
 	switch(m_gameStage)
 	{
 		case STAGE_BEAMERCALIBRATION:
-			UI::getInstance().showHeading("STAGE_BEAMERCALIBRATION");
 			performStageBeamerCalibration();
 		break;
 
 		case STAGE_STARTUP:
-			UI::getInstance().showHeading("STAGE_STARTUP");
 			performStageStartup();
 		break;
 		
 		case STAGE_INITIALIZATION:
-			UI::getInstance().showHeading("STAGE_INITIALIZATION");
 			performStageInitialization();
 			break;
 		
 		case STAGE_RUNNING:
-			UI::getInstance().showHeading("STAGE_RUNNING");
 			performStageRunning();
 			break;
-
+			
 		case STAGE_PAUSE:
-			UI::getInstance().showHeading( "STAGE_PAUSE");
 			performStagePause();
+			break;
+		case STAGE_WON_LEFT:
+			performStageWon(true);
+			break;
+		case STAGE_WON_RIGHT:
+			performStageWon(false);
 			break;
 		default:
 		break;
@@ -112,6 +113,7 @@ void Game::idle( void )
 }
 void Game::performStageBeamerCalibration(void)
 {
+	UI::getInstance().showHeading("STAGE_BEAMERCALIBRATION");
 	//Graphics::showImage("marker.jpg");
 	//Track the marker and estimate the canvas' pose
 
@@ -131,6 +133,7 @@ void Game::performStageBeamerCalibration(void)
 
 void Game::performStageStartup(void)
 {
+	UI::getInstance().showHeading("STAGE_STARTUP");
 	UI::getInstance().showInstruction("Bitte Spielfeldmarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
@@ -155,6 +158,7 @@ void Game::performStageStartup(void)
 }
 void Game::performStageInitialization(void)
 {
+	UI::getInstance().showHeading("STAGE_INITIALIZATION");
 	UI::getInstance().showInstruction("Bitte Paddlemarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PADDLE1) && isMarkerPresent(PURPOSE_PADDLE2) )
 	{
@@ -183,29 +187,37 @@ void Game::performStageInitialization(void)
 }
 void Game::performStageRunning(void)
 {
+	UI::getInstance().showHeading("STAGE_RUNNING");
+
 	PlayingField::getInstance().updatePaddlePositions();
 	PlayingField::getInstance().render();
-	if(PlayingField::getInstance().getBall()->getState() != Ball::ONFIELD)
+	Ball* ball = PlayingField::getInstance().getBall();
+	if(ball->getState() != Ball::ONFIELD)
 	{
-		if(PlayingField::getInstance().getBall()->getState() == Ball::LEFTOUT)
-		{
+		if(ball->getState() == Ball::LEFTOUT)
 			PlayingField::getInstance().getRightPaddle()->increaseScore();
-		}
-		if(PlayingField::getInstance().getBall()->getState() != Ball::RIGHTOUT)
-		{
+
+		else if(ball->getState() != Ball::RIGHTOUT)
 			PlayingField::getInstance().getLeftPaddle()->increaseScore();
-		}
+
+		if(PlayingField::getInstance().getLeftPaddle()->getScore() > MAX_POINTS_PER_ROUND)
+			setGameStage(STAGE_WON_LEFT);
+
+		if(PlayingField::getInstance().getRightPaddle()->getScore() > MAX_POINTS_PER_ROUND)
+			setGameStage(STAGE_WON_RIGHT);
 	}
 
 	if(isMarkerPresent(PURPOSE_PAUSE))
+	{
 		setGameStage(STAGE_PAUSE);
+	}
 	else
 	{
 		UI::getInstance().showScores();
 		//TODO Idee haben: Aktuell müssen alle actions erst deaktiviert werden
 		
-		PlayingField::getInstance().getBall()->disableActionSpeedIncrease();
-		PlayingField::getInstance().getBall()->disableActionSpeedDecrease();
+		ball->disableActionSpeedIncrease();
+		ball->disableActionSpeedDecrease();
 
 
 		if(isActionMarkerPresent())
@@ -224,7 +236,7 @@ void Game::performStageRunning(void)
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_BALL))
 			{
-				PlayingField::getInstance().getBall()->enableActionSpeedIncrease();
+				ball->enableActionSpeedIncrease();
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
 			{
@@ -234,7 +246,7 @@ void Game::performStageRunning(void)
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_BALL))
 			{
-				PlayingField::getInstance().getBall()->enableActionSpeedDecrease();
+				ball->enableActionSpeedDecrease();
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
 			{
@@ -247,18 +259,35 @@ void Game::performStageRunning(void)
 }
 void Game::performStagePause(void)
 {
+	UI::getInstance().showHeading( "STAGE_PAUSE");
 	if(!isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_RUNNING);
 			
 	if(isMarkerPresent(PURPOSE_RESTARTGAME))
 	{
-		/*
-		TODO do restart stuff
-		*/
+		performRestart();
 		setGameStage(STAGE_RUNNING);
 	}
 }
-
+void Game::performStageWon(bool isLeft)
+{
+	UI::getInstance().showHeading( "GAME_OVER");
+	if(isLeft)
+		UI::getInstance().showInstruction("Links hat gewonnen");
+	else
+		UI::getInstance().showInstruction("rechts hat gewonnen");
+	if(isMarkerPresent(PURPOSE_RESTARTGAME))
+	{
+		performRestart();
+		setGameStage(STAGE_RUNNING);
+	}
+}
+void Game::performRestart(void)
+{
+	PlayingField::getInstance().getBall()->reset();
+	PlayingField::getInstance().getLeftPaddle()->reset();
+	PlayingField::getInstance().getRightPaddle()->reset();
+}
 bool Game::isActionMarkerPresent(void)
 {
 	for(unsigned i = 0; i < getInstance().m_markers.size(); i++)

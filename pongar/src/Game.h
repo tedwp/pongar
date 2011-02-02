@@ -55,12 +55,14 @@ public:
 	static const int STAGE_INITIALIZATION = 3;
 	static const int STAGE_RUNNING = 4;
 	static const int STAGE_PAUSE = 5;
-	static const int STAGE_OVER = 6;
+	static const int STAGE_WON_LEFT = 6;
+	static const int STAGE_WON_RIGHT = 7;
 
 private:
 	static Game& m_instance;
 	std::vector<Marker*> m_markers;
 	int m_gameStage;
+	long int timerStart;
 
 	Game(void);
 	Game(const Game&);
@@ -75,7 +77,8 @@ private:
 	void performStageInitialization(void);
 	void performStageRunning(void);
 	void performStagePause(void);
-	long int timerStart;
+	void performStageWon(bool isLeft);
+	void performRestart(void);
 };
 
 

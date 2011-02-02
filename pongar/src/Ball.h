@@ -15,6 +15,7 @@ public:
 	void setPlayingField(PlayingField* playingField);
 	
 	int getState(void);
+	void reset(void);
 
 	void enableActionSpeedIncrease(void);
 	void disableActionSpeedIncrease(void);
@@ -35,7 +36,6 @@ private:
 	PlayingField* m_playingField;
 	float m_speed;
 	float m_angle;
-	std::pair<float, float> m_movementVector;
 	
 	bool m_actionSpeedIncreaseEnabled;
 	bool m_actionSpeedDecreaseEnabled;
