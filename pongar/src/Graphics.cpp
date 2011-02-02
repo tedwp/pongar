@@ -10,14 +10,14 @@
 Graphics::Graphics(void)
 {
 	isInFullScreen = false;
+	m_mainWindow = 0;
 }
 
 
 Graphics::~Graphics(void)
 {
-	fullScreenLeave();
+	cleanup();
 }
-
 Graphics& Graphics::getInstance(void)
 {
 	static Graphics m_instance;
@@ -30,7 +30,7 @@ void Graphics::init(int argc, char* argv[])
     glutInit( &argc, argv);
     glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutCreateWindow("PongAR");
+    m_mainWindow = glutCreateWindow("PongAR");
 
     // initialize the GL library
 
@@ -233,4 +233,10 @@ void Graphics::transposeMatrix(float* src, float* dst)
 			dst[x*4+y] = src[y*4+x];
 		}
 	}
+}
+
+void Graphics::cleanup(void)
+{
+	glutDestroyWindow(m_mainWindow);
+	fullScreenLeave();
 }
