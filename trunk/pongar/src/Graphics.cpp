@@ -9,7 +9,8 @@
 
 Graphics::Graphics(void)
 {
-	isInFullScreen = false;
+	m_isInFullScreen = false;
+	m_isInGameMode = false;
 	m_mainWindow = 0;
 }
 
@@ -33,6 +34,12 @@ void Graphics::init(int argc, char* argv[])
     m_mainWindow = glutCreateWindow("PongAR");
 
     // initialize the GL library
+
+	
+	if(FULLSCREEN_ONSTARTUP)
+		fullScreenEnter();
+	else fullScreenLeave();
+
 
     // pixel storage/packing stuff
     glPixelStorei( GL_PACK_ALIGNMENT,   1 );
@@ -65,11 +72,10 @@ void Graphics::init(int argc, char* argv[])
     glutIdleFunc( getInstance().idle);
 
 	
-	glutIgnoreKeyRepeat(1);
+	glutIgnoreKeyRepeat(false);
 	glutKeyboardFunc(Keyboard::pressKey);
 	glutSpecialFunc(Keyboard::pressSpecialKey);
 
-	fullScreenLeave();
 
 }
 void Graphics::idle(void)
@@ -111,8 +117,7 @@ void Graphics::prepare2D(void)
     glPushMatrix();
     glLoadIdentity();
     gluOrtho2D( 0.0, CAM_WIDTH, 0.0, CAM_HEIGHT );
-
-    glRasterPos2i( 0, CAM_HEIGHT-1 );
+	glRasterPos2i( 0, CAM_HEIGHT-1 );
    
 }
 void Graphics::finish2D(void)
@@ -167,25 +172,37 @@ void Graphics::doResize( int w, int h)
 }
 void Graphics::fullScreenEnter(void)
 {
-	if(!isInFullScreen && FULLSCREEN_ENABLED)
-	{	//glutGameModeString( "640x480:32@60");
-		//glutEnterGameMode();
-		//TODO fix above only if gamemode is needed
-		isInFullScreen = true;
-		glutFullScreen();
+	if(!m_isInFullScreen && FULLSCREEN_ENABLED)
+	{	
+		std::string tmp1 = toString(CAM_WIDTH) + "x" + toString(CAM_HEIGHT) + ":" + toString(FULLSCREEN_BITRATE)+ "@" + toString(FULLSCREEN_REFRESHRATE);
+		glutGameModeString(tmp1.c_str());
+		if(FULLSCREEN_USEGAMEMODE && FULLSCREEN_ONSTARTUP && (FULLSCREEN_DISABLECHECK || glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)))
+		{
+			glutEnterGameMode();
+			m_isInGameMode = true;
+		}
+		else
+		{
+			glutFullScreen();
+		}
+		m_isInFullScreen = true;
+		
 	}
 }
 void Graphics::fullScreenSwitch(void)
 {
-	isInFullScreen ? fullScreenLeave() : fullScreenEnter();
+	m_isInFullScreen ? fullScreenLeave() : fullScreenEnter();
 }
 void Graphics::fullScreenLeave(void)
 {
-	glutPositionWindow((int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5), (int)  ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5));
-	glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
-	isInFullScreen = false;
+	if(!FULLSCREEN_USEGAMEMODE || !FULLSCREEN_ONSTARTUP)
+	{
+		glutPositionWindow((int) ((glutGet(GLUT_SCREEN_WIDTH) - CAM_WIDTH) * .5), (int)  ((glutGet(GLUT_SCREEN_HEIGHT) - CAM_HEIGHT) * .5));
+		glutReshapeWindow(CAM_WIDTH, CAM_HEIGHT);
+		m_isInFullScreen = false;
+	}
 }
-void Graphics::showString(std::string& str, float r, float g, float b, int cx, int y)
+void Graphics::showString(std::string str, Color& c, int cx, int y)
 {
 	y = CAM_HEIGHT - y;
 	glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -206,17 +223,16 @@ void Graphics::showString(std::string& str, float r, float g, float b, int cx, i
 	for(unsigned int i = 0; i < str.length(); i++)
     	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 
-	glRasterPos3f((GLfloat) cx, (GLfloat) y+f, (GLfloat) 0);
+	glRasterPos3f((GLfloat) cx, (GLfloat) y +f, (GLfloat) 0);
 	for(unsigned int i = 0; i < str.length(); i++)
     	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 	
-	glRasterPos3f((GLfloat) cx +f, (GLfloat) y+f, (GLfloat) 0);
+	glRasterPos3f((GLfloat) cx +f, (GLfloat) y +f, (GLfloat) 0);
 	for(unsigned int i = 0; i < str.length(); i++)
     	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
 
 
-
-    glColor3f(r, g, b);
+    glColor4f(c.red, c.green, c.blue, c.alpha);
 	glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
 	for(unsigned int i = 0; i < str.length(); i++)
     	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);

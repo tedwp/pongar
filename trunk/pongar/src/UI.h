@@ -3,7 +3,7 @@
 #include <string>
 
 #include "conf.h"
-
+#include "Color.h"
 #include "Graphics.h"
 
 class UI
@@ -16,6 +16,7 @@ public:
 	void showInstruction(std::string instruction);
 	void showScores(void);
 	void drawStuffOnTop(void);
+	void beep(void);
 
 private:
 	UI(void);
@@ -23,6 +24,7 @@ private:
 	~UI(void);
 	std::string m_heading;
 	std::string m_instructions;
+	Color m_textColor;
 };
 /*
 std::string UI::m_heading;

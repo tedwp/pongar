@@ -4,8 +4,8 @@ using namespace std;
 
 Capture::Capture(void)
 {
-	threshold = THRESHOLD;
-	bw_threshold = THRESHOLD_BW;
+	m_threshold = THRESHOLD;
+	m_thresholdBW = THRESHOLD_BW;
 }
 
 Capture::~Capture(void)
@@ -22,21 +22,21 @@ Capture& Capture::getInstance(void)
 void Capture::init()
 {
 	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
-	cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
-	cvResizeWindow("Converted", 300, 80);
+	//cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	//cvResizeWindow("Converted", 300, 80);
 	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
 	/*cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );*/
 	
 	initVideoStream();
 	
-	int value = threshold;
+	/*int value = m_threshold;
 	int max = 255;
 	cvCreateTrackbar( "Threshold", "Converted", &value, max, trackbarHandler);
 	
-	int bw_value = Capture::getInstance().bw_threshold;
+	int bw_value = Capture::getInstance().m_thresholdBW;
 	cvCreateTrackbar( "BW Threshold", "Converted", &bw_value, max, bw_trackbarHandler);
-
+	*/
 	m_memStorage = cvCreateMemStorage();
 }
 
@@ -76,7 +76,7 @@ void Capture::updateMarkerPositions(void)
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 
 	cvConvertImage(iplGrabbed, iplConverted, 0);
-	cvThreshold(iplConverted, iplThreshold, Capture::getInstance().threshold, 255, CV_THRESH_BINARY);
+	cvThreshold(iplConverted, iplThreshold, getInstance().m_thresholdBW, 255, CV_THRESH_BINARY);
 	//cvAdaptiveThreshold(iplConverted, iplThreshold, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 33, 5);
 
 	// Find Contours
@@ -327,7 +327,7 @@ void Capture::updateMarkerPositions(void)
 			//change the perspective in the marker image using the previously calculated matrix
 			cvWarpPerspective(iplConverted, iplMarker, projMat, CV_WARP_FILL_OUTLIERS,  cvScalarAll(0));
 			
-			cvThreshold(iplMarker, iplMarker, Capture::getInstance().bw_threshold, 255, CV_THRESH_BINARY);
+			cvThreshold(iplMarker, iplMarker, Capture::getInstance().m_thresholdBW, 255, CV_THRESH_BINARY);
 
 			//now we have a B/W image of a supposed Marker
 
@@ -468,18 +468,47 @@ void Capture::cleanup()
 	cvReleaseMemStorage (&m_memStorage);
 	cvReleaseCapture (&(Capture::getInstance().m_cap));
 	//cvDestroyWindow ("Original Image");
-	cvDestroyWindow ("Converted");
+	//cvDestroyWindow ("Converted");
 	//cvDestroyWindow ("Stripe");
 	//cvDestroyWindow ("Marker");
 }
 
 //trackbar
-void Capture::trackbarHandler(int pos)
+/*void Capture::trackbarHandler(int pos)
 {
-	getInstance().threshold = pos;
+	getInstance().m_thresholdBW = pos;
 }
 
 void Capture::bw_trackbarHandler(int pos)
 {
-	getInstance().bw_threshold = pos;
+	getInstance().m_thresholdBW = pos;
+}*/
+
+int Capture::getThreshold(void)
+{
+	return m_threshold;
+}
+int Capture::getThresholdBW(void)
+{
+	return m_thresholdBW;
+}
+void Capture::increaseThreshold(void)
+{
+	if(m_threshold < 255)
+		m_threshold++;
+}
+void Capture::increaseThresholdBW(void)
+{
+	if(m_thresholdBW < 255)
+		m_thresholdBW++;
+}
+void Capture::decreaseThreshold(void)
+{
+	if(m_thresholdBW > 0)
+		m_threshold--;
+}
+void Capture::decreaseThresholdBW(void)
+{
+	if(m_thresholdBW > 0)
+		m_thresholdBW--;
 }

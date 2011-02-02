@@ -2,6 +2,7 @@
 #include "conf.h"
 #include "PlayingField.h"
 #include "Keyboard.h"
+#include "Color.h"
 #include <string>
 
 class Graphics
@@ -16,13 +17,14 @@ public:
 	void fullScreenEnter(void);
 	void fullScreenLeave(void);
 	void fullScreenSwitch(void);
-	void showString(std::string& str, float r, float g, float b, int cx, int y);
+	void showString(std::string str, Color& c, int cx, int y);
 
 	static void transposeMatrix(float* src, float* dst);
 	void cleanup(void);
 
 private:
-	bool isInFullScreen;
+	bool m_isInFullScreen;
+	bool m_isInGameMode;
 	static Graphics& m_instance;
 	int m_mainWindow;
 	Graphics(void);
