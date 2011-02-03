@@ -92,6 +92,9 @@
     <ClInclude Include="..\src\ColoredObject.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PongAR.rc">
@@ -100,6 +103,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\marker.jpg">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\icon2.ico">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\icon.ico">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_32.png">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_16.png">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_128.png">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_256.png">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>
