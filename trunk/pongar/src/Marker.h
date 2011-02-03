@@ -15,9 +15,7 @@ public:
 	int getId(void);
 	int getPurpose(void);
 	void setPurpose(int p);
-
-	void setOffset(float offset);
-	float getOffset();
+	
 	void clearHasPositionChanged(void);
 	bool hasPositionChanged(void);
 

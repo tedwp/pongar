@@ -9,11 +9,6 @@ Marker::Marker(int id)
 	m_lastUpdateTime = -1;
 
 	m_locked = false;
-	/*if(id == Game::PURPOSE_PLAYINGFIELD)
-		m_positionChanged = false;
-	else
-		m_positionChanged = true;*/
-	//TODO was haben die 4 zeilen darüber zu bedeuten?
 }
 
 
