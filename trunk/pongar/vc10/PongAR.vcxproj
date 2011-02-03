@@ -123,10 +123,6 @@
     <ResourceCompile Include="PongAR.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_128.png" />
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_16.png" />
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_256.png" />
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_32.png" />
     <None Include="..\icon.ico" />
     <None Include="..\icon2.ico" />
     <None Include="..\marker.jpg" />

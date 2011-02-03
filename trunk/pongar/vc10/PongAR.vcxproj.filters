@@ -111,17 +111,5 @@
     <None Include="..\icon.ico">
       <Filter>Ressourcendateien</Filter>
     </None>
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_32.png">
-      <Filter>Ressourcendateien</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_16.png">
-      <Filter>Ressourcendateien</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_128.png">
-      <Filter>Ressourcendateien</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\Desktop\My Dropbox\uni\1011\ar\PongAR\icon_256.png">
-      <Filter>Ressourcendateien</Filter>
-    </None>
   </ItemGroup>
 </Project>
