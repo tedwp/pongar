@@ -21,11 +21,14 @@ void Ball::updateMovement(void)
 {
 	int timePassed = getTimeSinceStart() - m_lastUpdate;
 	//TODO take this into account, right now ball is only dependent on cpu cycles! btw: wtf?!
-	float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
-	float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
+	//float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
+	//float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
+  
+	float paddle1End =  -m_playingField->getLeftPaddle()->getYRenderPosition();
+	float paddle2End =  -m_playingField->getRightPaddle()->getYRenderPosition();
 
-	float paddle1End = paddle1Start + PADDLE_LENGTH;
-	float paddle2End = paddle2Start + PADDLE_LENGTH;
+	float paddle1Start = paddle1End + PADDLE_LENGTH;
+	float paddle2Start = paddle2End + PADDLE_LENGTH;
 
 	float degInRad = m_angle*3.14159f/180;
 	
@@ -54,13 +57,13 @@ void Ball::updateMovement(void)
 	
 	if (!xCollision
 		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH
-		&& m_x<=paddle1Start && m_x>=paddle1End
+		&& m_x <= -paddle1End && m_x >= -paddle1Start
 		)
 		pCollision = true;
 	
 	if (!xCollision
 		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH
-		&& m_x<=paddle2Start && m_x>=paddle2End
+		&& m_x <= -paddle2End && m_x >= -paddle2Start
 		)
 		pCollision = true;
 	
