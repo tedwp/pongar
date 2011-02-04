@@ -105,9 +105,6 @@
     <None Include="..\marker.jpg">
       <Filter>Ressourcendateien</Filter>
     </None>
-    <None Include="..\icon2.ico">
-      <Filter>Ressourcendateien</Filter>
-    </None>
     <None Include="..\icon.ico">
       <Filter>Ressourcendateien</Filter>
     </None>

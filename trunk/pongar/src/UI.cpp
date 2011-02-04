@@ -48,12 +48,12 @@ void UI::showInstruction(std::string instruction)
 
 void UI::drawStuffOnTop(void)
 {
-	Graphics::getInstance().showString(m_instructions, m_textColor, 100, 100);
+	Graphics::getInstance().showString(m_instructions, m_textColor, 50, 200);
 
 	string th =  toString(Capture::getInstance().getThreshold()/255.0 * 100);
 	string thbw =  toString(Capture::getInstance().getThresholdBW()/255.0 * 100);
 
-	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 100, 10);
+	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 20, 20);
 
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{

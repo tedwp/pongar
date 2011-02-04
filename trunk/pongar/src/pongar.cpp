@@ -1,4 +1,6 @@
-//schtest
+//Blendet die Konsole unter Windows von Anfang an aus
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") 
+
 #include "conf.h"
 #include "Game.h"
 #include <string>
@@ -22,6 +24,9 @@ std::string toString(double a)
 
 int main(int argc, char* argv[]) 
 {
+	//Blendet die Konsole unter allen Systemen kurz nach dem Start aus
+	if(HIDE_CONSOLE)
+		FreeConsole();
 	Game::getInstance().init(argc, argv);
 	Game::getInstance().start();
     return 0;
