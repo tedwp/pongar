@@ -124,7 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\icon.ico" />
-    <None Include="..\icon2.ico" />
     <None Include="..\marker.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
