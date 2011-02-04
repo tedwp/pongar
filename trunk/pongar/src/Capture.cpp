@@ -70,7 +70,15 @@ void Capture::updateMarkerPositions(void)
 	}
 
 	CvSize picSize = cvGetSize(iplGrabbed);
-	memcpy( Graphics::getInstance().m_bkgnd, iplGrabbed->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
+	IplImage* iplDisplay;
+	if (FLIP_IMAGE){
+		iplDisplay = cvCreateImage(picSize, iplGrabbed->depth, iplGrabbed->nChannels);
+		cvFlip(iplGrabbed, iplDisplay, 1);
+	} else {
+		iplDisplay = cvCloneImage(iplGrabbed);
+	}
+	
+	memcpy( Graphics::getInstance().m_bkgnd, iplDisplay->imageData, sizeof(Graphics::getInstance().m_bkgnd) );
 
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
@@ -439,6 +447,7 @@ void Capture::updateMarkerPositions(void)
 
 	cvReleaseImage (&iplConverted);
 	cvReleaseImage (&iplThreshold);
+	cvReleaseImage (&iplDisplay);
 
 	cvClearMemStorage ( Capture::getInstance().m_memStorage );
 }
