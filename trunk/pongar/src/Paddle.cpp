@@ -22,8 +22,8 @@ void Paddle::render(void)
 {
 	glTranslatef( 0.0f, 0.0f, -0.01f );
 	
-	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
-	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
+	float paddle1YStart =  m_size/2 - m_yPosition;
+	float paddle1YEnd = -m_size/2 - m_yPosition;
 
 	if (paddle1YEnd > PLAYINGFIELD_HEIGHT/2)
 	{
