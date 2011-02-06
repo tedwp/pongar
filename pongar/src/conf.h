@@ -14,7 +14,10 @@ std::string toString(double a);
 const int THRESHOLD = 160;
 const int THRESHOLD_BW = 130;
 
-//camera
+//////////////////////////////////////////////////////////////
+// Camera settings
+//////////////////////////////////////////////////////////////
+
 const int CAM_WIDTH = 640; 
 const int CAM_HEIGHT = 480;
 
@@ -23,6 +26,8 @@ const int CAM_HEIGHT = 480;
 const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
+
+
 
 const bool FLIP_IMAGE = true;
 
