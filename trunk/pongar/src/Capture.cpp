@@ -22,9 +22,11 @@ Capture& Capture::getInstance(void)
 void Capture::init()
 {
 	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
-	if(SHOW_CONVERTED)
+	if(SHOW_CONVERTED && !FULLSCREEN_ENABLED)
+	{
 		cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
-	cvResizeWindow("Converted", 300, 80);
+		cvResizeWindow("Converted", 300, 80);
+	}
 	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
 	/*cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );*/
@@ -310,11 +312,11 @@ void Capture::updateMarkerPositions(void)
 				//exact corner
 				corners[i].x = (float) a; 
 				corners[i].y = (float) b;
-				CvPoint p;
+				/*CvPoint p;
 				p.x = (int)corners[i].x;
 				p.y = (int)corners[i].y;
 
-				cvCircle (iplGrabbed, p, 5, CV_RGB(i*60,i*60,0), -1);
+				cvCircle (iplGrabbed, p, 5, CV_RGB(i*60,i*60,0), -1);*/
 			} //finished the calculation of the exact corners
 
 			CvPoint2D32f targetCorners[4];
@@ -441,7 +443,7 @@ void Capture::updateMarkerPositions(void)
 
 	/*cvShowImage("Original Image", iplGrabbed);
 	*/
-	if(SHOW_CONVERTED)
+	if(SHOW_CONVERTED && !FULLSCREEN_ENABLED)
 		cvShowImage("Converted", iplThreshold);
 	
 
@@ -481,7 +483,7 @@ void Capture::cleanup()
 	cvReleaseCapture (&(Capture::getInstance().m_cap));
 	//cvDestroyWindow ("Original Image");
 	
-	if(SHOW_CONVERTED)
+	if(SHOW_CONVERTED && !FULLSCREEN_ENABLED)
 		cvDestroyWindow ("Converted");
 	//cvDestroyWindow ("Stripe");
 	//cvDestroyWindow ("Marker");
