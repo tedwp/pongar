@@ -5,6 +5,11 @@
 #include "Color.h"
 #include <string>
 
+struct vertex
+{
+	float x, y, z;
+};
+
 class Graphics
 {
 public:
@@ -19,6 +24,10 @@ public:
 	void fullScreenSwitch(void);
 	void showString(std::string str, Color& c, int cx, int y);
 
+	void setCamPosition( vertex& pos );
+	vertex& getCamPosition( void );
+	void moveCamera( float x, float y , float z );
+
 	static void transposeMatrix(float* src, float* dst);
 	void cleanup(void);
 
@@ -27,10 +36,11 @@ private:
 	bool m_isInGameMode;
 	static Graphics& m_instance;
 	int m_mainWindow;
+	vertex m_camPosition;
+
 	Graphics(void);
 	Graphics(const Graphics&);
 	~Graphics(void);
-
 
 	static void render();
 	void doRender(void);
