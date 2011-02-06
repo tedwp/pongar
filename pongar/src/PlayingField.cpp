@@ -34,11 +34,13 @@ void PlayingField::render()
 {
 	if(getCorrespondingMarker() != NULL)
 	{
+		vertex camPosition = Graphics::getInstance().getCamPosition();
 		float* m_position = getCorrespondingMarker()->getPosition();
 		float resultTransposedMatrix[16];
 		Graphics::transposeMatrix(m_position, resultTransposedMatrix);
 	
 		glLoadMatrixf( resultTransposedMatrix );
+		glTranslatef( camPosition.x, camPosition.y, camPosition.z );
 		glScalef(0.03f, 0.03f, 0.03f);
 		// draw white rectangle
 		glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);

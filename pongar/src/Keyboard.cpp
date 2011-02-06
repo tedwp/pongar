@@ -42,6 +42,30 @@ void Keyboard::doPressKey(unsigned char key, int x, int y)
 		case 0x66: // "f"
 			Graphics::getInstance().fullScreenSwitch();
 			break;
+
+		case 0x61: // "a"
+			Graphics::getInstance().moveCamera( 0.0f, CAM_CALIB_STEP, 0.f );
+			break;
+
+		case 0x64: // "d"
+			Graphics::getInstance().moveCamera( 0.f, -CAM_CALIB_STEP, 0.f );
+			break;
+		
+		case 0x73: // "s"
+			Graphics::getInstance().moveCamera( CAM_CALIB_STEP, 0.f, 0.f );
+			break;
+		
+		case 0x77: // "w"
+			Graphics::getInstance().moveCamera( -CAM_CALIB_STEP, 0.f, 0.f );
+			break;
+		
+		case 0x71: // "q"
+			Graphics::getInstance().moveCamera( 0.f, 0.f, -CAM_CALIB_STEP );
+			break;
+		
+		case 0x65: // "e"
+			Graphics::getInstance().moveCamera( 0.f, 0.f, CAM_CALIB_STEP );
+			break;
 		
 		case 27: // Escape
 			Game::getInstance().end();

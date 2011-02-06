@@ -12,6 +12,9 @@ Graphics::Graphics(void)
 	m_isInFullScreen = false;
 	m_isInGameMode = false;
 	m_mainWindow = 0;
+	m_camPosition.x = 0;
+	m_camPosition.y = 0;
+	m_camPosition.z = 0;
 }
 
 
@@ -255,4 +258,21 @@ void Graphics::cleanup(void)
 {
 	glutDestroyWindow(m_mainWindow);
 	fullScreenLeave();
+}
+
+void Graphics::setCamPosition( vertex& pos )
+{
+	m_camPosition = pos;
+}
+
+vertex& Graphics::getCamPosition( void )
+{
+	return m_camPosition;
+}
+
+void Graphics::moveCamera( float x , float y, float z )
+{
+	m_camPosition.x += x;
+	m_camPosition.y += y;
+	m_camPosition.z += z;
 }

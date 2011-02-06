@@ -27,7 +27,7 @@ const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-
+const float CAM_CALIB_STEP = 0.01f;
 
 const bool IMAGE_FLIP_H = true;
 const bool IMAGE_FLIP_V = true;
