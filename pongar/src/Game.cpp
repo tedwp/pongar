@@ -174,7 +174,7 @@ void Game::performStageInitialization(void)
 			rightPaddle->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 			
 			Ball* ball = PlayingField::getInstance().spawnBall();
-			ball->setColor(1.0f, 0.0f, 0.0f, 1.0f);
+			ball->setColor(1.0f, 0.0f, 1.0f, 1.0f);
 
 			setGameStage(STAGE_RUNNING);
 		}
