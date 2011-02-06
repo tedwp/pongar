@@ -73,10 +73,11 @@ void Ball::updateMovement(void)
 	if(xCollision || pCollision || yCollision)
 	{
 		//beep war nervig, deswegen auskommentiert
-		//UI::getInstance().beep();
+		UI::getInstance().beep();
 
 		if (xCollision)
 		{
+			reset();
 			// Left or right?
 			m_state = LEFTOUT;
 			m_state = RIGHTOUT;
