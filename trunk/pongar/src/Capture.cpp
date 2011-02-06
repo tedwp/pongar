@@ -22,8 +22,9 @@ Capture& Capture::getInstance(void)
 void Capture::init()
 {
 	//cvNamedWindow ("Original Image", CV_WINDOW_AUTOSIZE);
-	//cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
-	//cvResizeWindow("Converted", 300, 80);
+	if(SHOW_CONVERTED)
+		cvNamedWindow ("Converted", CV_WINDOW_AUTOSIZE);
+	cvResizeWindow("Converted", 300, 80);
 	/*cvNamedWindow ("Stripe", CV_WINDOW_AUTOSIZE);*/
 	/*cvNamedWindow ("Marker", 0 );
 	cvResizeWindow("Marker", 120, 120 );*/
@@ -56,7 +57,7 @@ void Capture::initVideoStream(void)
 
 void Capture::updateMarkerPositions(void)
 {
-	bool isFirstStripe = true;
+	//bool isFirstStripe = true;
 
 	bool isFirstMarker = true;
 
@@ -176,11 +177,11 @@ void Capture::updateMarkerPositions(void)
 							p2.x = (int)subPixel.x;
 							p2.y = (int)subPixel.y;
 
-							if (isFirstStripe)
+							/*if (isFirstStripe)
 								cvCircle (iplGrabbed, p2, 1, CV_RGB(255,0,255), -1);
 							else
 								cvCircle (iplGrabbed, p2, 1, CV_RGB(0,255,255), -1);
-
+*/
 							int pixel = Capture::getInstance().subpixSampleSafe (iplConverted, subPixel);
 
 							int w = m + 1; //add 1 to shift to 0..2
@@ -243,14 +244,14 @@ void Capture::updateMarkerPositions(void)
 					points[j-1].x = edgeCenter.x;
 					points[j-1].y = edgeCenter.y;
 
-					if (isFirstStripe)
+					/*if (isFirstStripe)
 					{
-						IplImage* iplTmp = cvCreateImage( cvSize(100,300), IPL_DEPTH_8U, 1 );
-						cvResize( iplStripe, iplTmp, CV_INTER_NN );
+						//IplImage* iplTmp = cvCreateImage( cvSize(100,300), IPL_DEPTH_8U, 1 );
+						//cvResize( iplStripe, iplTmp, CV_INTER_NN );
 						//cvShowImage ( "Stripe", iplTmp );//iplStripe );
-						cvReleaseImage( &iplTmp );
+						//cvReleaseImage( &iplTmp );
 						isFirstStripe = false;
-					}
+					}*/
 
 				} // end of loop over edge points of one edge
 				cvReleaseImage ( &iplStripe );
@@ -442,7 +443,7 @@ void Capture::updateMarkerPositions(void)
 	cvShowImage("Converted", iplThreshold);
 	*/
 
-	isFirstStripe = true;
+	//isFirstStripe = true;
 	isFirstMarker = true;
 
 	cvReleaseImage (&iplConverted);
