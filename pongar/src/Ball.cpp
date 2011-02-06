@@ -26,17 +26,18 @@ void Ball::updateMovement(void)
 	//TODO take this into account, right now ball is only dependent on cpu cycles! btw: wtf?!
 	//float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
 	//float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
-  
-	float lY = - m_playingField->getLeftPaddle()->getYPosition();
+	Paddle* leftPaddle = m_playingField->getLeftPaddle();
+	Paddle* rightPaddle = m_playingField->getRightPaddle();
+	float lY = - ->getYPosition();
 	float rY = - m_playingField->getRightPaddle()->getYPosition();
 	
 	
 
-	float leftPaddleStart = - PADDLE_LENGTH/2 + lY;
-	float rightPaddleStart = - PADDLE_LENGTH/2 + rY;
+	float leftPaddleStart = - leftPaddle->getSize()/2 + lY;
+	float rightPaddleStart = - rightPaddle->getSize()/2 + rY;
 	
-	float leftPaddleEnd =  PADDLE_LENGTH/2 + lY;
-	float rightPaddleEnd =  PADDLE_LENGTH/2 + rY;
+	float leftPaddleEnd =  leftPaddle->getSize()/2 + lY;
+	float rightPaddleEnd =  leftPaddle->getSize()/2 + rY;
 
 	
 
