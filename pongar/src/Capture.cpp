@@ -251,10 +251,10 @@ void Capture::updateMarkerPositions(void)
 					edgeCenter.x = (float) ( (double)p.x + (((double)maxIndexShift+pos) * stripeVecY.x));
 					edgeCenter.y = (float) ((double)p.y + (((double)maxIndexShift+pos) * stripeVecY.y));
 
-					CvPoint p_tmp;
+					/*CvPoint p_tmp;
 					p_tmp.x = (int)edgeCenter.x;
 					p_tmp.y = (int)edgeCenter.y;
-					cvCircle (iplGrabbed, p_tmp, 1, CV_RGB(0,0,255), -1);
+					cvCircle (iplGrabbed, p_tmp, 1, CV_RGB(0,0,255), -1);*/
 
 					points[j-1].x = edgeCenter.x;
 					points[j-1].y = edgeCenter.y;
@@ -428,10 +428,7 @@ void Capture::updateMarkerPositions(void)
 			}
 
 			if ( isFirstMarker )
-			{
-				//cvShowImage ( "Marker", iplMarker );
 				isFirstMarker = false;
-			}
 
 			// transfer camera coords to screen coords
 			for(int i = 0; i<4; i++)

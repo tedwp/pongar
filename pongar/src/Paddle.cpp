@@ -11,7 +11,7 @@ Paddle::Paddle(void)
 	m_isLeft = true;
 	m_playingField = NULL;
 	m_score = 0;
-	m_size = PADDLE_WIDTH;
+	m_size = PADDLE_LENGTH;
 }
 
 
@@ -21,17 +21,17 @@ Paddle::~Paddle(void)
 void Paddle::render(void)
 {
 	glTranslatef( 0.0f, 0.0f, -0.01f );
-	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
-	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
-	if (paddle1YEnd+PADDLE_LENGTH > PLAYINGFIELD_HEIGHT/2)
+	float paddle1YStart =  m_size/2 - m_yPosition;
+	float paddle1YEnd = -m_size/2 - m_yPosition;
+	if (paddle1YEnd+m_size > PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
-		paddle1YStart = paddle1YEnd - PADDLE_LENGTH;
+		paddle1YStart = paddle1YEnd - m_size;
 	}
-	if (paddle1YStart-PADDLE_LENGTH < -PLAYINGFIELD_HEIGHT/2)
+	if (paddle1YStart-m_size < -PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
-		paddle1YEnd = paddle1YStart + PADDLE_LENGTH;
+		paddle1YEnd = paddle1YStart + m_size;
 	}
 
 	m_yRenderPosition = paddle1YStart;
@@ -39,9 +39,9 @@ void Paddle::render(void)
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())
-		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + m_size);
+		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
 	else
-		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - m_size, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
+		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
 }
 
 void Paddle::updatePositionFromMarker(void)
@@ -145,7 +145,11 @@ float Paddle::getSize(void)
 {
 	return m_size;
 }
-
+void Paddle::disableAllActions(void)
+{
+	disableActionSizeDecrease();
+	disableActionSizeIncrease();
+}
 void Paddle::enableActionSizeIncrease(void)
 {
 	if(!m_actionSizeIncreaseEnabled)
