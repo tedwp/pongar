@@ -66,7 +66,15 @@ void Keyboard::doPressKey(unsigned char key, int x, int y)
 		case 0x65: // "e"
 			Graphics::getInstance().moveCamera( 0.f, 0.f, CAM_CALIB_STEP );
 			break;
+
+		case 0x79: // "y"
+			Graphics::getInstance().changeFov( VCAM_FOV_CALIB_STEP );
+			break;
 		
+		case 0x78: // "x"
+			Graphics::getInstance().changeFov( -VCAM_FOV_CALIB_STEP );
+			break;
+
 		case 27: // Escape
 			Game::getInstance().end();
 			break;

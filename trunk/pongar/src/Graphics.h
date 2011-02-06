@@ -27,6 +27,7 @@ public:
 	void setCamPosition( vertex& pos );
 	vertex& getCamPosition( void );
 	void moveCamera( float x, float y , float z );
+	void changeFov( float step );
 
 	static void transposeMatrix(float* src, float* dst);
 	void cleanup(void);
@@ -36,7 +37,8 @@ private:
 	bool m_isInGameMode;
 	static Graphics& m_instance;
 	int m_mainWindow;
-	vertex m_camPosition;
+	vertex m_vcamPosition;
+	float m_vcamFov, m_vcamAspect, m_vcamNear, m_vcamFar;
 
 	Graphics(void);
 	Graphics(const Graphics&);
