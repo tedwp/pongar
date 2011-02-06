@@ -38,7 +38,7 @@ void Game::init( int argc, char* argv[] )
 }
 void Game::registerMarkers(void)
 {
-	registerMarker(1, PURPOSE_PADDLE1); // 1
+	registerMarker(1, PURPOSE_PADDLE1, 0.045f); // 1
 	registerMarker(2, PURPOSE_PADDLE2);  // 2
 	registerMarker(90, PURPOSE_PLAYINGFIELD);
 }
@@ -344,6 +344,12 @@ void Game::setGameStage(int gameStage)
 void Game::registerMarker(int id, int purpose)
 {
 	Marker* m = new Marker(id);
+	m->setPurpose(purpose);
+	m_markers.push_back(m);
+}
+void Game::registerMarker(int id, int purpose, float size)
+{
+	Marker* m = new Marker(id, size);
 	m->setPurpose(purpose);
 	m_markers.push_back(m);
 }

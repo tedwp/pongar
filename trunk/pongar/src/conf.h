@@ -31,8 +31,8 @@ const float BALL_SPEED_INCREASE_FACTOR = 1.1f;
 
 const float BALL_RADIUS = 0.15f;
 
-const float PLAYINGFIELD_WIDTH = 6.0f;
-const float PLAYINGFIELD_HEIGHT = 4.0f;
+const float PLAYINGFIELD_WIDTH = 12.0f;
+const float PLAYINGFIELD_HEIGHT = 8.0f;
 
 const float PADDLE_LENGTH = 1.0f;
 const float PADDLE_WIDTH = 0.2f;
