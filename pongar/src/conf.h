@@ -45,7 +45,9 @@ const bool FULLSCREEN_ENABLED = true;
 const bool FULLSCREEN_ONSTARTUP = true;
 
 //Gamemode only works if FULLSCREEN_ONSTARTUP is enabled
-const bool FULLSCREEN_USEGAMEMODE = true;
+const bool FULLSCREEN_USEGAMEMODE = false;
+
+const bool SHOW_CONVERTED = true;
 
 //only applicable if gamemode is used
 const int FULLSCREEN_BITRATE = 32;
