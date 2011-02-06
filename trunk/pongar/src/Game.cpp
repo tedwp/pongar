@@ -207,12 +207,16 @@ void Game::performStageRunning(void)
 	PlayingField::getInstance().render();
 	if(ball->getState() != Ball::ONFIELD)
 	{
-		ball->reset();
 		if(ball->getState() == Ball::LEFTOUT)
+		{
 			PlayingField::getInstance().getRightPaddle()->increaseScore();
-
+			ball->reset();
+		}
 		else if(ball->getState() == Ball::RIGHTOUT)
+		{
 			PlayingField::getInstance().getLeftPaddle()->increaseScore();
+			ball->reset();
+		}
 
 		if(PlayingField::getInstance().getLeftPaddle()->getScore() >= MAX_POINTS_PER_ROUND)
 			setGameStage(STAGE_WON_LEFT);

@@ -28,8 +28,8 @@ void Ball::updateMovement(void)
 	//float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
 	Paddle* leftPaddle = m_playingField->getLeftPaddle();
 	Paddle* rightPaddle = m_playingField->getRightPaddle();
-	float lY = - ->getYPosition();
-	float rY = - m_playingField->getRightPaddle()->getYPosition();
+	float lY = - leftPaddle->getYPosition();
+	float rY = - rightPaddle->getYPosition();
 	
 	
 
