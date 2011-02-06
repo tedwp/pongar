@@ -480,7 +480,9 @@ void Capture::cleanup()
 	cvReleaseMemStorage (&m_memStorage);
 	cvReleaseCapture (&(Capture::getInstance().m_cap));
 	//cvDestroyWindow ("Original Image");
-	//cvDestroyWindow ("Converted");
+	
+	if(SHOW_CONVERTED)
+		cvDestroyWindow ("Converted");
 	//cvDestroyWindow ("Stripe");
 	//cvDestroyWindow ("Marker");
 }
