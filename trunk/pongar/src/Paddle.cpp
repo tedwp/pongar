@@ -25,12 +25,12 @@ void Paddle::render(void)
 	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
 	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
 
-	if (paddle1YEnd+m_size > PLAYINGFIELD_HEIGHT/2)
+	if (paddle1YEnd > PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
 		paddle1YStart = paddle1YEnd - m_size;
 	}
-	if (paddle1YStart-m_size < -PLAYINGFIELD_HEIGHT/2)
+	if (paddle1YStart < -PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 		paddle1YEnd = paddle1YStart + m_size;

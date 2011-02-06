@@ -13,7 +13,6 @@ Ball::~Ball(void)
 
 void Ball::render(void)
 {
-	updateMovement();
 	glTranslatef( m_x, m_y, 0.0f );
 	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
 	drawCircle(BALL_RADIUS);
@@ -165,8 +164,9 @@ void Ball::updateMovement(void)
 	}
 	*/
 	if(!collisionDetected_lr && !collisionDetected_tb)
-	{m_y = realX ;
-	m_x = realY;
+	{
+		m_y = realX ;
+		m_x = realY;
 	}
 
 	m_lastUpdate = getTimeSinceStart();
@@ -198,7 +198,7 @@ void Ball::reset(void)
 	m_direction.first /= tmp;
 	m_direction.second /= tmp;
 	//Now direction is normalized
-
+	m_state = ONFIELD;
 	m_x = 0.0f;
 	m_y = 0.0f;
 }
