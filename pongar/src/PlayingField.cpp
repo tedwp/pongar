@@ -52,8 +52,7 @@ void PlayingField::render()
 		glVertex2f(x2, y1);
 		glVertex2f(x2, y2);
 		glVertex2f(x1, y2);
-		glEnd()
-
+		glEnd();
 
 	}
 	
