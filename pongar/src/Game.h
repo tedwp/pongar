@@ -68,6 +68,7 @@ private:
 	Game(const Game&);
 	~Game(void);
 	void registerMarker(int id, int purpose);
+	void registerMarker(int id, int purpose, float size);
 	void updateMarkerOffsets(void);
 	void arrayToCvMat(float* transform, CvMat* mat);
 	void performInitialization(void);
