@@ -42,7 +42,19 @@ void PlayingField::render()
 		glScalef(0.03f, 0.03f, 0.03f);
 		// draw white rectangle
 		glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);
-		glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
+		//glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
+		float x1 = -PLAYINGFIELD_HEIGHT/2;
+		float y1 = -PLAYINGFIELD_WIDTH/2;
+		float x2 = PLAYINGFIELD_HEIGHT/2;
+		float y2=PLAYINGFIELD_WIDTH/2;
+		glBegin(GL_LINE_LOOP);
+		glVertex2f(x1, y1);
+		glVertex2f(x2, y1);
+		glVertex2f(x2, y2);
+		glVertex2f(x1, y2);
+		glEnd()
+
+
 	}
 	
 	if( m_leftPaddle != NULL )
