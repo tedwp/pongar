@@ -41,8 +41,7 @@ void PlayingField::render()
 		glLoadMatrixf( resultTransposedMatrix );
 		glScalef(0.03f, 0.03f, 0.03f);
 		// draw white rectangle
-		//glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);
-		glColor4f( 255, 0, 255, 255);
+		glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha);
 		//glRectf(-PLAYINGFIELD_HEIGHT/2, -PLAYINGFIELD_WIDTH/2, PLAYINGFIELD_HEIGHT/2, PLAYINGFIELD_WIDTH/2);
 		float x1 = -PLAYINGFIELD_HEIGHT/2;
 		float y1 = -PLAYINGFIELD_WIDTH/2;
