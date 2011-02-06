@@ -24,11 +24,14 @@ void Ball::updateMovement(void)
 	//float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
 	//float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
   
-	float paddle1End =  -m_playingField->getLeftPaddle()->getYRenderPosition();
-	float paddle2End =  -m_playingField->getRightPaddle()->getYRenderPosition();
+	Paddle* leftPaddle = m_playingField->getLeftPaddle();
+	Paddle* rightPaddle = m_playingField->getRightPaddle();
 
-	float paddle1Start = paddle1End + PADDLE_LENGTH;
-	float paddle2Start = paddle2End + PADDLE_LENGTH;
+	float paddle1End =  -leftPaddle->getYRenderPosition();
+	float paddle2End =  -rightPaddle->getYRenderPosition();
+
+	float paddle1Start = paddle1End + leftPaddle->getSize();
+	float paddle2Start = paddle2End + rightPaddle->getSize();
 
 	float degInRad = m_angle*3.14159f/180;
 	
@@ -56,13 +59,13 @@ void Ball::updateMovement(void)
 		yCollision = true;
 	
 	if (!xCollision
-		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + m_playingField->getLeftPaddle()->getSize()
+		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + leftPaddle->getSize()
 		&& m_x <= -paddle1End && m_x >= -paddle1Start
 		)
 		pCollision = true;
 	
 	if (!xCollision
-		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - m_playingField->getRightPaddle()->getSize()
+		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - rightPaddle->getSize()
 		&& m_x <= -paddle2End && m_x >= -paddle2Start
 		)
 		pCollision = true;
@@ -131,6 +134,11 @@ int Ball::getState(void)
 	return m_state;
 }
 
+void Ball::disableAllActions(void)
+{
+	disableActionSpeedDecrease();
+	disableActionSpeedIncrease();
+}
 void Ball::enableActionSpeedIncrease(void)
 {
 	if(!m_actionSpeedIncreaseEnabled)

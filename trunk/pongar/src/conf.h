@@ -27,7 +27,7 @@ const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-const float CAM_CALIB_STEP = 0.01f;
+const float CAM_CALIB_STEP = 0.003f;
 const float VCAM_FOV_CALIB_STEP = 1.f;
 
 const float VCAM_FOV = 60.f;
@@ -43,8 +43,8 @@ const float BALL_SPEED_INCREASE_FACTOR = 1.1f;
 
 const float BALL_RADIUS = 0.15f;
 
-const float PLAYINGFIELD_WIDTH = 6.0f;
-const float PLAYINGFIELD_HEIGHT = 4.0f;
+const float PLAYINGFIELD_WIDTH = 4.5f;
+const float PLAYINGFIELD_HEIGHT = 3.0f;
 
 const float PADDLE_LENGTH = 1.0f;
 const float PADDLE_WIDTH = 0.2f;
@@ -57,7 +57,7 @@ const bool FULLSCREEN_ENABLED = true;
 const bool FULLSCREEN_ONSTARTUP = true;
 
 //Gamemode only works if FULLSCREEN_ONSTARTUP is enabled
-const bool FULLSCREEN_USEGAMEMODE = true;
+const bool FULLSCREEN_USEGAMEMODE = false;
 
 const bool SHOW_CONVERTED = true;
 

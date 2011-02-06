@@ -22,6 +22,7 @@ public:
 	void enableActionSpeedDecrease(void);
 	void disableActionSpeedDecrease(void);
 	void updateMovement(void);
+	void disableAllActions(void);
 	
 	
 	static const int ONFIELD = 1;

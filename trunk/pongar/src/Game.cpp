@@ -38,11 +38,25 @@ void Game::init( int argc, char* argv[] )
 }
 void Game::registerMarkers(void)
 {
-	registerMarker(1, PURPOSE_PADDLE1, 0.045f); // 1
+	registerMarker(1, PURPOSE_PADDLE1); // 1
 	registerMarker(2, PURPOSE_PADDLE2);  // 2
 	registerMarker(97, PURPOSE_PAUSE);
 	registerMarker(3585, PURPOSE_RESTARTGAME);
 	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.02f);
+
+	registerMarker(2884, PURPOSE_ACTION_INCREASESIZE_LEFTPADDLE);
+	registerMarker(626, PURPOSE_ACTION_INCREASESIZE_RIGHTPADDLE);
+
+	registerMarker(1680, PURPOSE_ACTION_DECREASESIZE_LEFTPADDLE);
+	registerMarker(10, PURPOSE_ACTION_DECREASESIZE_RIGHTPADDLE);
+	
+	registerMarker(352, PURPOSE_ACTION_INCREASESPEED_BALL);
+	registerMarker(7236, PURPOSE_ACTION_INCREASESPEED_LEFTPADDLE);
+	registerMarker(208, PURPOSE_ACTION_INCREASESPEED_RIGHTPADDLE);
+	
+	registerMarker(624, PURPOSE_ACTION_DECREASESPEED_BALL);
+	registerMarker(80, PURPOSE_ACTION_DECREASESPEED_RIGHTPADDLE);
+	registerMarker(90, PURPOSE_ACTION_DECREASESPEED_LEFTPADDLE);
 }
 void Game::start(void)
 {
@@ -186,14 +200,14 @@ void Game::performStageInitialization(void)
 }
 void Game::performStageRunning(void)
 {
-
+	Ball* ball = PlayingField::getInstance().getBall();
 	PlayingField::getInstance().updatePaddlePositions();
-	PlayingField::getInstance().getBall()->updateMovement();
+	ball->updateMovement();
 	
 	PlayingField::getInstance().render();
-	Ball* ball = PlayingField::getInstance().getBall();
 	if(ball->getState() != Ball::ONFIELD)
 	{
+		PlayingField::getInstance().getBall()->reset();
 		if(ball->getState() == Ball::LEFTOUT)
 			PlayingField::getInstance().getRightPaddle()->increaseScore();
 
@@ -214,44 +228,46 @@ void Game::performStageRunning(void)
 	else
 	{
 		UI::getInstance().showScores();
-		//TODO Idee haben: Aktuell müssen alle actions erst deaktiviert werden
+		Paddle* leftPaddle = PlayingField::getInstance().getLeftPaddle();
+		Paddle* rightPaddle = PlayingField::getInstance().getRightPaddle();
+
 		
-		ball->disableActionSpeedIncrease();
-		ball->disableActionSpeedDecrease();
-
-
+		//TODO Idee haben: Aktuell müssen alle actions erst deaktiviert werden
+		ball->disableAllActions();
+		leftPaddle->disableAllActions();
+		rightPaddle->disableAllActions();
+		
 		if(isActionMarkerPresent())
 		{
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE1))
-			{
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_PADDLE2))
-			{
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE1))
-			{
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_PADDLE2))
-			{
-			}
+	
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_LEFTPADDLE))
+				leftPaddle->enableActionSizeIncrease();
+
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_RIGHTPADDLE))
+				rightPaddle->enableActionSizeIncrease();
+
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_LEFTPADDLE))
+				leftPaddle->enableActionSizeDecrease();
+
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_RIGHTPADDLE))
+				rightPaddle->enableActionSizeDecrease();
+			
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_BALL))
-			{
 				ball->enableActionSpeedIncrease();
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE1))
+			
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_LEFTPADDLE))
 			{
 			}
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_PADDLE2))
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_RIGHTPADDLE))
 			{
 			}
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_BALL))
-			{
 				ball->enableActionSpeedDecrease();
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE1))
+			
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_LEFTPADDLE))
 			{
 			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_PADDLE2))
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_RIGHTPADDLE))
 			{
 			}
 		}

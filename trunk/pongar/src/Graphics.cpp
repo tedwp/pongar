@@ -185,7 +185,7 @@ void Graphics::fullScreenEnter(void)
 		if(FULLSCREEN_USEGAMEMODE && FULLSCREEN_ONSTARTUP && (FULLSCREEN_DISABLECHECK || glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)))
 		{
 			glutEnterGameMode();
-			glutSetCursor(GLUT_CURSOR_NONE);
+			glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 			m_isInGameMode = true;
 		}
 		else

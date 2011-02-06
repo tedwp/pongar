@@ -31,6 +31,7 @@ public:
 	void disableActionSizeIncrease(void);
 	void enableActionSizeDecrease(void);
 	void disableActionSizeDecrease(void);
+	void disableAllActions(void);
 
 private:
 	float m_yPosition;
