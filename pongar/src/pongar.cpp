@@ -6,6 +6,10 @@
 #include <string>
 #include <stdio.h>
 #include <sstream>
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
 
 std::string toString(int a)
 {
@@ -15,11 +19,24 @@ std::string toString(int a)
 }
 std::string toString(long a)
 {
-	return toString((int) a);
+	std::stringstream tmp;
+	tmp << setprecision(3);
+	tmp << a;
+	return tmp.str();
+}
+std::string toString(float a)
+{
+	std::stringstream tmp;
+	tmp << setprecision(3);
+	tmp << a;
+	return tmp.str();
 }
 std::string toString(double a)
 {
-	return toString((int) a);
+	std::stringstream tmp;
+	tmp << setprecision(3);
+	tmp << a;
+	return tmp.str();
 }
 
 int main(int argc, char* argv[]) 

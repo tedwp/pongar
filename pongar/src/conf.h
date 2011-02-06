@@ -38,8 +38,8 @@ const float VCAM_FAR = 100.0f;
 const bool IMAGE_FLIP_H = true;
 const bool IMAGE_FLIP_V = true;
 
-const float BALL_SPEED_INIT = 3.14159265358979f*0.01f;
-const float BALL_SPEED_INCREASE_FACTOR = 1.1f;
+const float BALL_SPEED_INIT = 0.001f;//Playfield-Units per Millisec  //3.14159265358979f*0.005f;
+const float BALL_SPEED_INCREASE_FACTOR = 1.01f;
 
 const float BALL_RADIUS = 0.15f;
 

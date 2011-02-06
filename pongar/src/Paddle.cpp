@@ -21,8 +21,10 @@ Paddle::~Paddle(void)
 void Paddle::render(void)
 {
 	glTranslatef( 0.0f, 0.0f, -0.01f );
-	float paddle1YStart =  m_size/2 - m_yPosition;
-	float paddle1YEnd = -m_size/2 - m_yPosition;
+	
+	float paddle1YStart =  PADDLE_LENGTH/2 - m_yPosition;
+	float paddle1YEnd = -PADDLE_LENGTH/2 - m_yPosition;
+
 	if (paddle1YEnd+m_size > PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
@@ -34,7 +36,7 @@ void Paddle::render(void)
 		paddle1YEnd = paddle1YStart + m_size;
 	}
 
-	m_yRenderPosition = paddle1YStart;
+	//m_yRenderPosition = paddle1YStart;
 
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
@@ -86,10 +88,12 @@ void Paddle::updatePositionFromMarker(void)
 	float angle = (180 / 3.14159f) * acos( vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2] );
 	if((vec1[0] * vec2[1] - vec1[1] * vec2[0]) < 0 ) angle *= -1;
 
-	float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
+	m_yPosition = (float) PLAYINGFIELD_HEIGHT/2 * sin(angle*3.14159f/180);
+
+	/*float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	
 	m_yPosition = paddle1offset;
-	m_yRenderPosition = paddle1offset;
+	m_yRenderPosition = paddle1offset;*/
 }
 
 
@@ -106,10 +110,10 @@ float Paddle::getYPosition(void)
 {
 	return m_yPosition;
 }
-float Paddle::getYRenderPosition(void)
+/*float Paddle::getYRenderPosition(void)
 {
 	return m_yRenderPosition;
-}
+}*/
 void Paddle::setMarker(Marker* marker)
 {
 	m_marker = marker;
@@ -138,7 +142,7 @@ int Paddle::getScore(void)
 void Paddle::reset(void)
 {
 	m_yPosition = 0;
-	m_yRenderPosition = 0;
+	//m_yRenderPosition = 0;
 	m_score = 0;
 }
 float Paddle::getSize(void)

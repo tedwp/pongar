@@ -13,7 +13,7 @@ public:
 	~Paddle(void);
 
 	float getYPosition(void);
-	float getYRenderPosition(void);
+	//float getYRenderPosition(void);
 	void updatePositionFromMarker(void);
 	void setMarker(Marker* marker);
 	void render(void);
@@ -35,7 +35,7 @@ public:
 
 private:
 	float m_yPosition;
-	float m_yRenderPosition;
+	//float m_yRenderPosition;
 	bool m_isLeft;
 	float m_size;
 	int m_score;
