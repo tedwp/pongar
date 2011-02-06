@@ -29,15 +29,16 @@ const int CAM_INDEX = 0;
 
 
 
-const bool FLIP_IMAGE = true;
+const bool IMAGE_FLIP_H = true;
+const bool IMAGE_FLIP_V = true;
 
 const float BALL_SPEED_INIT = 3.14159265358979f*0.01f;
 const float BALL_SPEED_INCREASE_FACTOR = 1.1f;
 
 const float BALL_RADIUS = 0.15f;
 
-const float PLAYINGFIELD_WIDTH = 12.0f;
-const float PLAYINGFIELD_HEIGHT = 8.0f;
+const float PLAYINGFIELD_WIDTH = 6.0f;
+const float PLAYINGFIELD_HEIGHT = 4.0f;
 
 const float PADDLE_LENGTH = 1.0f;
 const float PADDLE_WIDTH = 0.2f;
@@ -60,6 +61,7 @@ const int FULLSCREEN_REFRESHRATE = 60;
 const bool FULLSCREEN_DISABLECHECK = true; //Turn on if glut says that the mode is not available despite it's working
 
 const bool SHOW_CAMERA_IMAGE = false;
+
 const int MAX_POINTS_PER_ROUND = 3;
 
 //How long after the last update should a marker still be considered visible?
@@ -79,6 +81,10 @@ const int INITIALIZATION_DURATION = 3000; //millisec
 
 const float ACTION_INCREASESPEED_BALL_FACTOR = 1.1f;
 const float ACTION_DECREASESPEED_BALL_FACTOR = 0.9f;
+
+const float ACTION_INCREASESIZE_PADDLE_FACTOR = 1.4f;
+const float ACTION_DECREASESIZE_PADDLE_FACTOR = 0.6f;
+
 
 //Markers
 

@@ -12,7 +12,6 @@ Ball::~Ball(void)
 
 void Ball::render(void)
 {
-	updateMovement();
 	glTranslatef( m_x, m_y, 0.0f );
 	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
 
@@ -57,13 +56,13 @@ void Ball::updateMovement(void)
 		yCollision = true;
 	
 	if (!xCollision
-		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH
+		&& m_y - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + m_playingField->getLeftPaddle()->getSize()
 		&& m_x <= -paddle1End && m_x >= -paddle1Start
 		)
 		pCollision = true;
 	
 	if (!xCollision
-		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH
+		&& m_y + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - m_playingField->getRightPaddle()->getSize()
 		&& m_x <= -paddle2End && m_x >= -paddle2Start
 		)
 		pCollision = true;
@@ -78,10 +77,8 @@ void Ball::updateMovement(void)
 
 		if (xCollision)
 		{
-			reset();
 			// Left or right?
-			m_state = LEFTOUT;
-			m_state = RIGHTOUT;
+			m_x < 0 ? m_state = LEFTOUT : m_state = RIGHTOUT;
 
 		} else if (pCollision)
 		{
@@ -154,7 +151,7 @@ void Ball::enableActionSpeedDecrease(void)
 {
 	if(!m_actionSpeedDecreaseEnabled)
 	{
-		m_speed *= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_speed *= ACTION_DECREASESPEED_BALL_FACTOR;
 		m_actionSpeedDecreaseEnabled = true;
 	}
 }

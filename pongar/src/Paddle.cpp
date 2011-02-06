@@ -11,6 +11,7 @@ Paddle::Paddle(void)
 	m_isLeft = true;
 	m_playingField = NULL;
 	m_score = 0;
+	m_size = PADDLE_WIDTH;
 }
 
 
@@ -38,9 +39,9 @@ void Paddle::render(void)
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())
-		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
+		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + m_size);
 	else
-		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
+		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - m_size, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
 }
 
 void Paddle::updatePositionFromMarker(void)
@@ -139,4 +140,41 @@ void Paddle::reset(void)
 	m_yPosition = 0;
 	m_yRenderPosition = 0;
 	m_score = 0;
+}
+float Paddle::getSize(void)
+{
+	return m_size;
+}
+
+void Paddle::enableActionSizeIncrease(void)
+{
+	if(!m_actionSizeIncreaseEnabled)
+	{
+		m_size *= ACTION_INCREASESIZE_PADDLE_FACTOR;
+		m_actionSizeIncreaseEnabled = true;
+	}
+}
+void Paddle::disableActionSizeIncrease(void)
+{
+	if(m_actionSizeIncreaseEnabled)
+	{
+		m_size /= ACTION_INCREASESIZE_PADDLE_FACTOR;
+		m_actionSizeIncreaseEnabled = false;
+	}
+}
+void Paddle::enableActionSizeDecrease(void)
+{
+	if(!m_actionSizeDecreaseEnabled)
+	{
+		m_size *= ACTION_DECREASESIZE_PADDLE_FACTOR;
+		m_actionSizeDecreaseEnabled = true;
+	}
+}
+void Paddle::disableActionSizeDecrease(void)
+{
+	if(m_actionSizeDecreaseEnabled)
+	{
+		m_size /= ACTION_DECREASESIZE_PADDLE_FACTOR;
+		m_actionSizeDecreaseEnabled = false;
+	}
 }

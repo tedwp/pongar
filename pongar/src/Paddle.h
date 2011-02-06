@@ -23,15 +23,25 @@ public:
 	void setPlayingField(PlayingField* playingField);
 	void increaseScore(void);
 	int getScore(void);
-	void reset();
+	void reset(void);
+	float getSize(void);
+
+	
+	void enableActionSizeIncrease(void);
+	void disableActionSizeIncrease(void);
+	void enableActionSizeDecrease(void);
+	void disableActionSizeDecrease(void);
 
 private:
 	float m_yPosition;
 	float m_yRenderPosition;
 	bool m_isLeft;
+	float m_size;
 	int m_score;
 	Marker* m_marker;
 	PlayingField* m_playingField;
 	void arrayToCvMat(float* transform, CvMat* mat);
+	bool m_actionSizeIncreaseEnabled;
+	bool m_actionSizeDecreaseEnabled;
 };
 

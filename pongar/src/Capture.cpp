@@ -74,9 +74,22 @@ void Capture::updateMarkerPositions(void)
 
 	CvSize picSize = cvGetSize(iplGrabbed);
 	IplImage* iplDisplay;
-	if (FLIP_IMAGE){
+	if (IMAGE_FLIP_H || IMAGE_FLIP_V)
+	{
 		iplDisplay = cvCreateImage(picSize, iplGrabbed->depth, iplGrabbed->nChannels);
-		cvFlip(iplGrabbed, iplDisplay, 1);
+
+		if(IMAGE_FLIP_H && IMAGE_FLIP_V)
+		{
+			cvFlip(iplGrabbed, iplDisplay, 1);
+			cvFlip(iplDisplay, iplDisplay, 0);
+		}
+		else if(IMAGE_FLIP_H)
+		{
+			cvFlip(iplGrabbed, iplDisplay, 1);
+		}else if(IMAGE_FLIP_V)
+		{
+			cvFlip(iplGrabbed, iplDisplay, 0);
+		}
 	} else {
 		iplDisplay = cvCloneImage(iplGrabbed);
 	}
@@ -86,7 +99,7 @@ void Capture::updateMarkerPositions(void)
 	IplImage* iplConverted = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 	IplImage* iplThreshold = cvCreateImage(picSize, IPL_DEPTH_8U, 1);
 
-	cvConvertImage(iplGrabbed, iplConverted, 0);
+	cvConvertImage(iplDisplay, iplConverted, 0);
 	cvThreshold(iplConverted, iplThreshold, getInstance().m_thresholdBW, 255, CV_THRESH_BINARY);
 	//cvAdaptiveThreshold(iplConverted, iplThreshold, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 33, 5);
 

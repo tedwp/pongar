@@ -21,6 +21,7 @@ public:
 	void disableActionSpeedIncrease(void);
 	void enableActionSpeedDecrease(void);
 	void disableActionSpeedDecrease(void);
+	void updateMovement(void);
 	
 	
 	static const int ONFIELD = 1;
@@ -40,7 +41,6 @@ private:
 	bool m_actionSpeedDecreaseEnabled;
 
 	void drawCircle(float r);
-	void updateMovement(void);
 	long int m_lastUpdate;
 };
 
