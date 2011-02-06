@@ -41,9 +41,9 @@ void Paddle::render(void)
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())
-		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH);
+		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH/2 , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH/2);
 	else
-		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH, paddle1YStart, PLAYINGFIELD_WIDTH / 2 );
+		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH/2, paddle1YStart, PLAYINGFIELD_WIDTH / 2 + PADDLE_WIDTH);
 }
 
 void Paddle::updatePositionFromMarker(void)
