@@ -262,7 +262,7 @@ void Capture::updateMarkerPositions(void)
 				// cvFitLine stores the calculated line in lineParams in the following way:
 				// vec.x, vec.y, point.x, point.y
 
-				CvPoint p;
+				/*CvPoint p;
 				p.x=(int)lineParams[4*i+2] - (int)(50.0*lineParams[4*i+0]);
 				p.y=(int)lineParams[4*i+3] - (int)(50.0*lineParams[4*i+1]);
 
@@ -270,7 +270,7 @@ void Capture::updateMarkerPositions(void)
 				p2.x = (int)lineParams[4*i+2] + (int)(50.0*lineParams[4*i+0]);
 				p2.y = (int)lineParams[4*i+3] + (int)(50.0*lineParams[4*i+1]);
 
-				cvLine (iplGrabbed, p, p2, CV_RGB(0,255,255), 1, 8, 0);
+				cvLine (iplGrabbed, p, p2, CV_RGB(0,255,255), 1, 8, 0);*/
 
 			} // end of loop over the 4 edges
 
@@ -429,7 +429,7 @@ void Capture::updateMarkerPositions(void)
 			if(m != NULL)
 			{
 				float shizzle[16];
-				estimateSquarePose( shizzle, corners, 0.045f );
+				estimateSquarePose( shizzle, corners, m->getSize() );
 				m->updatePosition(shizzle);
 			}
 
