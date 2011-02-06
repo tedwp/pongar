@@ -96,7 +96,6 @@ void Graphics::render()
 void Graphics::doRender()
 {
 	prepareForDisplay();
-	
 	PlayingField::getInstance().render();
 	
 	prepare2D();
@@ -179,6 +178,7 @@ void Graphics::fullScreenEnter(void)
 		if(FULLSCREEN_USEGAMEMODE && FULLSCREEN_ONSTARTUP && (FULLSCREEN_DISABLECHECK || glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)))
 		{
 			glutEnterGameMode();
+			glutSetCursor(GLUT_CURSOR_NONE);
 			m_isInGameMode = true;
 		}
 		else

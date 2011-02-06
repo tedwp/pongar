@@ -35,7 +35,7 @@ void UI::showPercentageString(string str, int value, int max)
 }
 void UI::beep(void)
 {
-	Beep(522, 100);
+	Beep(522, 50);
 }
 void UI::showHeading(string heading)
 {
@@ -48,12 +48,18 @@ void UI::showInstruction(std::string instruction)
 
 void UI::drawStuffOnTop(void)
 {
-	Graphics::getInstance().showString(m_instructions, m_textColor, 150, 100);
+	Graphics::getInstance().showString(m_instructions, m_textColor, 50, 20);
+
+	if(m_heading != "")
+	{
+		Graphics::getInstance().showString(m_heading, m_textColor, 200, 200);
+		m_heading = "";
+	}
 
 	string th =  toString(Capture::getInstance().getThreshold()/255.0 * 100);
 	string thbw =  toString(Capture::getInstance().getThresholdBW()/255.0 * 100);
 
-	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 20, 20);
+	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 430, 20);
 
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
 	{

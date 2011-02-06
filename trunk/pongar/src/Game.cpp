@@ -40,7 +40,9 @@ void Game::registerMarkers(void)
 {
 	registerMarker(1, PURPOSE_PADDLE1, 0.045f); // 1
 	registerMarker(2, PURPOSE_PADDLE2);  // 2
-	registerMarker(90, PURPOSE_PLAYINGFIELD);
+	registerMarker(97, PURPOSE_PAUSE);
+	registerMarker(3585, PURPOSE_RESTARTGAME);
+	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.02f);
 }
 void Game::start(void)
 {
@@ -113,7 +115,6 @@ void Game::idle( void )
 }
 void Game::performStageBeamerCalibration(void)
 {
-	UI::getInstance().showHeading("STAGE_BEAMERCALIBRATION");
 	//Graphics::showImage("marker.jpg");
 	//Track the marker and estimate the canvas' pose
 
@@ -133,7 +134,6 @@ void Game::performStageBeamerCalibration(void)
 
 void Game::performStageStartup(void)
 {
-	UI::getInstance().showHeading("STAGE_STARTUP");
 	UI::getInstance().showInstruction("Bitte Spielfeldmarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
@@ -158,7 +158,6 @@ void Game::performStageStartup(void)
 }
 void Game::performStageInitialization(void)
 {
-	UI::getInstance().showHeading("STAGE_INITIALIZATION");
 	UI::getInstance().showInstruction("Bitte Paddlemarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PADDLE1) && isMarkerPresent(PURPOSE_PADDLE2) )
 	{
@@ -187,9 +186,10 @@ void Game::performStageInitialization(void)
 }
 void Game::performStageRunning(void)
 {
-	UI::getInstance().showHeading("STAGE_RUNNING");
 
 	PlayingField::getInstance().updatePaddlePositions();
+	PlayingField::getInstance().getBall()->updateMovement();
+	
 	PlayingField::getInstance().render();
 	Ball* ball = PlayingField::getInstance().getBall();
 	if(ball->getState() != Ball::ONFIELD)
@@ -259,7 +259,7 @@ void Game::performStageRunning(void)
 }
 void Game::performStagePause(void)
 {
-	UI::getInstance().showHeading( "STAGE_PAUSE");
+	UI::getInstance().showHeading( "Spiel pausiert");
 	if(!isMarkerPresent(PURPOSE_PAUSE))
 		setGameStage(STAGE_RUNNING);
 			
@@ -271,7 +271,7 @@ void Game::performStagePause(void)
 }
 void Game::performStageWon(bool isLeft)
 {
-	UI::getInstance().showHeading( "GAME_OVER");
+	UI::getInstance().showHeading( "GAME OVER");
 	if(isLeft)
 		UI::getInstance().showInstruction("Links hat gewonnen");
 	else
