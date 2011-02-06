@@ -37,6 +37,7 @@ private:
 	PlayingField* m_playingField;
 	float m_speed;
 	float m_angle;
+	std::pair<float, float> m_direction;
 	
 	bool m_actionSpeedIncreaseEnabled;
 	bool m_actionSpeedDecreaseEnabled;
