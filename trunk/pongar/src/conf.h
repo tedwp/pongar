@@ -42,7 +42,7 @@ const bool HIDE_CONSOLE = true;
 
 //Game
 const bool FULLSCREEN_ENABLED = true;
-const bool FULLSCREEN_ONSTARTUP = true;
+const bool FULLSCREEN_ONSTARTUP = false;
 
 //Gamemode only works if FULLSCREEN_ONSTARTUP is enabled
 const bool FULLSCREEN_USEGAMEMODE = false;
@@ -54,7 +54,7 @@ const int FULLSCREEN_BITRATE = 32;
 const int FULLSCREEN_REFRESHRATE = 60;
 const bool FULLSCREEN_DISABLECHECK = true; //Turn on if glut says that the mode is not available despite it's working
 
-const bool SHOW_CAMERA_IMAGE = false;
+const bool SHOW_CAMERA_IMAGE = true;
 const int MAX_POINTS_PER_ROUND = 3;
 
 //How long after the last update should a marker still be considered visible?
