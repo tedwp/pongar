@@ -15,7 +15,6 @@ void Ball::render(void)
 	updateMovement();
 	glTranslatef( m_x, m_y, 0.0f );
 	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
-	glColor4f( 255, 0, 255, 255);
 
 	drawCircle(BALL_RADIUS);
 }

@@ -28,7 +28,6 @@ public:
 	static const int RIGHTOUT = 3;
 
 private:
-	Color m_color;
 	float m_x;
 	float m_y;
 	int m_state;
