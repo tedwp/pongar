@@ -28,6 +28,12 @@ const int CAM_ANGLE = 60;
 const int CAM_INDEX = 0;
 
 const float CAM_CALIB_STEP = 0.01f;
+const float VCAM_FOV_CALIB_STEP = 1.f;
+
+const float VCAM_FOV = 60.f;
+const float VCAM_ASPECT = 1.33f; // currently not used
+const float VCAM_NEAR = 0.1f;
+const float VCAM_FAR = 100.0f;
 
 const bool IMAGE_FLIP_H = true;
 const bool IMAGE_FLIP_V = true;

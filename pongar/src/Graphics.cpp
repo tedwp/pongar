@@ -12,9 +12,13 @@ Graphics::Graphics(void)
 	m_isInFullScreen = false;
 	m_isInGameMode = false;
 	m_mainWindow = 0;
-	m_camPosition.x = 0;
-	m_camPosition.y = 0;
-	m_camPosition.z = 0;
+	m_vcamPosition.x = 0;
+	m_vcamPosition.y = 0;
+	m_vcamPosition.z = 0;
+	m_vcamNear = VCAM_NEAR;
+	m_vcamFar = VCAM_FAR;
+	m_vcamFov = VCAM_FOV;
+	m_vcamAspect = VCAM_ASPECT;
 }
 
 
@@ -262,17 +266,37 @@ void Graphics::cleanup(void)
 
 void Graphics::setCamPosition( vertex& pos )
 {
-	m_camPosition = pos;
+	m_vcamPosition = pos;
 }
 
 vertex& Graphics::getCamPosition( void )
 {
-	return m_camPosition;
+	return m_vcamPosition;
 }
 
 void Graphics::moveCamera( float x , float y, float z )
 {
-	m_camPosition.x += x;
-	m_camPosition.y += y;
-	m_camPosition.z += z;
+	m_vcamPosition.x += x;
+	m_vcamPosition.y += y;
+	m_vcamPosition.z += z;
+}
+
+void Graphics::changeFov( float step )
+{
+	m_vcamFov += step;
+
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	// Note: Just setting the Perspective is an easy hack. In fact, the camera should be calibrated.
+	// With such a calibration we would get the projection matrix. This matrix could then be loaded 
+	// to GL_PROJECTION.
+	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
+	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
+	// decrease.
+	gluPerspective( m_vcamFov, ((double)CAM_WIDTH/(double)CAM_HEIGHT), VCAM_NEAR, VCAM_FAR );
+
+    // invalidate display
+    glutPostRedisplay();
+
 }
