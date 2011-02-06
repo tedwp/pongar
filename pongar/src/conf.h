@@ -52,7 +52,7 @@ const int FULLSCREEN_BITRATE = 32;
 const int FULLSCREEN_REFRESHRATE = 60;
 const bool FULLSCREEN_DISABLECHECK = true; //Turn on if glut says that the mode is not available despite it's working
 
-const bool SHOW_CAMERA_IMAGE = true;
+const bool SHOW_CAMERA_IMAGE = false;
 const int MAX_POINTS_PER_ROUND = 3;
 
 //How long after the last update should a marker still be considered visible?
