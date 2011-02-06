@@ -41,7 +41,7 @@ const float PADDLE_WIDTH = 0.2f;
 const bool HIDE_CONSOLE = true;
 
 //Game
-const bool FULLSCREEN_ENABLED = false;
+const bool FULLSCREEN_ENABLED = true;
 const bool FULLSCREEN_ONSTARTUP = true;
 
 //Gamemode only works if FULLSCREEN_ONSTARTUP is enabled
