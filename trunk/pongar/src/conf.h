@@ -24,7 +24,7 @@ const int CAM_ANGLE = 60;
 
 const int CAM_INDEX = 0;
 
-const bool FLIP_IMAGE = false;
+const bool FLIP_IMAGE = true;
 
 const float BALL_SPEED_INIT = 3.14159265358979f*0.01f;
 const float BALL_SPEED_INCREASE_FACTOR = 1.1f;
