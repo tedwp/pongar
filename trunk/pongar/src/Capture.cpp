@@ -440,8 +440,10 @@ void Capture::updateMarkerPositions(void)
 	} // end of loop over contours
 
 	/*cvShowImage("Original Image", iplGrabbed);
-	cvShowImage("Converted", iplThreshold);
 	*/
+	if(SHOW_CONVERTED)
+		cvShowImage("Converted", iplThreshold);
+	
 
 	//isFirstStripe = true;
 	isFirstMarker = true;
