@@ -7,10 +7,18 @@ Marker::Marker(int id)
 	m_id = id;
 	m_position = new float[16];
 	m_lastUpdateTime = -1;
-
 	m_locked = false;
+	m_size = MARKER_DEFAULTSIZE;
 }
-
+Marker::Marker(int id, float size)
+{
+	
+	m_id = id;
+	m_position = new float[16];
+	m_lastUpdateTime = -1;
+	m_locked = false;
+	m_size = size;
+}
 
 Marker::~Marker(void)
 {
@@ -79,4 +87,8 @@ void Marker::lock(void)
 void Marker::unLock(void)
 {
 	m_locked = false;
+}
+float Marker::getSize(void)
+{
+	return m_size;
 }

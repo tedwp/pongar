@@ -8,6 +8,7 @@ class Marker
 
 public:
 	Marker(int id);
+	Marker(int id, float size);
 	~Marker(void);
 	void updatePosition(float position[16]);
 	float* getPosition(void);
@@ -23,9 +24,11 @@ public:
 	bool isVisible(void);
 	void lock(void);
 	void unLock(void);
+	float getSize();
 
 private:
 	int m_id;
+	float m_size;
 	float* m_position;
 	bool m_positionChanged;
 	int m_purpose;

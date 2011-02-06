@@ -74,3 +74,7 @@ const int INITIALIZATION_DURATION = 3000; //millisec
 
 const float ACTION_INCREASESPEED_BALL_FACTOR = 1.1f;
 const float ACTION_DECREASESPEED_BALL_FACTOR = 0.9f;
+
+//Markers
+
+const float MARKER_DEFAULTSIZE = 0.045f;
