@@ -28,7 +28,7 @@ void Game::init( int argc, char* argv[] )
 	getInstance().registerMarkers();
 		
 	
-	m_gameStage = STAGE_BEAMERCALIBRATION;
+	m_gameStage = STAGE_STARTUP;
 	timerStart = getTimeSinceStart();
 	
 	Capture::getInstance().init();
@@ -42,7 +42,7 @@ void Game::registerMarkers(void)
 	registerMarker(2, PURPOSE_PADDLE2);  // 2
 	registerMarker(97, PURPOSE_PAUSE);
 	registerMarker(3585, PURPOSE_RESTARTGAME);
-	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.01f);
+	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.1f);
 
 	registerMarker(2884, PURPOSE_ACTION_INCREASESIZE_LEFTPADDLE);
 	registerMarker(626, PURPOSE_ACTION_INCREASESIZE_RIGHTPADDLE);
@@ -51,15 +51,16 @@ void Game::registerMarkers(void)
 	registerMarker(10, PURPOSE_ACTION_DECREASESIZE_RIGHTPADDLE);
 	
 	registerMarker(352, PURPOSE_ACTION_INCREASESPEED_BALL);
-	registerMarker(7236, PURPOSE_ACTION_INCREASESPEED_LEFTPADDLE);
-	registerMarker(208, PURPOSE_ACTION_INCREASESPEED_RIGHTPADDLE);
-	
 	registerMarker(624, PURPOSE_ACTION_DECREASESPEED_BALL);
-	registerMarker(80, PURPOSE_ACTION_DECREASESPEED_RIGHTPADDLE);
-	registerMarker(90, PURPOSE_ACTION_DECREASESPEED_LEFTPADDLE);
+
+	registerMarker(7236, PURPOSE_ACTION_INCREASESIZE_BALL);
+	registerMarker(208, PURPOSE_ACTION_DECREASESIZE_BALL);
+	
+	
 }
 void Game::start(void)
 {
+	Graphics::getInstance().moveCamera( 50* CAM_CALIB_STEP, 0.f, 0.f );
 	Graphics::getInstance().start();
 }
 
@@ -127,30 +128,9 @@ void Game::idle( void )
 
 	
 }
-void Game::performStageBeamerCalibration(void)
-{
-	//Graphics::showImage("marker.jpg");
-	//Track the marker and estimate the canvas' pose
-
-	// load the image
-    /*if(m_markerImage == NULL)
-	{
-		m_markerImage = cvLoadImage("marker.jpg", CV_LOAD_IMAGE_COLOR);
-	}*/
-	/*
-    	/* create a window * /
-		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
-		/* display the image * /
-		cvShowImage( "image", img );*/
-	Graphics::getInstance().moveCamera( 3* CAM_CALIB_STEP, 0.f, 0.f );
-
-
-	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
-	setGameStage(STAGE_STARTUP);
-}
-
 void Game::performStageStartup(void)
 {
+	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
 	UI::getInstance().showInstruction("Bitte Spielfeldmarker platzieren.");
 	if(isMarkerPresent(PURPOSE_PLAYINGFIELD))
 	{
@@ -158,9 +138,6 @@ void Game::performStageStartup(void)
 		PlayingField::getInstance().setCorrespondingMarker(getMarkerByPurpose(PURPOSE_PLAYINGFIELD));
 		if(getTimeSinceStart() - timerStart> STARTUP_DURATION)
 		{
-			PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
-			//TODO remove line above
-
 			PlayingField::getInstance().getCorrespondingMarker()->lock();
 			setGameStage(STAGE_INITIALIZATION);
 		}
@@ -192,7 +169,9 @@ void Game::performStageInitialization(void)
 			Ball* ball = PlayingField::getInstance().spawnBall();
 			ball->setColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-			setGameStage(STAGE_RUNNING);
+
+
+			setGameStage(STAGE_BEAMERCALIBRATION);
 		}
 	}
 	else
@@ -201,13 +180,30 @@ void Game::performStageInitialization(void)
 	}
 	// Nicht zu verwechseln mit init()! Hier wird das Spiel aus Sicht der Benutzers initialisiert, alles technische geschieht hingegen in init()
 }
+void Game::performStageBeamerCalibration(void)
+{
+	UI::getInstance().showInstruction("Bitte Beamer-Verzerrung ausgleichen.");
+	
+	
+	PlayingField::getInstance().updatePaddlePositions();
+	string tmp = "o: " + toString(PlayingField::getInstance().getLeftPaddle()->m_zoomOffset) + "f: " + toString(PlayingField::getInstance().getLeftPaddle()->m_zoomFactor);
+	tmp += "   |   o: " + toString(PlayingField::getInstance().getRightPaddle()->m_zoomOffset) + "f: " + toString(PlayingField::getInstance().getRightPaddle()->m_zoomFactor);
+	
+	UI::getInstance().showHeading(tmp);
+	PlayingField::getInstance().render();
+	
+
+	if(isMarkerPresent(PURPOSE_RESTARTGAME))
+	{
+		setGameStage(STAGE_RUNNING);
+	}
+}
+
 void Game::performStageRunning(void)
 {
 	Ball* ball = PlayingField::getInstance().getBall();
 	PlayingField::getInstance().updatePaddlePositions();
 	ball->updateMovement();
-	
-	PlayingField::getInstance().render();
 	if(ball->getState() != Ball::ONFIELD)
 	{
 		if(ball->getState() == Ball::LEFTOUT)
@@ -258,30 +254,26 @@ void Game::performStageRunning(void)
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_RIGHTPADDLE))
 				rightPaddle->enableActionSizeIncrease();
 
+
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_LEFTPADDLE))
 				leftPaddle->enableActionSizeDecrease();
 
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_RIGHTPADDLE))
 				rightPaddle->enableActionSizeDecrease();
 			
+
 			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_BALL))
 				ball->enableActionSpeedIncrease();
 			
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_LEFTPADDLE))
-			{
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_INCREASESPEED_RIGHTPADDLE))
-			{
-			}
 			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_BALL))
 				ball->enableActionSpeedDecrease();
 			
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_LEFTPADDLE))
-			{
-			}
-			if(isMarkerPresent(PURPOSE_ACTION_DECREASESPEED_RIGHTPADDLE))
-			{
-			}
+
+			if(isMarkerPresent(PURPOSE_ACTION_INCREASESIZE_BALL))
+				ball->enableActionSizeIncrease();
+		
+			if(isMarkerPresent(PURPOSE_ACTION_DECREASESIZE_BALL))
+				ball->enableActionSizeDecrease();
 		}
 	}
 }
@@ -302,11 +294,11 @@ void Game::performStagePause(void)
 }
 void Game::performStageWon(bool isLeft)
 {
-	UI::getInstance().showHeading( "GAME OVER");
+	UI::getInstance().showInstruction("RESTART zum Neustarten");
 	if(isLeft)
-		UI::getInstance().showInstruction("Links hat gewonnen");
+		UI::getInstance().showHeading( "GAME OVER - Links hat gewonnen");
 	else
-		UI::getInstance().showInstruction("rechts hat gewonnen");
+		UI::getInstance().showHeading( "GAME OVER - Rechts hat gewonnen");
 	if(isMarkerPresent(PURPOSE_RESTARTGAME))
 	{
 		performRestart();

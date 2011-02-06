@@ -32,6 +32,8 @@ public:
 	static void transposeMatrix(float* src, float* dst);
 	void cleanup(void);
 
+	
+
 private:
 	bool m_isInFullScreen;
 	bool m_isInGameMode;

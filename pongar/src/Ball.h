@@ -22,6 +22,12 @@ public:
 	void disableActionSpeedIncrease(void);
 	void enableActionSpeedDecrease(void);
 	void disableActionSpeedDecrease(void);
+
+	void enableActionSizeIncrease(void);
+	void disableActionSizeIncrease(void);
+	void enableActionSizeDecrease(void);
+	void disableActionSizeDecrease(void);
+	
 	void updateMovement(void);
 	void disableAllActions(void);
 	float getRadius(void);
@@ -39,6 +45,9 @@ private:
 	PlayingField* m_playingField;
 	float m_speed;
 	float m_angle;
+	bool m_actionSizeIncreaseEnabled;
+	bool m_actionSizeDecreaseEnabled;
+
 	std::pair<float, float> m_direction;
 	
 	bool m_actionSpeedIncreaseEnabled;
@@ -47,4 +56,5 @@ private:
 	void drawCircle(float r);
 	long int m_lastUpdate;
 };
+
 
