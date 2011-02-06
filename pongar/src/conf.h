@@ -32,7 +32,7 @@ const float VCAM_FOV_CALIB_STEP = 1.f;
 
 const float VCAM_FOV = 60.f;
 const float VCAM_ASPECT = 1.33f; // currently not used
-const float VCAM_NEAR = 0.1f;
+const float VCAM_NEAR = 0.01f;
 const float VCAM_FAR = 100.0f;
 
 const bool IMAGE_FLIP_H = true;
@@ -43,11 +43,11 @@ const float BALL_SPEED_INCREASE_FACTOR = 1.01f;
 
 const float BALL_RADIUS = 0.15f;
 
-const float PLAYINGFIELD_WIDTH = 4.5f;
-const float PLAYINGFIELD_HEIGHT = 3.0f;
+const float PLAYINGFIELD_WIDTH = 2.5f;
+const float PLAYINGFIELD_HEIGHT = 1.5f;
 
-const float PADDLE_LENGTH = 1.0f;
-const float PADDLE_WIDTH = 0.2f;
+const float PADDLE_LENGTH = 0.5f;
+const float PADDLE_WIDTH = 0.1f;
 
 //
 const bool HIDE_CONSOLE = true;
@@ -85,8 +85,8 @@ const int INITIALIZATION_DURATION = 3000; //millisec
 
 //Actions
 
-const float ACTION_INCREASESPEED_BALL_FACTOR = 1.1f;
-const float ACTION_DECREASESPEED_BALL_FACTOR = 0.9f;
+const float ACTION_INCREASESPEED_BALL_FACTOR = 1.5f;
+const float ACTION_DECREASESPEED_BALL_FACTOR = 0.5f;
 
 const float ACTION_INCREASESIZE_PADDLE_FACTOR = 1.4f;
 const float ACTION_DECREASESIZE_PADDLE_FACTOR = 0.6f;

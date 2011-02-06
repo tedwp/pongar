@@ -25,12 +25,12 @@ void Paddle::render(void)
 	float paddle1YStart =  m_size/2 - m_yPosition;
 	float paddle1YEnd = -m_size/2 - m_yPosition;
 
-	if (paddle1YEnd > PLAYINGFIELD_HEIGHT/2)
+	if (paddle1YStart > PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YEnd = PLAYINGFIELD_HEIGHT/2;
 		paddle1YStart = paddle1YEnd - m_size;
 	}
-	if (paddle1YStart < -PLAYINGFIELD_HEIGHT/2)
+	if (paddle1YEnd < -PLAYINGFIELD_HEIGHT/2)
 	{
 		paddle1YStart = -PLAYINGFIELD_HEIGHT/2;
 		paddle1YEnd = paddle1YStart + m_size;
@@ -43,7 +43,7 @@ void Paddle::render(void)
 	if(isLeft())
 		glRectf(paddle1YEnd, -(PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH/2 , paddle1YStart, -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH/2);
 	else
-		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH/2, paddle1YStart, PLAYINGFIELD_WIDTH / 2 + PADDLE_WIDTH);
+		glRectf(paddle1YEnd, PLAYINGFIELD_WIDTH / 2 - PADDLE_WIDTH/2, paddle1YStart, PLAYINGFIELD_WIDTH / 2 + PADDLE_WIDTH/2);
 }
 
 void Paddle::updatePositionFromMarker(void)
@@ -88,7 +88,7 @@ void Paddle::updatePositionFromMarker(void)
 	float angle = (180 / 3.14159f) * acos( vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2] );
 	if((vec1[0] * vec2[1] - vec1[1] * vec2[0]) < 0 ) angle *= -1;
 
-	m_yPosition = (float) PLAYINGFIELD_HEIGHT/2 * sin(angle*3.14159f/180);
+	m_yPosition = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 
 	/*float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	

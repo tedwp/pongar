@@ -39,6 +39,7 @@ void Graphics::init(int argc, char* argv[])
     glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
     m_mainWindow = glutCreateWindow("PongAR");
+	glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 
     // initialize the GL library
 
@@ -170,7 +171,7 @@ void Graphics::doResize( int w, int h)
 	// If you are using another camera (which you'll do in most cases), you'll have to adjust the FOV
 	// value. How? Fiddle around: Move Marker to edge of display and check if you have to increase or 
 	// decrease.
-    gluPerspective( CAM_ANGLE, ((double)CAM_WIDTH/(double)CAM_HEIGHT), 0.01, 100 );
+    gluPerspective( CAM_ANGLE, ((double)CAM_WIDTH/(double)CAM_HEIGHT), VCAM_NEAR, VCAM_FAR );
 
     // invalidate display
     glutPostRedisplay();
@@ -185,7 +186,6 @@ void Graphics::fullScreenEnter(void)
 		if(FULLSCREEN_USEGAMEMODE && FULLSCREEN_ONSTARTUP && (FULLSCREEN_DISABLECHECK || glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)))
 		{
 			glutEnterGameMode();
-			glutSetCursor(GLUT_CURSOR_CROSSHAIR);
 			m_isInGameMode = true;
 		}
 		else

@@ -16,6 +16,7 @@ public:
 	
 	int getState(void);
 	void reset(void);
+	void resumeAfterPause(void);
 
 	void enableActionSpeedIncrease(void);
 	void disableActionSpeedIncrease(void);
@@ -23,6 +24,7 @@ public:
 	void disableActionSpeedDecrease(void);
 	void updateMovement(void);
 	void disableAllActions(void);
+	float getRadius(void);
 	
 	
 	static const int ONFIELD = 1;
@@ -32,8 +34,8 @@ public:
 private:
 	float m_x;
 	float m_y;
+	float m_radius;
 	int m_state;
-
 	PlayingField* m_playingField;
 	float m_speed;
 	float m_angle;

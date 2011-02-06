@@ -15,7 +15,7 @@ void Ball::render(void)
 {
 	glTranslatef( m_x, m_y, 0.0f );
 	glColor4f(m_color.red, m_color.green, m_color.blue, m_color.alpha);
-	drawCircle(BALL_RADIUS);
+	drawCircle(m_radius);
 }
 void Ball::updateMovement(void)
 {
@@ -45,58 +45,62 @@ void Ball::updateMovement(void)
 	realX += m_direction.first * timePassed * m_speed;
 	realY += m_direction.second * timePassed* m_speed;
 
-	//UI::getInstance().showHeading(toString(leftPaddleStart) + " to " + toString(leftPaddleEnd));
-	UI::getInstance().showHeading(toString(m_playingField->getLeftPaddle()->getYPosition()));
 	bool collisionDetected_lr = false;
 	bool collisionDetected_tb = false;
-	if(realX - BALL_RADIUS < - PLAYINGFIELD_WIDTH / 2)
+	if(realX - m_radius < - PLAYINGFIELD_WIDTH / 2)
 	{
 		//left out
 		collisionDetected_lr = true;
 
 	}
-	if(realX + BALL_RADIUS > PLAYINGFIELD_WIDTH / 2)
+	if(realX + m_radius > PLAYINGFIELD_WIDTH / 2)
 	{
 		//right out
 		collisionDetected_lr = true;
 	}
-	if(   realY - BALL_RADIUS < - PLAYINGFIELD_HEIGHT / 2
-	   || realY + BALL_RADIUS > PLAYINGFIELD_HEIGHT / 2
+	if(   realY - m_radius < - PLAYINGFIELD_HEIGHT / 2
+	   || realY + m_radius > PLAYINGFIELD_HEIGHT / 2
 	  )
 	{
 		//bottom out
 		collisionDetected_tb = true;
 	}
 
-
-	if(collisionDetected_tb)
-		m_direction.second*= -1;
+	if(collisionDetected_tb || collisionDetected_lr)
+	{
+		if(collisionDetected_tb)
+			m_direction.second*= -1;
 	
-	else if(collisionDetected_lr)
-		m_direction.first*= -1;
-
+		else if(collisionDetected_lr)
+			m_direction.first*= -1;
+		
+		UI::getInstance().beep();
+	}
 	m_state = ONFIELD;
 
 	if(collisionDetected_lr)
 	{
 		if(   realX < 0
 		   && (
-		       realY + BALL_RADIUS > leftPaddleEnd
-			   || realY - BALL_RADIUS < leftPaddleStart
+		       realY > leftPaddleEnd + m_radius 
+			   || realY < leftPaddleStart - m_radius 
 			  )
 		  )
 		{
 			m_state = LEFTOUT;
 		}
-		
-		if(   realX > 0
+		else if(   realX > 0
 		   && (
-		       realY + BALL_RADIUS > rightPaddleEnd
-			   || realY - BALL_RADIUS < rightPaddleStart
+		       realY > rightPaddleEnd + m_radius 
+			   || realY < rightPaddleStart - m_radius 
 			  )
 		  )
 		{
 			m_state = RIGHTOUT;
+		}
+		else
+		{
+			m_speed *= BALL_SPEED_INCREASE_FACTOR;
 		}
 	}
 	/*
@@ -172,7 +176,10 @@ void Ball::updateMovement(void)
 
 	m_lastUpdate = getTimeSinceStart();
 }
-
+void Ball::resumeAfterPause(void)
+{
+	m_lastUpdate = getTimeSinceStart();
+}
 void Ball::drawCircle(float r)
 {
 	glBegin(GL_TRIANGLE_FAN);
@@ -187,6 +194,7 @@ void Ball::drawCircle(float r)
 void Ball::reset(void)
 {
 	m_speed = BALL_SPEED_INIT;
+	m_radius = BALL_RADIUS;
 	srand ((unsigned) getTimeSinceStart());
 	
 	float degInRad = (float) (rand() % 60 - 30)*3.14159f/180;
@@ -250,4 +258,8 @@ void Ball::disableActionSpeedDecrease(void)
 		m_speed /= ACTION_DECREASESPEED_BALL_FACTOR;
 		m_actionSpeedDecreaseEnabled = false;
 	}
+}
+float Ball::getRadius(void)
+{
+	return m_radius;
 }

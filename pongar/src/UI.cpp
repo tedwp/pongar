@@ -33,6 +33,27 @@ void UI::showPercentageString(string str, int value, int max)
 		m_instructions  = str + toString(((float)value / (float)max) * 100.0f) + "%";
 	}
 }
+void UI::winBeep(void)
+{
+	Beep(1188,250);
+	Beep(1408,125);
+	Beep(1760,250);
+	Beep(1584,125);
+	Beep(1408,125);
+	Beep(1320,375);
+	Beep(1056,125);
+	Beep(1320,250);
+	Beep(1188,125);
+	Beep(1056,125);
+	Beep(990,250);
+	Beep(990,125);
+	Beep(1056,125);
+	Beep(1188,250);
+	Beep(1320,250);
+	Beep(1056,250);
+	Beep(880,250);
+	Beep(880,250);
+}
 void UI::beep(void)
 {
 	Beep(522, 50);

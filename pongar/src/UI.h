@@ -17,6 +17,7 @@ public:
 	void showScores(void);
 	void drawStuffOnTop(void);
 	void beep(void);
+	void winBeep(void);
 
 private:
 	UI(void);

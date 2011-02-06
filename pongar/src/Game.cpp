@@ -42,7 +42,7 @@ void Game::registerMarkers(void)
 	registerMarker(2, PURPOSE_PADDLE2);  // 2
 	registerMarker(97, PURPOSE_PAUSE);
 	registerMarker(3585, PURPOSE_RESTARTGAME);
-	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.02f);
+	registerMarker(90, PURPOSE_PLAYINGFIELD, 0.01f);
 
 	registerMarker(2884, PURPOSE_ACTION_INCREASESIZE_LEFTPADDLE);
 	registerMarker(626, PURPOSE_ACTION_INCREASESIZE_RIGHTPADDLE);
@@ -142,6 +142,9 @@ void Game::performStageBeamerCalibration(void)
 		cvNamedWindow( "image", CV_WINDOW_FULLSCREEN);
 		/* display the image * /
 		cvShowImage( "image", img );*/
+	Graphics::getInstance().moveCamera( 3* CAM_CALIB_STEP, 0.f, 0.f );
+
+
 	PlayingField::getInstance().setColor(1.0f, 1.0f, 1.0f, 1.0f);
 	setGameStage(STAGE_STARTUP);
 }
@@ -180,14 +183,14 @@ void Game::performStageInitialization(void)
 		{
 			Paddle* leftPaddle = PlayingField::getInstance().spawnPaddle(true);
 			leftPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE1));
-			leftPaddle->setColor(0.5f, 0.5f, 0.5f, 1.0f);
+			leftPaddle->setColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 			Paddle* rightPaddle = PlayingField::getInstance().spawnPaddle(false);
 			rightPaddle->setMarker(getMarkerByPurpose(PURPOSE_PADDLE2));
 			rightPaddle->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 			
 			Ball* ball = PlayingField::getInstance().spawnBall();
-			ball->setColor(1.0f, 0.0f, 1.0f, 1.0f);
+			ball->setColor(1.0f, 0.0f, 0.0f, 1.0f);
 
 			setGameStage(STAGE_RUNNING);
 		}
@@ -219,10 +222,15 @@ void Game::performStageRunning(void)
 		}
 
 		if(PlayingField::getInstance().getLeftPaddle()->getScore() >= MAX_POINTS_PER_ROUND)
+		{
+			UI::getInstance().winBeep();
 			setGameStage(STAGE_WON_LEFT);
-
+		}
 		if(PlayingField::getInstance().getRightPaddle()->getScore() >= MAX_POINTS_PER_ROUND)
+		{
 			setGameStage(STAGE_WON_RIGHT);
+			UI::getInstance().winBeep();
+		}
 	}
 
 	if(isMarkerPresent(PURPOSE_PAUSE))
@@ -281,7 +289,10 @@ void Game::performStagePause(void)
 {
 	UI::getInstance().showHeading( "Spiel pausiert");
 	if(!isMarkerPresent(PURPOSE_PAUSE))
+	{
+		PlayingField::getInstance().getBall()->resumeAfterPause();
 		setGameStage(STAGE_RUNNING);
+	}
 			
 	if(isMarkerPresent(PURPOSE_RESTARTGAME))
 	{
