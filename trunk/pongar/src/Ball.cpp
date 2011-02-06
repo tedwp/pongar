@@ -226,6 +226,8 @@ void Ball::disableAllActions(void)
 {
 	disableActionSpeedDecrease();
 	disableActionSpeedIncrease();
+	disableActionSizeDecrease();
+	disableActionSizeIncrease();
 }
 void Ball::enableActionSpeedIncrease(void)
 {
@@ -257,6 +259,41 @@ void Ball::disableActionSpeedDecrease(void)
 	{
 		m_speed /= ACTION_DECREASESPEED_BALL_FACTOR;
 		m_actionSpeedDecreaseEnabled = false;
+	}
+}
+
+
+void Ball::enableActionSizeIncrease(void)
+{
+	if(!m_actionSizeIncreaseEnabled)
+	{
+		m_radius *= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_actionSizeIncreaseEnabled = true;
+	}
+}
+void Ball::disableActionSizeIncrease(void)
+{
+	if(m_actionSizeIncreaseEnabled)
+	{
+		m_radius /= ACTION_INCREASESPEED_BALL_FACTOR;
+		m_actionSizeIncreaseEnabled = false;
+	}
+}
+
+void Ball::enableActionSizeDecrease(void)
+{
+	if(!m_actionSizeDecreaseEnabled)
+	{
+		m_radius *= ACTION_DECREASESPEED_BALL_FACTOR;
+		m_actionSizeDecreaseEnabled = true;
+	}
+}
+void Ball::disableActionSizeDecrease(void)
+{
+	if(m_actionSizeDecreaseEnabled)
+	{
+		m_radius /= ACTION_DECREASESPEED_BALL_FACTOR;
+		m_actionSizeDecreaseEnabled = false;
 	}
 }
 float Ball::getRadius(void)

@@ -12,6 +12,8 @@ Paddle::Paddle(void)
 	m_playingField = NULL;
 	m_score = 0;
 	m_size = PADDLE_LENGTH;
+	m_zoomFactor = 1.5f;
+	m_zoomOffset = 0.0f;
 }
 
 
@@ -88,8 +90,7 @@ void Paddle::updatePositionFromMarker(void)
 	float angle = (180 / 3.14159f) * acos( vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2] );
 	if((vec1[0] * vec2[1] - vec1[1] * vec2[0]) < 0 ) angle *= -1;
 
-	m_yPosition = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
-
+	m_yPosition = m_zoomOffset + m_zoomFactor * (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	/*float paddle1offset = (float) PLAYINGFIELD_WIDTH/2 * sin(angle*3.14159f/180);
 	
 	m_yPosition = paddle1offset;

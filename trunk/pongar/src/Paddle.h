@@ -33,6 +33,9 @@ public:
 	void disableActionSizeDecrease(void);
 	void disableAllActions(void);
 
+	float m_zoomFactor;
+	float m_zoomOffset;
+
 private:
 	float m_yPosition;
 	//float m_yRenderPosition;

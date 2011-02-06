@@ -79,7 +79,6 @@ void UI::drawStuffOnTop(void)
 
 	string th =  toString(Capture::getInstance().getThreshold()/255.0 * 100);
 	string thbw =  toString(Capture::getInstance().getThresholdBW()/255.0 * 100);
-
 	Graphics::getInstance().showString("Th: " + th + "% ThBW: " + thbw + "%", m_textColor, 430, 20);
 
 	if(Game::getInstance().getGameStage() == Game::getInstance().STAGE_BEAMERCALIBRATION)
