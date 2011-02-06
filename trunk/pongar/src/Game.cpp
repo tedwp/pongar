@@ -38,8 +38,8 @@ void Game::init( int argc, char* argv[] )
 }
 void Game::registerMarkers(void)
 {
-	registerMarker(2884, PURPOSE_PADDLE1); // 1
-	registerMarker(626, PURPOSE_PADDLE2);  // 2
+	registerMarker(1, PURPOSE_PADDLE1); // 1
+	registerMarker(2, PURPOSE_PADDLE2);  // 2
 	registerMarker(90, PURPOSE_PLAYINGFIELD);
 }
 void Game::start(void)
