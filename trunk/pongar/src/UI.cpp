@@ -48,7 +48,7 @@ void UI::showInstruction(std::string instruction)
 
 void UI::drawStuffOnTop(void)
 {
-	Graphics::getInstance().showString(m_instructions, m_textColor, 50, 200);
+	Graphics::getInstance().showString(m_instructions, m_textColor, 150, 100);
 
 	string th =  toString(Capture::getInstance().getThreshold()/255.0 * 100);
 	string thbw =  toString(Capture::getInstance().getThresholdBW()/255.0 * 100);
