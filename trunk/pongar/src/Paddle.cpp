@@ -38,8 +38,7 @@ void Paddle::render(void)
 		paddle1YEnd = paddle1YStart + m_size;
 	}
 
-	//m_yRenderPosition = paddle1YStart;
-
+	
 	// draw paddle
 	glColor4f( m_color.red, m_color.green, m_color.blue, m_color.alpha );
 	if(isLeft())

@@ -37,17 +37,23 @@ void Graphics::init(int argc, char* argv[])
 	// initialize the window system
     glutInit( &argc, argv);
     glutInitWindowSize( CAM_WIDTH, CAM_HEIGHT );
-    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    m_mainWindow = glutCreateWindow("PongAR");
-	glutSetCursor(GLUT_CURSOR_CROSSHAIR);
+	if(IMAGE_ANTIALIAS)
+		glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
+	else
+		glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+
+	m_mainWindow = glutCreateWindow("PongAR");
+	glutSetCursor(GLUT_CURSOR_NONE);
 
     // initialize the GL library
 
 	
 	if(FULLSCREEN_ONSTARTUP)
 		fullScreenEnter();
-	else fullScreenLeave();
-
+	else
+		fullScreenLeave();
+	
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     // pixel storage/packing stuff
     glPixelStorei( GL_PACK_ALIGNMENT,   1 );
@@ -211,8 +217,9 @@ void Graphics::fullScreenLeave(void)
 }
 void Graphics::showString(std::string str, Color& c, int cx, int y)
 {
+	glEnable(GL_BLEND);
 	y = CAM_HEIGHT - y;
-	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glColor4f(1.0, 1.0, 1.0, c.alpha);
 	int f = 2;
 	glRasterPos3f((GLfloat) cx -f, (GLfloat) y -f, (GLfloat) 0);
 	for(unsigned int i = 0; i < str.length(); i++)
@@ -243,6 +250,7 @@ void Graphics::showString(std::string str, Color& c, int cx, int y)
 	glRasterPos3f((GLfloat) cx, (GLfloat) y, (GLfloat) 0);
 	for(unsigned int i = 0; i < str.length(); i++)
     	glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+	glDisable(GL_BLEND);
 }
 
 
