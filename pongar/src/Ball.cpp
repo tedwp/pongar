@@ -23,16 +23,11 @@ void Ball::updateMovement(void)
 	float realY = m_x;
 
 	int timePassed = getTimeSinceStart() - m_lastUpdate;
-	//TODO take this into account, right now ball is only dependent on cpu cycles! btw: wtf?!
-	//float paddle1Start =  PADDLE_LENGTH/2 - m_playingField->getLeftPaddle()->getYRenderPosition();
-	//float paddle2Start =  PADDLE_LENGTH/2 - m_playingField->getRightPaddle()->getYRenderPosition();
 	Paddle* leftPaddle = m_playingField->getLeftPaddle();
 	Paddle* rightPaddle = m_playingField->getRightPaddle();
 	float lY = - leftPaddle->getYPosition();
 	float rY = - rightPaddle->getYPosition();
 	
-	
-
 	float leftPaddleStart = - leftPaddle->getSize()/2 + lY;
 	float rightPaddleStart = - rightPaddle->getSize()/2 + rY;
 	
@@ -103,71 +98,6 @@ void Ball::updateMovement(void)
 			m_speed *= BALL_SPEED_INCREASE_FACTOR;
 		}
 	}
-	/*
-
-	bool lrCollision = false;
-	bool yCollision = false;
-	bool pCollision = false;
-
-	if (realX - BALL_RADIUS <= -(PLAYINGFIELD_WIDTH / 2) + PADDLE_WIDTH //Ball-Äußeres außerhalb der inneren Paddle-Grenze
-		&& realY <= -paddle1End && realY >= -paddle1Start //Ball im 
-		)
-		pCollision = true;
-	
-	if (realX + BALL_RADIUS >= (PLAYINGFIELD_WIDTH / 2) - PADDLE_WIDTH
-		&& realY <= -paddle2End && realY >= -paddle2Start
-		)
-		pCollision = true;
-
-
-	if (!pCollision && realX + BALL_RADIUS > PLAYINGFIELD_WIDTH/2)
-		lrCollision = true;
-	
-	if (!pCollision && realX - BALL_RADIUS < -PLAYINGFIELD_WIDTH/2)
-		lrCollision = true;
-	
-	if (realY + BALL_RADIUS > PLAYINGFIELD_HEIGHT/2)
-		yCollision = true;
-	
-	if (realY - BALL_RADIUS < -PLAYINGFIELD_HEIGHT/2)
-		yCollision = true;
-	
-	
-	
-	
-	if(!lrCollision )
-		m_state = ONFIELD;
-	if(lrCollision  || pCollision || yCollision)
-	{
-		//beep war nervig, deswegen auskommentiert
-		//UI::getInstance().beep();
-
-		if (lrCollision )
-		{
-			// Left or right?
-			m_state = LEFTOUT;
-			m_state = RIGHTOUT;
-
-		} else if (pCollision)
-		{
-			realY-= vector.first;
-			realX-= vector.second;
-			m_angle = 180 - m_angle;
-			realY+= vector.first;
-			realX+= vector.second;
-
-			//increase ball m_speed
-			m_speed*= BALL_SPEED_INCREASE_FACTOR;
-		} else if (yCollision)
-		{
-			realY-= vector.first;
-			realX-= vector.second;
-			m_angle = 360 - m_angle;
-			realY+=  vector.first;
-			realX+=  vector.second;
-		}
-	}
-	*/
 	if(!collisionDetected_lr && !collisionDetected_tb)
 	{
 		m_y = realX ;

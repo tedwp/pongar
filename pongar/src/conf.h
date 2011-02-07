@@ -38,7 +38,9 @@ const float VCAM_FAR = 100.0f;
 const bool IMAGE_FLIP_H = true;
 const bool IMAGE_FLIP_V = true;
 
-const float BALL_SPEED_INIT = 0.005f;//Playfield-Units per Millisec  //3.14159265358979f*0.005f;
+const bool IMAGE_ANTIALIAS = true;
+
+const float BALL_SPEED_INIT = 0.005f;//Playfield-Units per Millisec
 const float BALL_SPEED_INCREASE_FACTOR = 1.03f;
 
 const float BALL_RADIUS = 0.5f;
@@ -57,7 +59,7 @@ const bool FULLSCREEN_ENABLED = true;
 const bool FULLSCREEN_ONSTARTUP = true;
 
 //Gamemode only works if FULLSCREEN_ONSTARTUP is enabled
-const bool FULLSCREEN_USEGAMEMODE = false;
+const bool FULLSCREEN_USEGAMEMODE = true;
 
 const bool SHOW_CONVERTED = true;
 
@@ -66,7 +68,7 @@ const int FULLSCREEN_BITRATE = 32;
 const int FULLSCREEN_REFRESHRATE = 60;
 const bool FULLSCREEN_DISABLECHECK = true; //Turn on if glut says that the mode is not available despite it's working
 
-const bool SHOW_CAMERA_IMAGE = false;
+const bool SHOW_CAMERA_IMAGE = true;
 
 const int MAX_POINTS_PER_ROUND = 3;
 
